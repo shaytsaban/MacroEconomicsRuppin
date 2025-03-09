@@ -20,9 +20,9 @@ Click the button below to instantly access the **Macro Coursebook.docx**:
   </a>
 </p>
 
-## 🎥 Watch the Lecture
+## 🎥 Lecture 1 - The Basics of Macroeconomics - 9.3.2026
 
-Enjoy Dr. Shay Tsaban's captivating lecture right here:
+In the grand theater of life, understanding macroeconomics is like learning the ancient art of balance—it teaches you to navigate the chaos of economic forces and find order in complexity. As if you were decoding the language of civilization itself, this lecture lays the foundation for wisdom and responsibility in a world that demands you stand tall amidst uncertainty.
 
 <div style="text-align:center; margin: 20px 0;">
   <iframe width="720" height="405" src="https://www.youtube.com/embed/pBMn3h_NNK8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: 2px solid #ddd; border-radius: 8px;"></iframe>
