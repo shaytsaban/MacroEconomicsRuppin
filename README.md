@@ -31,6 +31,14 @@ Plus, charts, graphs, examples, and possibly Dr. Shay's famous economic jokes—
 - People who want to impress others at parties with macroeconomic trivia
 - Anyone who’s ever wondered "What on Earth is Macroeconomics?!"
 
+## 🎥 Watch the Lecture Recording!
+
+Click the image below to watch the lecture:
+
+[![Lecture Recording](https://img.youtube.com/vi/pBMn3h_NNK8/0.jpg)](https://www.youtube.com/watch?v=pBMn3h_NNK8)
+
+*Tip: You can add more lectures later by following the same format.*
+
 ## 👩‍🎓👨‍🎓 Final Words of Wisdom
 
 Remember, economics isn't just numbers and graphs—it's the pulse of the world, and understanding it makes you a superhero in disguise. 🦸‍♂️🦸‍♀️ Dive in, laugh, learn, and let Dr. Shay Tsaban lead the way!
@@ -40,4 +48,3 @@ Remember, economics isn't just numbers and graphs—it's the pulse of the world,
 Made with ❤️, humor, and a healthy dose of supply-side optimism.
 
 **Happy studying!** 📚🥳✨
-
