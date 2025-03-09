@@ -12,7 +12,14 @@ Ah, where to begin? Dr. Shay Tsaban isn't just your typical lecturer. He's the e
 
 ## 🗃️ How to Access the Treasure?
 
-Simple as counting money during a hyperinflation crisis! Just click on the **[Macro Coursebook.docx](Macro%20Coursebook.docx)**, then hit **View Raw** (if needed), and voilà! You've just unlocked economic enlightenment! 🔑📖
+Simple as counting money during a hyperinflation crisis! Click the button below to access the **Macro Coursebook.docx** (your treasure trove of economic wisdom):
+
+<!-- HTML button for a cleaner look -->
+<p>
+  <a href="Macro%20Coursebook.docx" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;" target="_blank">
+    Download Course Notes
+  </a>
+</p>
 
 ## 🎥 Watch the Lecture Recording!
 
