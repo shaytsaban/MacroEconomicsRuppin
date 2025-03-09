@@ -4,34 +4,33 @@ Hey there, curious minds! You've landed on the most epic repository dedicated to
 
 ## 🤔 What’s this repository all about?
 
-Glad you asked! This page houses the one and only, awe-inspiring **Macro Coursebook.docx**, a file that holds all the economic wisdom you'll ever need for Dr. Shay Tsaban’s course at Ruppin Academic Center. Yes, all of it—no more frantic midnight searches or begging classmates for notes! 😅🙏
+This repository houses the awe-inspiring **Macro Coursebook.docx**, your one-stop treasure trove of economic wisdom for Dr. Shay Tsaban’s course at Ruppin Academic Center.
 
 ## 🌟 Why Dr. Shay Tsaban? 🌟
 
-Ah, where to begin? Dr. Shay Tsaban isn't just your typical lecturer. He's the economic equivalent of Gandalf, guiding students through the complexities of fiscal policies, inflation, and GDP with clarity, humor, and maybe just a sprinkle of magic. 🧙✨ If Macroeconomics had a rockstar, he’d be shredding economic theories on the main stage! 🎸💰
+Dr. Shay Tsaban is the economic equivalent of Gandalf, illuminating the path through fiscal policies, inflation, and GDP with unmatched clarity, humor, and a dash of magic. If Macroeconomics were a rock concert, he’d be the headliner! 🎸💰
 
-## 🗃️ How to Access the Treasure?
+## 🗃️ Access the Course Notes
 
-Simple as counting money during a hyperinflation crisis! Click the button below to access the **Macro Coursebook.docx** (your treasure trove of economic wisdom):
+Click the button below to instantly access the **Macro Coursebook.docx**:
 
-<!-- HTML button for a cleaner look -->
-<p>
-  <a href="Macro%20Coursebook.docx" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 4px;" target="_blank">
+<p style="text-align:center;">
+  <a href="Macro%20Coursebook.docx" style="display: inline-block; padding: 15px 30px; background-color: #28a745; color: #fff; text-decoration: none; font-size: 1.2em; border-radius: 8px;" target="_blank">
     Download Course Notes
   </a>
 </p>
 
-## 🎥 Watch the Lecture Recording!
+## 🎥 Watch the Lecture
 
-Click the image below to watch the lecture:
+Enjoy Dr. Shay Tsaban's captivating lecture right here:
 
-[![Lecture Recording](https://img.youtube.com/vi/pBMn3h_NNK8/0.jpg)](https://www.youtube.com/watch?v=pBMn3h_NNK8)
-
-*Tip: You can add more lectures later by following the same format.*
+<div style="text-align:center; margin: 20px 0;">
+  <iframe width="720" height="405" src="https://www.youtube.com/embed/pBMn3h_NNK8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen style="border: 2px solid #ddd; border-radius: 8px;"></iframe>
+</div>
 
 ## 👩‍🎓👨‍🎓 Final Words of Wisdom
 
-Remember, economics isn't just numbers and graphs—it's the pulse of the world, and understanding it makes you a superhero in disguise. 🦸‍♂️🦸‍♀️ Dive in, laugh, learn, and let Dr. Shay Tsaban lead the way!
+Economics isn’t just numbers and graphs—it’s the pulse of our world. Embrace the journey, let the insights inspire you, and remember: every economic theory is a step towards making you a superhero in disguise. 🦸‍♂️🦸‍♀️
 
 ---
 
