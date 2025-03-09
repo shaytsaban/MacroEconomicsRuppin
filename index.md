@@ -20,7 +20,7 @@ Click the button below to instantly access the **Macro Coursebook.docx**:
   </a>
 </p>
 
-## 🎥 Lecture 1 - The Basics of Macroeconomics - 9.3.2026
+## 🎥 Lecture 1 - The Basics of Macroeconomics - 9.3.2025
 
 In the grand theater of life, understanding macroeconomics is like learning the ancient art of balance—it teaches you to navigate the chaos of economic forces and find order in complexity. As if you were decoding the language of civilization itself, this lecture lays the foundation for wisdom and responsibility in a world that demands you stand tall amidst uncertainty.
 
