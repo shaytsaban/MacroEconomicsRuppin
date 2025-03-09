@@ -12,24 +12,7 @@ Ah, where to begin? Dr. Shay Tsaban isn't just your typical lecturer. He's the e
 
 ## 🗃️ How to Access the Treasure?
 
-Simple as counting money during a hyperinflation crisis! Just click on the **Macro Coursebook.docx**, then hit **View Raw**, and voilà! You've just unlocked economic enlightenment! 🔑📖
-
-## 📌 What’s in the Coursebook?
-
-Expect comprehensive yet crystal-clear notes on:
-- 💸 Inflation (why your coffee keeps getting pricier!)
-- 🌍 GDP and National Income (spoiler: size matters!)
-- 📉 Unemployment (why your cousin’s still on your couch)
-- 🚀 Fiscal and Monetary Policies (when the government becomes your economic BFF)
-
-Plus, charts, graphs, examples, and possibly Dr. Shay's famous economic jokes—like why economists never lose their balance… because they always have supply and demand! 😂⚖️
-
-## 🥳 Who is this for?
-
-- Students desperate for clarity
-- Economic enthusiasts
-- People who want to impress others at parties with macroeconomic trivia
-- Anyone who’s ever wondered "What on Earth is Macroeconomics?!"
+Simple as counting money during a hyperinflation crisis! Just click on the **[Macro Coursebook.docx](Macro%20Coursebook.docx)**, then hit **View Raw** (if needed), and voilà! You've just unlocked economic enlightenment! 🔑📖
 
 ## 🎥 Watch the Lecture Recording!
 
