@@ -4,135 +4,161 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Marvelous World of Macroeconomics</title>
+    <!-- Modern & inviting font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            /* palette */
+            --primary-1: #4e54c8;
+            --primary-2: #8f94fb;
+            --accent-1: #ff7676;
+            --accent-2: #ff9e57;
+            --accent-3: #e84393;
+            --accent-4: #fd79a8;
+            --success-1: #00b894;
+            --success-2: #55efc4;
+            --neutral-bg: #f7f9fc;
+            --text-main: #2d3436;
+            --text-title: #1e272e;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        /* global reset */
+        *, *::before, *::after { box-sizing: border-box; }
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            background: linear-gradient(to bottom, #eef2f7, #ffffff);
-            color: #2d3436;
-            line-height: 1.8;
-            padding: 40px;
             margin: 0;
+            padding: 0 4vw 80px;
+            font-family: 'Inter', Arial, sans-serif;
+            background: var(--neutral-bg);
+            color: var(--text-main);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
         h1, h2, h3 {
-            color: #1e272e;
+            color: var(--text-title);
             font-weight: 700;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            line-height: 1.3;
         }
+        /* header */
         .header {
-            background: linear-gradient(120deg, #6c5ce7, #00cec9);
-            color: white;
-            padding: 40px;
-            border-radius: 20px;
+            background: linear-gradient(120deg, var(--primary-1), var(--primary-2));
+            color: #fff;
+            padding: 48px 24px;
+            border-radius: 24px;
             text-align: center;
-            margin-bottom: 40px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-            animation: glow 3s infinite alternate;
+            margin: 48px auto;
+            max-width: 900px;
+            box-shadow: var(--shadow);
+            animation: glow 3s ease-in-out infinite alternate;
         }
         @keyframes glow {
-            0% { box-shadow: 0 10px 30px rgba(108, 92, 231, 0.3); }
-            100% { box-shadow: 0 10px 40px rgba(0, 206, 201, 0.4); }
+            from { box-shadow: 0 10px 32px rgba(78, 84, 200, .25); }
+            to   { box-shadow: 0 10px 40px rgba(143, 148, 251, .35); }
+        }
+        /* buttons */
+        .btn, .guidance-btn {
+            display: inline-block;
+            padding: 18px 42px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 999px;
+            transition: transform .35s ease, box-shadow .35s ease;
         }
         .btn {
-            display: inline-block;
-            padding: 18px 40px;
-            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
-            color: white;
-            text-decoration: none;
-            font-size: 1.3em;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: all 0.4s ease;
-            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
+            box-shadow: 0 6px 18px rgba(255, 118, 118, .45);
         }
-        .btn:hover {
-            transform: scale(1.15) translateY(-5px);
-            box-shadow: 0 12px 30px rgba(255, 107, 107, 0.6);
-            background: linear-gradient(45deg, #ff8e53, #ff6b6b);
+        .btn:hover { transform: translateY(-4px) scale(1.06); box-shadow: 0 12px 26px rgba(255, 118, 118, .55); }
+
+        .guidance-btn {
+            background: linear-gradient(45deg, var(--accent-3), var(--accent-4));
+            box-shadow: 0 6px 18px rgba(232, 67, 147, .4);
+            font-size: 1.25rem;
         }
-        .zoom-btn {
-            display: inline-block;
-            padding: 20px 50px;
-            background: linear-gradient(45deg, #e84393, #fd79a8);
-            color: white;
-            text-decoration: none;
-            font-size: 1.5em;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: all 0.4s ease;
-            box-shadow: 0 6px 20px rgba(232, 67, 147, 0.4);
-            animation: flash 1.5s infinite;
-            margin: 40px 0;
-        }
-        @keyframes flash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-        .zoom-btn:hover {
-            transform: scale(1.2) translateY(-5px);
-            box-shadow: 0 12px 30px rgba(232, 67, 147, 0.6);
-            background: linear-gradient(45deg, #fd79a8, #e84393);
-        }
+        .guidance-btn:hover { transform: translateY(-4px) scale(1.07); box-shadow: 0 12px 30px rgba(232, 67, 147, .55); }
+
+        /* sections */
         .content-section {
             background: #fff;
-            padding: 30px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            padding: 32px;
+            border-radius: 20px;
+            margin: 32px auto;
+            max-width: 900px;
+            box-shadow: var(--shadow);
+            transition: transform .3s ease, box-shadow .3s ease;
         }
-        .content-section:hover {
-            transform: translateY(-5px);
-        }
-        .video-container {
-            text-align: center;
-            margin: 40px 0;
-        }
+        .content-section:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,.1); }
+
+        .video-container { text-align: center; margin: 32px 0 16px; }
         iframe {
-            border: 4px solid #6c5ce7;
+            width: 100%;
+            max-width: 720px;
+            height: 405px;
+            border: 4px solid var(--primary-1);
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.2);
+            box-shadow: 0 6px 18px rgba(78, 84, 200, .25);
         }
+        /* quote */
         .quote {
             font-style: italic;
             color: #d63031;
             background: #ffeaa7;
-            padding: 15px;
-            border-left: 5px solid #d63031;
-            margin: 20px 0;
-            border-radius: 8px;
+            padding: 16px 24px;
+            border-left: 6px solid #d63031;
+            border-radius: 12px;
+            margin: 24px 0;
         }
+        /* homework */
         .homework {
             background: #fab1a0;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            color: #2d3436;
+            padding: 18px 24px;
+            border-radius: 14px;
+            margin-top: 18px;
+            color: var(--text-main);
+            font-weight: 600;
         }
+        /* final words */
         .final-words {
-            background: linear-gradient(135deg, #00b894, #55efc4);
-            color: white;
-            padding: 25px;
-            border-radius: 15px;
+            background: linear-gradient(135deg, var(--success-1), var(--success-2));
+            color: #fff;
+            padding: 32px 24px;
+            border-radius: 20px;
             text-align: center;
-            margin-top: 40px;
-            box-shadow: 0 10px 30px rgba(0, 184, 148, 0.3);
+            margin: 48px auto;
+            max-width: 900px;
+            box-shadow: var(--shadow);
         }
+        /* footer */
         .footer {
             text-align: center;
-            margin-top: 40px;
-            font-size: 1.1em;
+            font-size: 1rem;
             color: #636e72;
+            margin-top: 56px;
+        }
+        /* responsive */
+        @media (max-width: 600px) {
+            .btn, .guidance-btn { padding: 14px 32px; font-size: 1rem; }
+            iframe { height: 56vw; }
         }
     </style>
 </head>
 <body>
     <div class="header">
         <h1>📚🎉 Welcome to the Marvelous World of Macroeconomics 🎉📚</h1>
-        <p style="font-size: 1.2em;">Hey there, curious minds! You've landed on the most epic repository dedicated to unraveling the mysteries of <strong>Macroeconomics</strong>—guided by the legendary, insightful, and infinitely entertaining <strong>Dr. Shay Tsaban</strong>! 🧙‍♂️📈</p>
+        <p style="font-size: 1.1rem; max-width: 760px; margin: 0 auto;">Hey there, curious minds! You've landed on the most epic repository dedicated to unraveling the mysteries of <strong>Macroeconomics</strong>—guided by the legendary, insightful, and infinitely entertaining <strong>Dr. Shay Tsaban</strong>! 🧙‍♂️📈</p>
+
+        <!-- NEW: Guidance Button for Final Assignment (WAR 2025B) -->
+        <div style="margin-top: 32px;">
+            <a href="Guidance%20Towards%20Final%20Assignment%20-%20WAR%202025B%2009072025.docx" class="guidance-btn" target="_blank">Download Final Assignment Guidance</a>
+        </div>
     </div>
 
+    <!-- Removed Zoom Meetings button as requested -->
+
     <div style="text-align: center; margin: 40px 0;">
-        <a href="https://us02web.zoom.us/j/6293724767?omn=88465859461" class="zoom-btn" target="_blank">Link to Live Zoom Meetings During War</a>
+        <a href="Macro%20Coursebook.docx" class="btn" target="_blank">Download Course Notes</a>
     </div>
 
     <div class="content-section">
@@ -145,15 +171,13 @@
         <p>Dr. Shay Tsaban is the economic equivalent of Gandalf, illuminating the path through fiscal policies, inflation, and GDP with unmatched clarity, humor, and a dash of magic. If Macroeconomics were a rock concert, he’d be the headliner! 🎸💰</p>
     </div>
 
-    <div style="text-align: center; margin: 40px 0;">
-        <a href="Macro%20Coursebook.docx" class="btn" target="_blank">Download Course Notes</a>
-    </div>
+    <!-- Lecture Sections -->
 
     <div class="content-section">
         <h2>🎥 Lecture 1 - The Basics of Macroeconomics - 9.3.2025</h2>
         <p>In the grand theater of life, understanding macroeconomics is like learning the ancient art of balance—it teaches you to navigate the chaos of economic forces and find order in complexity. As if you were decoding the language of civilization itself, this lecture lays the foundation for wisdom and responsibility in a world that demands you stand tall amidst uncertainty.</p>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/pBMn3h_NNK8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/pBMn3h_NNK8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -167,7 +191,7 @@
             <p><strong>Homework Alert:</strong> Assignments for this lecture are detailed on the official course website. They are due by <strong>March 23, 2025, at 8:00 AM sharp</strong>. Don’t delay—mastery awaits!</p>
         </div>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/HMj2FwF9_Yg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/HMj2FwF9_Yg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -178,7 +202,7 @@
             <p><strong>Homework Alert:</strong> Assignments for this lecture are detailed on the official course website. They are due by <strong>March 30, 2025, at 8:00 AM sharp</strong>. Don’t delay—mastery awaits!</p>
         </div>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/sPBxd5UZUIU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/sPBxd5UZUIU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -186,7 +210,7 @@
         <h2>🎥 Lecture 4 - 30.3.2025 - AD (Aggregate Demand): Investments and Keynes' Multiplier</h2>
         <p>Join Dr. Shay Tsaban as he explores the powerhouse of Aggregate Demand, focusing on the pivotal role of investments and the magic of Keynes' Multiplier. This lecture unveils how these elements amplify economic activity, giving you the tools to understand the ripples of fiscal decisions in the grand economic ocean.</p>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/dgZUbP6Wtnc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/dgZUbP6Wtnc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -197,7 +221,7 @@
             <p><strong>Homework Alert:</strong> Gear up, econ warriors! ⚔️📝 Your epic assignments for this lecture are chilling on the official course website. Slay them before <strong>April 29th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
         </div>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/8p491FjuZoY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/8p491FjuZoY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -205,7 +229,7 @@
         <h2>🎥 Lecture 6 - 20.4.2025 - Deflational Gap and Fiscal Intervention - Additional Methods of Interventions</h2>
         <p>Governments can do awful things. But they can also intervene for the good of the cause! Learn more about fiscal interventions in this lecture 🧠✨</p>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/W1iNON1GNOE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/W1iNON1GNOE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -216,7 +240,7 @@
             <p><strong>Homework Alert:</strong> Gear up, econ warriors! ⚔️📝 Your epic assignments for this lecture are chilling on the official course website. Slay them before <strong>May 4th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
         </div>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/Eqpfgao3D-o" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/Eqpfgao3D-o" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -224,15 +248,15 @@
         <h2>🎥 Lecture 8 - 4.5.2025 - Basic Equilibrium in the Money Market</h2>
         <p>Learn about combining the demand and supply of money to assess impact on interest rates! 🧠✨</p>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/CfkhzliSVpg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/CfkhzliSVpg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
-    
+
     <div class="content-section">
         <h2>🎥 Lecture 9 - 18.5.2025 - Combined Equilibrium in the Money Market + The Product Market</h2>
         <p>Learn about combining the demand and supply of money and products and the interaction between the two! 🧠✨</p>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/rzdm0Xfyy0Q" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/rzdm0Xfyy0Q" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
@@ -243,41 +267,39 @@
             <p><strong>Homework Alert:</strong> There is a new assignment on the rise, submission possible until <strong>June 8th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
         </div>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/4-A9aKrMrHU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/4-A9aKrMrHU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
     <div class="content-section">
         <h2>🎥 Lecture 11 - 8.6.2025 - Combined Equilibrium - Exercises!</h2>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/QefXAWstX8Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/QefXAWstX8Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
-     <div class="content-section">
+    <div class="content-section">
         <h2>🎥 Lecture 12 - 24.6.2025 - last lecture </h2>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/Cj_1n6hj_gc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/Cj_1n6hj_gc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
-    
+
     <div class="content-section">
         <h2>🎥 Lecture 13 - 9.7.2025 - Final Assignment - Explanations</h2>
         <div class="video-container">
-            <iframe width="720" height="405" src="https://www.youtube.com/embed/OkyndrTWhDw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe src="https://www.youtube.com/embed/OkyndrTWhDw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
     </div>
 
-
-
     <div class="final-words">
         <h3>👩‍🎓👨‍🎓 Final Words of Wisdom</h3>
-        <p style="font-size: 1.1em;">Economics isn’t just numbers and graphs—it’s the pulse of our world. Embrace the journey, let the insights inspire you, and remember: every economic theory is a step towards making you a superhero in disguise. 🦸‍♂️🦸‍♀️</p>
+        <p style="font-size: 1.05rem; max-width: 680px; margin: 0 auto;">Economics isn’t just numbers and graphs—it’s the pulse of our world. Embrace the journey, let the insights inspire you, and remember: every economic theory is a step towards making you a superhero in disguise. 🦸‍♂️🦸‍♀️</p>
     </div>
 
     <div class="footer">
         <p>Made with ❤️, humor, and a healthy dose of supply-side optimism.</p>
-        <p style="font-size: 1.3em;"><strong>Happy studying!</strong> 📚🥳✨</p>
+        <p style="font-size: 1.25rem;"><strong>Happy studying!</strong> 📚🥳✨</p>
     </div>
 </body>
 </html>
