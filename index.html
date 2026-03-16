@@ -1,305 +1,592 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Marvelous World of Macroeconomics</title>
-    <!-- Modern & inviting font -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>מאקרו כלכלה | המרכז האקדמי רופין</title>
+    <meta name="description" content="קורס מאקרו כלכלה במרכז האקדמי רופין, מועבר על ידי ד&quot;ר שי צבן, Ph.D.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
         :root {
-            /* palette */
-            --primary-1: #4e54c8;
-            --primary-2: #8f94fb;
-            --accent-1: #ff7676;
-            --accent-2: #ff9e57;
-            --accent-3: #e84393;
-            --accent-4: #fd79a8;
-            --success-1: #00b894;
-            --success-2: #55efc4;
-            --neutral-bg: #f7f9fc;
-            --text-main: #2d3436;
-            --text-title: #1e272e;
-            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --primary-start: #0a2342;
+            --primary-mid: #17507d;
+            --primary-end: #0f3057;
+            --accent-main: #3498db;
+            --accent-secondary: #f39c12;
+            --accent-highlight: #e74c3c;
+            --text-dark: #2c3e50;
+            --text-light: #7f8c8d;
+            --bg-color: #f4f6f9;
+            --card-bg: #ffffff;
+            --success: #27ae60;
         }
 
-        /* global reset */
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
+        * {
+            box-sizing: border-box;
             margin: 0;
-            padding: 0 4vw 80px;
-            font-family: 'Inter', Arial, sans-serif;
-            background: var(--neutral-bg);
-            color: var(--text-main);
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
             line-height: 1.7;
-            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
-        h1, h2, h3 {
-            color: var(--text-title);
-            font-weight: 700;
-            line-height: 1.3;
+
+        .page-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
-        /* header */
-        .header {
-            background: linear-gradient(120deg, var(--primary-1), var(--primary-2));
-            color: #fff;
-            padding: 48px 24px;
-            border-radius: 24px;
+
+        /* ========== HERO ========== */
+        header {
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-mid) 50%, var(--primary-end) 100%);
+            color: white;
+            padding: 6rem 1.5rem 8rem;
             text-align: center;
-            margin: 48px auto;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Abstract Background Elements */
+        header::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            /* Switched sides for RTL feel */
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(52, 152, 219, 0.2), transparent 70%);
+            border-radius: 50%;
+            animation: pulseBg 10s ease-in-out infinite alternate;
+        }
+
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: -80px;
+            right: -80px;
+            /* Switched sides */
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(243, 156, 18, 0.15), transparent 70%);
+            border-radius: 50%;
+            animation: pulseBg 12s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes pulseBg {
+            0% {
+                transform: scale(1) translate(0, 0);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1.1) translate(20px, -20px);
+                opacity: 1;
+            }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 10;
             max-width: 900px;
-            box-shadow: var(--shadow);
-            animation: glow 3s ease-in-out infinite alternate;
+            margin: 0 auto;
         }
-        @keyframes glow {
-            from { box-shadow: 0 10px 32px rgba(78, 84, 200, .25); }
-            to   { box-shadow: 0 10px 40px rgba(143, 148, 251, .35); }
+
+        .badge-row {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
         }
-        /* buttons */
-        .btn, .guidance-btn {
-            display: inline-block;
-            padding: 18px 42px;
-            font-size: 1.1rem;
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.2rem;
+            border-radius: 30px;
+            font-size: 0.9rem;
             font-weight: 600;
-            color: #fff;
-            text-decoration: none;
-            border-radius: 999px;
-            transition: transform .35s ease, box-shadow .35s ease;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
         }
-        .btn {
-            background: linear-gradient(45deg, var(--accent-1), var(--accent-2));
-            box-shadow: 0 6px 18px rgba(255, 118, 118, .45);
-        }
-        .btn:hover { transform: translateY(-4px) scale(1.06); box-shadow: 0 12px 26px rgba(255, 118, 118, .55); }
 
-        .guidance-btn {
-            background: linear-gradient(45deg, var(--accent-3), var(--accent-4));
-            box-shadow: 0 6px 18px rgba(232, 67, 147, .4);
-            font-size: 1.25rem;
+        .badge:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
         }
-        .guidance-btn:hover { transform: translateY(-4px) scale(1.07); box-shadow: 0 12px 30px rgba(232, 67, 147, .55); }
 
-        /* sections */
-        .content-section {
-            background: #fff;
-            padding: 32px;
-            border-radius: 20px;
-            margin: 32px auto;
-            max-width: 900px;
-            box-shadow: var(--shadow);
-            transition: transform .3s ease, box-shadow .3s ease;
-        }
-        .content-section:hover { transform: translateY(-6px); box-shadow: 0 12px 28px rgba(0,0,0,.1); }
-
-        .video-container { text-align: center; margin: 32px 0 16px; }
-        iframe {
-            width: 100%;
-            max-width: 720px;
-            height: 405px;
-            border: 4px solid var(--primary-1);
-            border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(78, 84, 200, .25);
-        }
-        /* quote */
-        .quote {
-            font-style: italic;
-            color: #d63031;
-            background: #ffeaa7;
-            padding: 16px 24px;
-            border-left: 6px solid #d63031;
-            border-radius: 12px;
-            margin: 24px 0;
-        }
-        /* homework */
-        .homework {
-            background: #fab1a0;
-            padding: 18px 24px;
-            border-radius: 14px;
-            margin-top: 18px;
-            color: var(--text-main);
-            font-weight: 600;
-        }
-        /* final words */
-        .final-words {
-            background: linear-gradient(135deg, var(--success-1), var(--success-2));
-            color: #fff;
-            padding: 32px 24px;
-            border-radius: 20px;
-            text-align: center;
-            margin: 48px auto;
-            max-width: 900px;
-            box-shadow: var(--shadow);
-        }
-        /* footer */
-        .footer {
-            text-align: center;
+        .badge i {
             font-size: 1rem;
-            color: #636e72;
-            margin-top: 56px;
+            color: var(--accent-secondary);
         }
-        /* responsive */
-        @media (max-width: 600px) {
-            .btn, .guidance-btn { padding: 14px 32px; font-size: 1rem; }
-            iframe { height: 56vw; }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+
+        h1 .highlight {
+            background: linear-gradient(to left, var(--accent-secondary), #f1c40f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 1.8rem;
+            font-weight: 400;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+        }
+
+        .instructor-details {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+        }
+
+        .instructor-name {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #ecf0f1;
+        }
+
+        .contact-link {
+            color: var(--accent-main);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .contact-link:hover {
+            color: #74b9ff;
+            text-decoration: underline;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .container {
+            max-width: 1000px;
+            margin: -4rem auto 4rem;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 20;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            padding: 3rem;
+            margin-bottom: 3rem;
+            border: 1px solid rgba(0, 0, 0, 0.03);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 0.8s forwards;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
+        }
+
+        .card:nth-child(1) {
+            animation-delay: 0.2s;
+        }
+
+        .card:nth-child(2) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes fadeUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #ecf0f1;
+        }
+
+        .icon-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 55px;
+            border-radius: 16px;
+            margin-left: 1.2rem;
+            /* RTL */
+            flex-shrink: 0;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .icon-box i {
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .icon-box.blue {
+            background: linear-gradient(135deg, #2980b9, #3498db);
+        }
+
+        .icon-box.orange {
+            background: linear-gradient(135deg, #d35400, #e67e22);
+        }
+
+
+        h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-start);
+            margin: 0;
+            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
+        }
+
+        /* ========== LECTURE CONTENT ========== */
+        .lecture-meta {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            background: #f8f9fa;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            border-right: 4px solid var(--accent-main);
+        }
+
+        .lecture-meta strong {
+            color: var(--text-dark);
+            font-weight: 700;
+        }
+
+        .lecture-meta i {
+            color: var(--accent-main);
+            margin-left: 0.4rem;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            /* 16:9 Aspect Ratio */
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+            background-color: #000;
+            border: 4px solid #fff;
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
+        /* ========== COURSE NOTES ========== */
+        .notes-wrapper {
+            background: linear-gradient(to left, #fff9e6, #ffffff);
+            border: 1px solid #f1c40f;
+            border-radius: 16px;
+            padding: 2.5rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .notes-wrapper::before {
+            content: '\f15c';
+            /* FontAwesome file-alt */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            top: -20px;
+            left: -20px;
+            font-size: 8rem;
+            color: rgba(241, 196, 15, 0.1);
+            transform: rotate(-15deg);
+        }
+
+        .notes-content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .notes-content h3 {
+            font-size: 1.6rem;
+            color: var(--primary-start);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .notes-content p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: white;
+            background: linear-gradient(135deg, var(--accent-secondary), #e67e22);
+            border-radius: 50px;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 2px solid transparent;
+        }
+
+        .btn:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 12px 25px rgba(243, 156, 18, 0.6);
+            background: linear-gradient(135deg, #e67e22, var(--accent-secondary));
+        }
+
+        .btn i {
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn:hover i {
+            transform: translateX(-5px);
+            /* RTL arrow movement */
+        }
+
+        /* ========== FOOTER ========== */
+        footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-light);
+            margin-top: auto;
+            background: var(--primary-start);
+            color: #ecf0f1;
+            border-top: 5px solid var(--accent-secondary);
+        }
+
+        .footer-brand {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-brand span {
+            color: var(--accent-secondary);
+        }
+
+        footer p {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-bottom: 0.5rem;
+        }
+
+        footer .heart {
+            color: var(--accent-highlight);
+            animation: pulseHeart 1.5s infinite;
+            display: inline-block;
+        }
+
+        @keyframes pulseHeart {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.8rem;
+            }
+
+            .subtitle {
+                font-size: 1.4rem;
+            }
+
+            header {
+                padding: 4rem 1rem 6rem;
+            }
+
+            .container {
+                padding: 0 1rem;
+                margin-top: -3rem;
+            }
+
+            .card {
+                padding: 2rem 1.5rem;
+            }
+
+            .lecture-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+
+            .badge-row {
+                flex-direction: column;
+                align-items: center;
+                gap: 0.5rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="header">
-        <h1>📚🎉 Welcome to the Marvelous World of Macroeconomics 🎉📚</h1>
-        <p style="font-size: 1.1rem; max-width: 760px; margin: 0 auto;">Hey there, curious minds! You've landed on the most epic repository dedicated to unraveling the mysteries of <strong>Macroeconomics</strong>—guided by the legendary, insightful, and infinitely entertaining <strong>Dr. Shay Tsaban</strong>! 🧙‍♂️📈</p>
+    <div class="page-wrapper">
 
-        <!-- NEW: Guidance Button for Final Assignment (WAR 2025B) -->
-        <div style="margin-top: 32px;">
-            <a href="Guidance%20Towards%20Final%20Assignment%20-%20WAR%202025B%2009072025.docx" class="guidance-btn" target="_blank">Download Final Assignment Guidance</a>
-        </div>
-    </div>
+        <header>
+            <div class="header-content">
+                <div class="badge-row">
+                    <span class="badge"><i class="fas fa-university"></i> המרכז האקדמי רופין</span>
+                    <span class="badge"><i class="fas fa-chart-line"></i> כלכלה וניהול</span>
+                    <span class="badge"><i class="far fa-calendar-alt"></i> סמסטר אביב 2026</span>
+                </div>
 
-    <!-- Removed Zoom Meetings button as requested -->
+                <h1><span class="highlight">מאקרו כלכלה</span></h1>
+                <p class="subtitle">הבנת התמונה הגדולה של הכלכלה הלאומית והעולמית</p>
 
-    <div style="text-align: center; margin: 40px 0;">
-        <a href="Macro%20Coursebook.docx" class="btn" target="_blank">Download Course Notes</a>
-    </div>
+                <div class="instructor-details">
+                    <span class="instructor-name">מרצה: ד"ר שי צבן, Ph.D.</span>
+                    <a href="mailto:shay.tsaban@gmail.com" class="contact-link">
+                        <i class="fas fa-envelope"></i> shay.tsaban@gmail.com
+                    </a>
+                </div>
+            </div>
+        </header>
 
-    <div class="content-section">
-        <h2>🤔 What’s this all about?</h2>
-        <p>This repository houses the awe-inspiring <strong>Macro Coursebook.docx</strong>, your one-stop treasure trove of economic wisdom for Dr. Shay Tsaban’s course at Ruppin Academic Center.</p>
-    </div>
+        <main class="container">
 
-    <div class="content-section">
-        <h2>🌟 Why Dr. Shay Tsaban? 🌟</h2>
-        <p>Dr. Shay Tsaban is the economic equivalent of Gandalf, illuminating the path through fiscal policies, inflation, and GDP with unmatched clarity, humor, and a dash of magic. If Macroeconomics were a rock concert, he’d be the headliner! 🎸💰</p>
-    </div>
+            <!-- LECTURE 1 SECTION -->
+            <section class="card" id="lecture-1">
+                <div class="section-header">
+                    <div class="icon-box blue">
+                        <i class="fas fa-video"></i>
+                    </div>
+                    <h2>שיעור 1: יסודות המאקרו כלכלה</h2>
+                </div>
 
-    <!-- Lecture Sections -->
+                <div class="lecture-meta">
+                    <span><i class="far fa-calendar-alt"></i> <strong>תאריך השקה:</strong> 15.3.2026</span>
+                    <span><i class="fas fa-stopwatch"></i> <strong>אורך:</strong> צפייה מלאה</span>
+                    <span><i class="fas fa-tags"></i> <strong>נושאים:</strong> מבוא, תמ"ג, צמיחה כלכלית</span>
+                </div>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 1 - The Basics of Macroeconomics - 9.3.2025</h2>
-        <p>In the grand theater of life, understanding macroeconomics is like learning the ancient art of balance—it teaches you to navigate the chaos of economic forces and find order in complexity. As if you were decoding the language of civilization itself, this lecture lays the foundation for wisdom and responsibility in a world that demands you stand tall amidst uncertainty.</p>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/pBMn3h_NNK8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/jNON2qClINE?si=vXJQc2_QG-wB108B"
+                        title="YouTube video player" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 2 - Exploring Economic Forces</h2>
-        <p>Dive deeper into the dynamic world of macroeconomics as Dr. Shay Tsaban unravels the intricate forces shaping economies. This lecture builds on the basics, offering insights that resonate like a symphony of supply and demand, while furthering and expanding your knowledge regarding national accounting—the backbone of understanding a nation's economic health.</p>
-        <div class="quote">
-            <p>“To grasp national accounting is to wrestle with the very structure of civilization. It’s not just numbers; it’s the story of human struggle and triumph. Face it with discipline, and you’ll emerge not merely educated, but formidable.” — Inspired by Jordan Peterson</p>
-        </div>
-        <div class="homework">
-            <p><strong>Homework Alert:</strong> Assignments for this lecture are detailed on the official course website. They are due by <strong>March 23, 2025, at 8:00 AM sharp</strong>. Don’t delay—mastery awaits!</p>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/HMj2FwF9_Yg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+            <!-- COURSE NOTES SECTION -->
+            <section class="card" id="course-notes">
+                <div class="section-header">
+                    <div class="icon-box orange">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h2>חומרי עזר וסיכומי שיעור</h2>
+                </div>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 3 - 23.3.2025 - National Accounting: Government Expenditure and Private Consumption</h2>
-        <p>Step into the heart of national accounting with Dr. Shay Tsaban as he breaks down the critical roles of government expenditure and private consumption. This lecture explores how these forces drive economic growth and stability, offering a vibrant perspective on the numbers that shape our world.</p>
-        <div class="homework">
-            <p><strong>Homework Alert:</strong> Assignments for this lecture are detailed on the official course website. They are due by <strong>March 30, 2025, at 8:00 AM sharp</strong>. Don’t delay—mastery awaits!</p>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/sPBxd5UZUIU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+                <div class="notes-wrapper">
+                    <div class="notes-content">
+                        <h3>מחברת הקורס המלאה</h3>
+                        <p>כאן תוכלו למצוא את הסיכום המקיף של כלל החומר הנלמד בשיעורים, כולל תרשימים, נוסחאות והסברים
+                            מפורטים. המחברת מתעדכנת באופן שוטף.</p>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 4 - 30.3.2025 - AD (Aggregate Demand): Investments and Keynes' Multiplier</h2>
-        <p>Join Dr. Shay Tsaban as he explores the powerhouse of Aggregate Demand, focusing on the pivotal role of investments and the magic of Keynes' Multiplier. This lecture unveils how these elements amplify economic activity, giving you the tools to understand the ripples of fiscal decisions in the grand economic ocean.</p>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/dgZUbP6Wtnc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+                        <a href="https://mypac-my.sharepoint.com/:w:/g/personal/shay_tsaban_pac_org_il/IQDDP9iB-AW1RbxCBeR0wiuWAWq9_VNbUL2kovIUoFvkgFA"
+                            target="_blank" rel="noopener noreferrer" class="btn">
+                            <i class="fas fa-external-link-alt"></i>
+                            לצפייה במחברת הקורס (SharePoint)
+                        </a>
+                    </div>
+                </div>
+            </section>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 5 - 6.4.2025 - Equilibrium, Keynes Multiplier, Deflational Gap and Fiscal Intervention</h2>
-        <p>Get ready for an economic rollercoaster with Dr. Shay Tsaban! 🎢💸 This lecture dives into the juicy details of finding balance in the economy, supercharging it with Keynes’ Multiplier, tackling deflationary gaps, and swooping in with fiscal heroics. It’s like an action-packed blockbuster for your brain! 🧠✨</p>
-        <div class="homework">
-            <p><strong>Homework Alert:</strong> Gear up, econ warriors! ⚔️📝 Your epic assignments for this lecture are chilling on the official course website. Slay them before <strong>April 29th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/8p491FjuZoY" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+        </main>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 6 - 20.4.2025 - Deflational Gap and Fiscal Intervention - Additional Methods of Interventions</h2>
-        <p>Governments can do awful things. But they can also intervene for the good of the cause! Learn more about fiscal interventions in this lecture 🧠✨</p>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/W1iNON1GNOE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
+        <footer>
+            <div class="footer-brand">מאקרו כלכלה <span>|</span> המרכז האקדמי רופין</div>
+            <p>ד"ר שי צבן, Ph.D. &copy; 2026 כל הזכויות שמורות</p>
+            <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.6;">
+                נבנה באהבה <span class="heart">♥</span> למען הסטודנטים
+            </p>
+        </footer>
 
-    <div class="content-section">
-        <h2>🎥 Lecture 7 - 27.4.2025 - The Basics of Money Supply</h2>
-        <p>Learn about the basics of the monetary system and the money supply creation! 🧠✨</p>
-        <div class="homework">
-            <p><strong>Homework Alert:</strong> Gear up, econ warriors! ⚔️📝 Your epic assignments for this lecture are chilling on the official course website. Slay them before <strong>May 4th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/Eqpfgao3D-o" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 8 - 4.5.2025 - Basic Equilibrium in the Money Market</h2>
-        <p>Learn about combining the demand and supply of money to assess impact on interest rates! 🧠✨</p>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/CfkhzliSVpg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 9 - 18.5.2025 - Combined Equilibrium in the Money Market + The Product Market</h2>
-        <p>Learn about combining the demand and supply of money and products and the interaction between the two! 🧠✨</p>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/rzdm0Xfyy0Q" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 10 - 25.5.2025 - Combined Equilibrium in the Money Market + The Product Market - Part 2</h2>
-        <p>Let's keep going! More exercises regarding this important topic are on the way 🧠✨</p>
-        <div class="homework">
-            <p><strong>Homework Alert:</strong> There is a new assignment on the rise, submission possible until <strong>June 8th, 8:00 AM sharp</strong>, or risk missing out on glory. Procrastination is the enemy—charge towards victory now! 🏆🚀</p>
-        </div>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/4-A9aKrMrHU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 11 - 8.6.2025 - Combined Equilibrium - Exercises!</h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/QefXAWstX8Y" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 12 - 24.6.2025 - last lecture </h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/Cj_1n6hj_gc" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="content-section">
-        <h2>🎥 Lecture 13 - 9.7.2025 - Final Assignment - Explanations</h2>
-        <div class="video-container">
-            <iframe src="https://www.youtube.com/embed/OkyndrTWhDw" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-        </div>
-    </div>
-
-    <div class="final-words">
-        <h3>👩‍🎓👨‍🎓 Final Words of Wisdom</h3>
-        <p style="font-size: 1.05rem; max-width: 680px; margin: 0 auto;">Economics isn’t just numbers and graphs—it’s the pulse of our world. Embrace the journey, let the insights inspire you, and remember: every economic theory is a step towards making you a superhero in disguise. 🦸‍♂️🦸‍♀️</p>
-    </div>
-
-    <div class="footer">
-        <p>Made with ❤️, humor, and a healthy dose of supply-side optimism.</p>
-        <p style="font-size: 1.25rem;"><strong>Happy studying!</strong> 📚🥳✨</p>
     </div>
 </body>
+
 </html>
