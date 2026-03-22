@@ -26,6 +26,7 @@
             --bg-color: #f4f6f9;
             --card-bg: #ffffff;
             --success: #27ae60;
+            --zoom-color: #2D8CFF;
         }
 
         * {
@@ -52,20 +53,18 @@
         header {
             background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-mid) 50%, var(--primary-end) 100%);
             color: white;
-            padding: 6rem 1.5rem 8rem;
+            padding: 5rem 1.5rem 7rem;
             text-align: center;
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
 
-        /* Abstract Background Elements */
         header::before {
             content: '';
             position: absolute;
             top: -100px;
             left: -100px;
-            /* Switched sides for RTL feel */
             width: 500px;
             height: 500px;
             background: radial-gradient(circle, rgba(52, 152, 219, 0.2), transparent 70%);
@@ -73,29 +72,9 @@
             animation: pulseBg 10s ease-in-out infinite alternate;
         }
 
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: -80px;
-            right: -80px;
-            /* Switched sides */
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(243, 156, 18, 0.15), transparent 70%);
-            border-radius: 50%;
-            animation: pulseBg 12s ease-in-out infinite alternate-reverse;
-        }
-
         @keyframes pulseBg {
-            0% {
-                transform: scale(1) translate(0, 0);
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: scale(1.1) translate(20px, -20px);
-                opacity: 1;
-            }
+            0% { transform: scale(1) translate(0, 0); opacity: 0.8; }
+            100% { transform: scale(1.1) translate(20px, -20px); opacity: 1; }
         }
 
         .header-content {
@@ -110,7 +89,7 @@
             justify-content: center;
             gap: 1rem;
             flex-wrap: wrap;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .badge {
@@ -123,92 +102,79 @@
             border-radius: 30px;
             font-size: 0.9rem;
             font-weight: 600;
-            letter-spacing: 0.5px;
             border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .badge:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .badge i {
-            font-size: 1rem;
-            color: var(--accent-secondary);
         }
 
         h1 {
-            font-size: 4rem;
+            font-size: 3.5rem;
             font-weight: 900;
-            letter-spacing: -0.02em;
-            line-height: 1.2;
             margin-bottom: 0.5rem;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
         }
 
         h1 .highlight {
             background: linear-gradient(to left, var(--accent-secondary), #f1c40f);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .subtitle {
-            font-size: 1.8rem;
-            font-weight: 400;
+            font-size: 1.6rem;
             opacity: 0.9;
-            margin-bottom: 1rem;
-            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.1s both;
+            margin-bottom: 2rem;
+        }
+
+        /* Live Session Link Styles */
+        .live-session-container {
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s 0.3s both;
+        }
+
+        .btn-zoom {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: var(--zoom-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(45, 140, 255, 0.4);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.2);
+        }
+
+        .btn-zoom:hover {
+            transform: translateY(-3px) scale(1.05);
+            background: #1e73e8;
+            box-shadow: 0 8px 20px rgba(45, 140, 255, 0.6);
+        }
+
+        .btn-zoom i {
+            font-size: 1.2rem;
         }
 
         .instructor-details {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
-            animation: slideDown 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.2s both;
+            gap: 0.3rem;
         }
 
-        .instructor-name {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: #ecf0f1;
-        }
-
-        .contact-link {
-            color: var(--accent-main);
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: color 0.3s ease;
-        }
-
-        .contact-link:hover {
-            color: #74b9ff;
-            text-decoration: underline;
-        }
+        .instructor-name { font-size: 1.3rem; font-weight: 700; color: #ecf0f1; }
+        .contact-link { color: var(--accent-main); text-decoration: none; font-size: 1rem; }
 
         @keyframes slideDown {
-            from {
-                transform: translateY(-30px);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
         /* ========== MAIN CONTENT ========== */
         .container {
             max-width: 1000px;
-            margin: -4rem auto 4rem;
+            margin: -3rem auto 4rem;
             padding: 0 2rem;
             position: relative;
             z-index: 20;
@@ -221,30 +187,12 @@
             padding: 3rem;
             margin-bottom: 3rem;
             border: 1px solid rgba(0, 0, 0, 0.03);
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
-            opacity: 0;
-            transform: translateY(30px);
             animation: fadeUp 0.8s forwards;
         }
 
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.12);
-        }
-
-        .card:nth-child(1) {
-            animation-delay: 0.2s;
-        }
-
-        .card:nth-child(2) {
-            animation-delay: 0.4s;
-        }
-
         @keyframes fadeUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .section-header {
@@ -263,39 +211,22 @@
             height: 55px;
             border-radius: 16px;
             margin-left: 1.2rem;
-            /* RTL */
             flex-shrink: 0;
             box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .icon-box i {
-            font-size: 1.5rem;
-            color: white;
-        }
+        .icon-box i { font-size: 1.5rem; color: white; }
+        .icon-box.blue { background: linear-gradient(135deg, #2980b9, #3498db); }
+        .icon-box.purple { background: linear-gradient(135deg, #8e44ad, #9b59b6); }
+        .icon-box.orange { background: linear-gradient(135deg, #d35400, #e67e22); }
 
-        .icon-box.blue {
-            background: linear-gradient(135deg, #2980b9, #3498db);
-        }
+        h2 { font-size: 1.8rem; font-weight: 800; color: var(--primary-start); margin: 0; }
 
-        .icon-box.orange {
-            background: linear-gradient(135deg, #d35400, #e67e22);
-        }
-
-
-        h2 {
-            font-size: 2rem;
-            font-weight: 800;
-            color: var(--primary-start);
-            margin: 0;
-            text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.8);
-        }
-
-        /* ========== LECTURE CONTENT ========== */
         .lecture-meta {
             display: flex;
             align-items: center;
             gap: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             font-size: 1.1rem;
             color: var(--text-light);
             background: #f8f9fa;
@@ -304,21 +235,22 @@
             border-right: 4px solid var(--accent-main);
         }
 
-        .lecture-meta strong {
-            color: var(--text-dark);
-            font-weight: 700;
-        }
+        .lecture-meta i { color: var(--accent-main); margin-left: 0.4rem; }
 
-        .lecture-meta i {
-            color: var(--accent-main);
-            margin-left: 0.4rem;
+        .lecture-description {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            background: rgba(52, 152, 219, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px dashed var(--accent-main);
         }
 
         .video-container {
             position: relative;
             width: 100%;
             padding-bottom: 56.25%;
-            /* 16:9 Aspect Ratio */
             border-radius: 16px;
             overflow: hidden;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
@@ -327,57 +259,16 @@
         }
 
         .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;
         }
 
-        /* ========== COURSE NOTES ========== */
+        /* ========== NOTES ========== */
         .notes-wrapper {
             background: linear-gradient(to left, #fff9e6, #ffffff);
             border: 1px solid #f1c40f;
             border-radius: 16px;
             padding: 2.5rem;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .notes-wrapper::before {
-            content: '\f15c';
-            /* FontAwesome file-alt */
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            position: absolute;
-            top: -20px;
-            left: -20px;
-            font-size: 8rem;
-            color: rgba(241, 196, 15, 0.1);
-            transform: rotate(-15deg);
-        }
-
-        .notes-content {
-            position: relative;
-            z-index: 10;
-        }
-
-        .notes-content h3 {
-            font-size: 1.6rem;
-            color: var(--primary-start);
-            margin-bottom: 1rem;
-            font-weight: 800;
-        }
-
-        .notes-content p {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
         .btn {
@@ -392,120 +283,29 @@
             background: linear-gradient(135deg, var(--accent-secondary), #e67e22);
             border-radius: 50px;
             text-decoration: none;
-            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 2px solid transparent;
+            transition: all 0.3s ease;
         }
 
-        .btn:hover {
-            transform: translateY(-5px) scale(1.05);
-            box-shadow: 0 12px 25px rgba(243, 156, 18, 0.6);
-            background: linear-gradient(135deg, #e67e22, var(--accent-secondary));
-        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 12px 25px rgba(243, 156, 18, 0.4); }
 
-        .btn i {
-            font-size: 1.3rem;
-            transition: transform 0.3s ease;
-        }
-
-        .btn:hover i {
-            transform: translateX(-5px);
-            /* RTL arrow movement */
-        }
-
-        /* ========== FOOTER ========== */
         footer {
             text-align: center;
             padding: 3rem 2rem;
-            color: var(--text-light);
-            margin-top: auto;
             background: var(--primary-start);
             color: #ecf0f1;
             border-top: 5px solid var(--accent-secondary);
         }
 
-        .footer-brand {
-            font-size: 1.6rem;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-brand span {
-            color: var(--accent-secondary);
-        }
-
-        footer p {
-            font-size: 1rem;
-            opacity: 0.8;
-            margin-bottom: 0.5rem;
-        }
-
-        footer .heart {
-            color: var(--accent-highlight);
-            animation: pulseHeart 1.5s infinite;
-            display: inline-block;
-        }
-
-        @keyframes pulseHeart {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.2);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.8rem;
-            }
-
-            .subtitle {
-                font-size: 1.4rem;
-            }
-
-            header {
-                padding: 4rem 1rem 6rem;
-            }
-
-            .container {
-                padding: 0 1rem;
-                margin-top: -3rem;
-            }
-
-            .card {
-                padding: 2rem 1.5rem;
-            }
-
-            .lecture-meta {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .badge-row {
-                flex-direction: column;
-                align-items: center;
-                gap: 0.5rem;
-            }
-
-            h2 {
-                font-size: 1.6rem;
-            }
+            h1 { font-size: 2.5rem; }
+            .lecture-meta { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .badge-row { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
 
 <body>
     <div class="page-wrapper">
-
         <header>
             <div class="header-content">
                 <div class="badge-row">
@@ -513,12 +313,20 @@
                     <span class="badge"><i class="fas fa-chart-line"></i> כלכלה וניהול</span>
                     <span class="badge"><i class="far fa-calendar-alt"></i> סמסטר אביב 2026</span>
                 </div>
-
                 <h1><span class="highlight">מאקרו כלכלה</span></h1>
-                <p class="subtitle">הבנת התמונה הגדולה של הכלכלה הלאומית והעולמית</p>
+                <p class="subtitle">הבנת התמונה הגדולה של הכלכלה הלאומית</p>
+                
+                <!-- Live Session Link -->
+                <div class="live-session-container">
+                    <a href="https://us02web.zoom.us/j/89302348504?pwd=wwWWxxjW62KS61XDbOteC0sy4nBhfa.1" 
+                       target="_blank" class="btn-zoom">
+                        <i class="fas fa-video"></i>
+                        כניסה למפגש חי (Zoom)
+                    </a>
+                </div>
 
                 <div class="instructor-details">
-                    <span class="instructor-name">מרצה: ד"ר שי צבן, Ph.D.</span>
+                    <span class="instructor-name">מרצה: ד"ר שי צבאן, Ph.D.</span>
                     <a href="mailto:shay.tsaban@gmail.com" class="contact-link">
                         <i class="fas fa-envelope"></i> shay.tsaban@gmail.com
                     </a>
@@ -527,7 +335,6 @@
         </header>
 
         <main class="container">
-
             <!-- LECTURE 1 SECTION -->
             <section class="card" id="lecture-1">
                 <div class="section-header">
@@ -536,17 +343,38 @@
                     </div>
                     <h2>שיעור 1: יסודות המאקרו כלכלה</h2>
                 </div>
-
                 <div class="lecture-meta">
-                    <span><i class="far fa-calendar-alt"></i> <strong>תאריך השקה:</strong> 15.3.2026</span>
-                    <span><i class="fas fa-stopwatch"></i> <strong>אורך:</strong> צפייה מלאה</span>
-                    <span><i class="fas fa-tags"></i> <strong>נושאים:</strong> מבוא, תמ"ג, צמיחה כלכלית</span>
+                    <span><i class="far fa-calendar-alt"></i> <strong>תאריך:</strong> 15.3.2026</span>
+                    <span><i class="fas fa-tags"></i> <strong>נושאים:</strong> מבוא, תמ"ג, צמיחה</span>
+                </div>
+                <div class="video-container">
+                    <iframe src="https://www.youtube.com/embed/jNON2qClINE?si=vXJQc2_QG-wB108B"
+                        title="Lecture 1" frameborder="0" allowfullscreen>
+                    </iframe>
+                </div>
+            </section>
+
+            <!-- LECTURE 2 SECTION -->
+            <section class="card" id="lecture-2">
+                <div class="section-header">
+                    <div class="icon-box purple">
+                        <i class="fas fa-chart-pie"></i>
+                    </div>
+                    <h2>שיעור 2: המשך חשבונאות לאומית ותרגול ברמת בחינה</h2>
+                </div>
+                <div class="lecture-meta">
+                    <span><i class="far fa-calendar-alt"></i> <strong>תאריך:</strong> 22.3.2026</span>
+                    <span><i class="fas fa-tags"></i> <strong>נושאים:</strong> רכיבי הביקוש (C, I, G), הכנסה פנויה, חיסכון והשקעה</span>
+                </div>
+                
+                <div class="lecture-description">
+                    <strong>תיאור השיעור:</strong> בשיעור זה צללנו לעומק רכיבי הביקוש המצרפי במשק הסגור. ניתחנו את הגורמים המשפיעים על הצריכה הפרטית (C), ההשקעות (I) וההוצאה הממשלתית (G). למדנו להשתמש בדוח היווי הון להבנת מקורות המימון להשקעות (חיסכון פרטי, עסקי וממשלתי) ותרגלנו שאלות מורכבות ממבחני עבר לחישוב התוצר והכנסה פנויה.
                 </div>
 
                 <div class="video-container">
-                    <iframe src="https://www.youtube.com/embed/jNON2qClINE?si=vXJQc2_QG-wB108B"
-                        title="YouTube video player" frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    <iframe src="https://www.youtube.com/embed/G4WcQAqE_Rg"
+                        title="Lecture 2" frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen>
                     </iframe>
                 </div>
@@ -560,32 +388,21 @@
                     </div>
                     <h2>חומרי עזר וסיכומי שיעור</h2>
                 </div>
-
                 <div class="notes-wrapper">
-                    <div class="notes-content">
-                        <h3>מחברת הקורס המלאה</h3>
-                        <p>כאן תוכלו למצוא את הסיכום המקיף של כלל החומר הנלמד בשיעורים, כולל תרשימים, נוסחאות והסברים
-                            מפורטים. המחברת מתעדכנת באופן שוטף.</p>
-
-                        <a href="https://mypac-my.sharepoint.com/:w:/g/personal/shay_tsaban_pac_org_il/IQDDP9iB-AW1RbxCBeR0wiuWAWq9_VNbUL2kovIUoFvkgFA"
-                            target="_blank" rel="noopener noreferrer" class="btn">
-                            <i class="fas fa-external-link-alt"></i>
-                            לצפייה במחברת הקורס (SharePoint)
-                        </a>
-                    </div>
+                    <h3>מחברת הקורס המלאה</h3>
+                    <p>סיכום מקיף של כלל החומר הנלמד בשיעורים, כולל תרשימים, נוסחאות והסברים מפורטים. המחברת מתעדכנת באופן שוטף.</p>
+                    <a href="https://mypac-my.sharepoint.com/:w:/g/personal/shay_tsaban_pac_org_il/IQDDP9iB-AW1RbxCBeR0wiuWAWq9_VNbUL2kovIUoFvkgFA"
+                        target="_blank" rel="noopener noreferrer" class="btn">
+                        <i class="fas fa-external-link-alt"></i> לצפייה במחברת הקורס (SharePoint)
+                    </a>
                 </div>
             </section>
-
         </main>
 
         <footer>
             <div class="footer-brand">מאקרו כלכלה <span>|</span> המרכז האקדמי רופין</div>
             <p>ד"ר שי צבאן, Ph.D. &copy; 2026 כל הזכויות שמורות</p>
-            <p style="margin-top: 1rem; font-size: 0.85rem; opacity: 0.6;">
-                נבנה באהבה <span class="heart">♥</span> למען הסטודנטים
-            </p>
         </footer>
-
     </div>
 </body>
 
