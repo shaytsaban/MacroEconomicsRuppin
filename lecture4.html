@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מבדק מקרו-כלכלה אינטראקטיבי</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Heebo', sans-serif; background-color: #f0f4f8; }
+        .option-card { transition: all 0.2s; cursor: pointer; border: 2px solid transparent; }
+        .option-card:hover { border-color: #3b82f6; background-color: #eff6ff; }
+        .selected { border-color: #3b82f6; background-color: #dbeafe; }
+        .correct { border-color: #10b981; background-color: #ecfdf5; }
+        .incorrect { border-color: #ef4444; background-color: #fef2f2; }
+    </style>
+</head>
+<body class="py-10 px-4">
+
+    <div class="max-w-3xl mx-auto">
+        <!-- Header -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl font-black text-gray-800 mb-2">מבדק יסודות הביקוש המצרפי</h1>
+            <p class="text-lg text-gray-600">בחן את הבנתך במושגי ה-AD, המכפיל והנטיות השוליות</p>
+            <div id="progress-bar" class="w-full bg-gray-200 h-2 mt-6 rounded-full overflow-hidden">
+                <div id="progress-fill" class="bg-blue-600 h-full w-0 transition-all duration-500"></div>
+            </div>
+        </header>
+
+        <!-- Quiz Container -->
+        <div id="quiz-box" class="bg-white rounded-3xl shadow-xl p-8 min-h-[400px]">
+            <div id="question-container">
+                <!-- Question will be injected here -->
+            </div>
+            
+            <div id="feedback-container" class="mt-6 hidden p-4 rounded-xl border">
+                <p id="feedback-text" class="font-bold mb-1"></p>
+                <p id="explanation-text" class="text-sm text-gray-700"></p>
+            </div>
+
+            <div class="mt-10 flex justify-between items-center">
+                <button id="next-btn" class="bg-blue-600 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-700 transition disabled:opacity-50 disabled:cursor-not-allowed">
+                    לשאלה הבאה
+                </button>
+                <span id="question-counter" class="text-gray-500 font-medium text-sm"></span>
+            </div>
+        </div>
+
+        <!-- Final Score View (Hidden by default) -->
+        <div id="score-view" class="hidden bg-white rounded-3xl shadow-xl p-12 text-center">
+            <div class="text-6xl mb-4">🏆</div>
+            <h2 class="text-3xl font-black text-gray-800 mb-2">כל הכבוד!</h2>
+            <p class="text-xl text-gray-600 mb-6">סיימת את המבדק בהצלחה.</p>
+            <div class="text-5xl font-black text-blue-600 mb-8" id="final-score-text">0/0</div>
+            <button onclick="location.reload()" class="bg-gray-800 text-white px-8 py-3 rounded-full font-bold hover:bg-black transition">
+                נסה שוב
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                q: "מה מייצגת פונקציית הביקוש המצרפי (AD) במשק סגור?",
+                options: [
+                    "את סך התוצר המיוצר בפועל במשק ברגע נתון.",
+                    "סך התכנונים של כל המגזרים לרכישת מוצרים ושירותים (C+I+G).",
+                    "את סך המיסים שהממשלה מתכננת לגבות.",
+                    "את עודף הייצור של הפירמות מעבר לביקוש."
+                ],
+                correct: 1,
+                explanation: "AD מייצג את סך הביקוש המתוכנן מצד משקי הבית (צריכה), פירמות (השקעה) והממשלה (צריכה ציבורית)."
+            },
+            {
+                q: "כיצד מוגדרת 'הכנסה פנויה' (Yd) במודל?",
+                options: [
+                    "סך התוצר בתוספת המיסים הקבועים.",
+                    "סך הצריכה הפרטית בלבד.",
+                    "התוצר הלאומי פחות המיסים נטו (Y - T).",
+                    "סך הכסף שנמצא במזומן אצל הציבור."
+                ],
+                correct: 2,
+                explanation: "הכנסה פנויה היא מה שנשאר לאזרחים ביד לאחר שהממשלה גבתה את המיסים (T) מתוך סך התוצר (Y)."
+            },
+            {
+                q: "אם ידוע כי הנטייה השולית לצרוך (MPC) היא 0.4 והנטייה השולית להשקיע (MPI) היא 0.3, מהו ה-MPE?",
+                options: [
+                    "0.1",
+                    "0.7",
+                    "0.12",
+                    "1.0"
+                ],
+                correct: 1,
+                explanation: "ה-MPE הוא סכום הנטיות השוליות להוצאה מהתוצר: 0.4 + 0.3 = 0.7."
+            },
+            {
+                q: "מה קורה לביקוש המצרפי כאשר הממשלה מגדילה את המיסים הקבועים (T)?",
+                options: [
+                    "פונקציית AD תעלה במקביל.",
+                    "פונקציית AD תשתנה בשיפוע שלה.",
+                    "פונקציית AD תרד במקביל (כי הצריכה תקטן).",
+                    "הביקוש המצרפי לא יושפע ממיסים קבועים."
+                ],
+                correct: 2,
+                explanation: "עליית מיסים מקטינה את ההכנסה הפנויה, מה שגורם לירידה בצריכה הפרטית ולכן לירידה ב-AD."
+            },
+            {
+                q: "מה המשמעות הכלכלית של הקביעה כי ה-MPE הוא 0.8?",
+                options: [
+                    "המשק תמיד צורך 80% מההכנסה שלו.",
+                    "על כל שקל נוסף של תוצר, הביקוש המצרפי יגדל ב-80 אגורות.",
+                    "הממשלה לוקחת 80% מס מהתוצר.",
+                    "80% מהתוצר מיועד להשקעות של פירמות."
+                ],
+                correct: 1,
+                explanation: "נטייה שולית (Marginal) תמיד מתייחסת לשינוי - תוספת של יחידה אחת בתוצר גוררת תוספת של 0.8 בביקוש."
+            },
+            {
+                q: "מהו 'ביקוש אוטונומי' (מסומן לרוב כ-AD0)?",
+                options: [
+                    "חלק הביקוש המשתנה בהתאם לרמת התוצר.",
+                    "חלק הביקוש שאינו תלוי ברמת התוצר (הקבוע במשוואה).",
+                    "סך הביקוש של הממשלה בלבד.",
+                    "הביקוש של משקי בית בלבד."
+                ],
+                correct: 1,
+                explanation: "ביקוש אוטונומי הוא החלק ב-AD שנשאר קבוע גם אם התוצר (Y) הוא אפס (למשל צריכה בסיסית או השקעה קבועה)."
+            },
+            {
+                q: "אם הממשלה מגדילה את הצריכה הציבורית (G) ב-100 מיליון ש\"ח, מה יקרה לעקומת ה-AD?",
+                options: [
+                    "היא תרד ב-100 מיליון ש\"ח.",
+                    "היא תעלה במקביל בדיוק ב-100 מיליון ש\"ח.",
+                    "היא תעלה, אך בשיפוע תלול יותר.",
+                    "היא לא תזוז, רק התוצר ישתנה."
+                ],
+                correct: 1,
+                explanation: "G הוא מרכיב אוטונומי. גידול בו מעלה את סך הביקוש המצרפי (החלק הקבוע) ולכן העקומה כולה עולה למעלה."
+            },
+            {
+                q: "כיצד משפיע ה-MPE על גודלו של ה'מכפיל' (Multiplier)?",
+                options: [
+                    "ככל שה-MPE קטן יותר, המכפיל גדול יותר.",
+                    "אין קשר בין MPE למכפיל.",
+                    "ככל שה-MPE גדול יותר, המכפיל גדול יותר.",
+                    "המכפיל תמיד שווה ל-1 פלוס MPE."
+                ],
+                correct: 2,
+                explanation: "נוסחת המכפיל היא 1/(1-MPE). ככל שהנטייה להוציא גדולה יותר, 'סבבי ההוצאה' חזקים יותר והמכפיל גדל."
+            },
+            {
+                q: "מתי תתרחש 'תנועה לאורך' עקומת ה-AD (להבדיל מ'תזוזה' של העקומה)?",
+                options: [
+                    "כאשר יש שינוי בצריכה הציבורית (G).",
+                    "כאשר יש שינוי ברמת התוצר (Y).",
+                    "כאשר יש שינוי במיסים (T).",
+                    "כאשר הפירמות מחליטות להשקיע יותר ללא קשר לתוצר."
+                ],
+                correct: 1,
+                explanation: "עקומת AD משורטטת כפונקציה של Y. לכן, שינוי ב-Y הוא תנועה על הקו. כל שינוי במשתנה אחר (G, T, C0) יזיז את הקו כולו."
+            },
+            {
+                q: "אם פונקציית הצריכה היא C = 100 + 0.5Yd, והמיסים הם T = 20, מהי הצריכה האוטונומית במונחי Y?",
+                options: [
+                    "100",
+                    "80",
+                    "90",
+                    "120"
+                ],
+                correct: 2,
+                explanation: "מציבים: C = 100 + 0.5(Y-20) = 100 + 0.5Y - 10 = 90 + 0.5Y. החלק הקבוע הוא 90."
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let selectedOption = null;
+        let answered = false;
+
+        const questionContainer = document.getElementById('question-container');
+        const feedbackContainer = document.getElementById('feedback-container');
+        const nextBtn = document.getElementById('next-btn');
+        const counter = document.getElementById('question-counter');
+        const progressFill = document.getElementById('progress-fill');
+
+        function loadQuestion() {
+            answered = false;
+            selectedOption = null;
+            nextBtn.disabled = true;
+            nextBtn.innerText = currentQuestion === questions.length - 1 ? "סיים מבדק" : "לשאלה הבאה";
+            feedbackContainer.classList.add('hidden');
+            
+            const qData = questions[currentQuestion];
+            
+            let html = `<h2 class="text-xl font-bold text-gray-800 mb-6">${qData.q}</h2>`;
+            html += `<div class="space-y-3">`;
+            qData.options.forEach((opt, index) => {
+                html += `
+                    <div onclick="selectOption(${index})" id="opt-${index}" class="option-card p-4 rounded-xl border-2 border-gray-100 bg-gray-50 font-medium">
+                        ${opt}
+                    </div>
+                `;
+            });
+            html += `</div>`;
+            
+            questionContainer.innerHTML = html;
+            counter.innerText = `שאלה ${currentQuestion + 1} מתוך ${questions.length}`;
+            progressFill.style.width = `${((currentQuestion) / questions.length) * 100}%`;
+        }
+
+        window.selectOption = function(index) {
+            if (answered) return;
+            
+            // UI updates
+            document.querySelectorAll('.option-card').forEach(el => el.classList.remove('selected'));
+            document.getElementById(`opt-${index}`).classList.add('selected');
+            
+            selectedOption = index;
+            checkAnswer();
+        }
+
+        function checkAnswer() {
+            answered = true;
+            const qData = questions[currentQuestion];
+            const isCorrect = selectedOption === qData.correct;
+            
+            if (isCorrect) score++;
+            
+            // Mark correct and incorrect
+            document.getElementById(`opt-${qData.correct}`).classList.add('correct');
+            if (!isCorrect) {
+                document.getElementById(`opt-${selectedOption}`).classList.add('incorrect');
+            }
+            
+            // Show feedback
+            feedbackContainer.classList.remove('hidden');
+            feedbackContainer.className = `mt-6 p-4 rounded-xl border ${isCorrect ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'}`;
+            document.getElementById('feedback-text').innerText = isCorrect ? "נכון מאוד!" : "טעות...";
+            document.getElementById('feedback-text').className = `font-bold mb-1 ${isCorrect ? 'text-green-700' : 'text-red-700'}`;
+            document.getElementById('explanation-text').innerText = qData.explanation;
+            
+            nextBtn.disabled = false;
+            if (currentQuestion === questions.length - 1) {
+                progressFill.style.width = '100%';
+            }
+        }
+
+        nextBtn.addEventListener('click', () => {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                loadQuestion();
+            } else {
+                showFinalScore();
+            }
+        });
+
+        function showFinalScore() {
+            document.getElementById('quiz-box').classList.add('hidden');
+            document.getElementById('score-view').classList.remove('hidden');
+            document.getElementById('final-score-text').innerText = `${score} / ${questions.length}`;
+            
+            // Celebration logic if score is high
+            if (score === questions.length) {
+                document.querySelector('#score-view h2').innerText = "מושלם! שליטה מלאה בחומר.";
+            }
+        }
+
+        // Initialize
+        loadQuestion();
+    </script>
+</body>
+</html>
