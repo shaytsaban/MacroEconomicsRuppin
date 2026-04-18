@@ -1098,3 +1098,1017 @@
   </script>
 </body>
 </html>
+    // בלוק להצגת נתונים/משוואות בתוך השאלות עצמן
+    const QMath = ({ children }) => (
+      <div dir="ltr" className="text-left text-[1.15rem] md:text-[1.25rem] text-indigo-950 font-semibold tracking-wide my-1.5 font-serif">
+        {children}
+      </div>
+    );
+
+    // בלוק שלבי פתרון מודגשים במראה אקדמי
+    const MathBlock = ({ children }) => (
+      <div dir="ltr" className="text-left text-lg md:text-xl text-indigo-950 bg-indigo-50/80 py-3.5 px-6 rounded-xl my-3 border border-indigo-100 shadow-sm overflow-x-auto whitespace-nowrap tracking-wide font-semibold font-serif">
+        {children}
+      </div>
+    );
+
+    const questions = [
+      {
+        id: 1,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">במשק "עצמאות" ידועים הנתונים הבאים (במיליוני שקלים):</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-5 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>C = 1500 + 0.7Y<Sub>D</Sub></QMath>
+              <QMath>I = 650 + 0.05Y</QMath>
+              <QMath>G = 700</QMath>
+              <QMath>T = 500</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">מהי משוואת הביקוש המצרפי במשק?</p>
+          </React.Fragment>
+        ),
+        options: [
+          "AD = 2500 + 0.75Y", 
+          "AD = 2850 + 0.75Y", 
+          "AD = 2500 + 0.7Y", 
+          "AD = 2850 + 0.8Y"
+        ],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>אל תשכחו להציב תחילה את המיסים (<M>T</M>) בתוך נוסחת ההכנסה הפנויה:</p>
+            <MathBlock>Y<Sub>D</Sub> = Y - T</MathBlock>
+            <p>רק לאחר שתבצעו זאת, חברו את כל המרכיבים יחד למשוואת הביקוש המצרפי הכוללת:</p>
+            <MathBlock>AD = C + I + G</MathBlock>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: נגדיר את ההכנסה הפנויה כפונקציה של התוצר (<M>Y</M>) והמיסים (<M>T</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>D</Sub> = Y - T = Y - 500</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נציב את ההכנסה הפנויה בתוך פונקציית הצריכה הפרטית (<M>C</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>C = 1500 + 0.7(Y - 500)</React.Fragment> },
+          { type: 'math', content: <React.Fragment>C = 1500 + 0.7Y - 350</React.Fragment> },
+          { type: 'math', content: <React.Fragment>C = 1150 + 0.7Y</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 3: נסכום את כל מרכיבי הביקוש המצרפי (<M>AD = C + I + G</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>AD = (1150 + 0.7Y) + (650 + 0.05Y) + 700</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 4: נכנס את האיברים החופשיים (האוטונומיים) ואת מקדמי התוצר (<M>Y</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>AD = (1150 + 650 + 700) + (0.7Y + 0.05Y)</React.Fragment> },
+          { type: 'math', content: <React.Fragment>AD = 2500 + 0.75Y</React.Fragment> }
+        ]
+      },
+      {
+        id: 2,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">בהמשך לנתוני השאלה הקודמת:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit">
+              <QMath>AD = 2500 + 0.75Y</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">מהו המכפיל הקיינסיאני במשק?</p>
+          </React.Fragment>
+        ),
+        options: ["4", "2.5", "5", "1.33"],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>המכפיל הקיינסיאני (<M>K</M>) מחושב באופן הבא:</p>
+            <MathBlock>K = <Frac n="1" d="1 - MPE"/></MathBlock>
+            <p>הנטייה השולית להוציא (<M>MPE</M>) היא פשוט המקדם של התוצר <M>Y</M> במשוואת הביקוש המצרפי שלכם.</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: נזהה את הנטייה השולית להוציא (<M>MPE</M>) מתוך משוואת הביקוש המצרפי:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>AD = 2500 + 0.75Y <Arrow/> MPE = 0.75</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נציב את הנתון בנוסחת המכפיל הקיינסיאני הפשוט (<M>K</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="1" d="1 - MPE"/></React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="1" d="1 - 0.75"/> = <Frac n="1" d="0.25"/></React.Fragment> },
+          { type: 'text', content: 'שלב 3: התוצאה הסופית:' },
+          { type: 'math', content: <React.Fragment>K = 4</React.Fragment> }
+        ]
+      },
+      {
+        id: 3,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">בהמשך לאותו משק:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>AD = 2500 + 0.75Y</QMath>
+              <QMath>K = 4</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">מהו תוצר שיווי משקל במשק?</p>
+          </React.Fragment>
+        ),
+        options: ["10,000", "11,600", "8,500", "12,000"],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>הדרך המהירה ביותר למצוא את תוצר שיווי המשקל היא להיעזר בנוסחה:</p>
+            <MathBlock>Y<Sub>E</Sub> = AD<Sub>0</Sub> <Dot/> K</MathBlock>
+            <p>כאשר <M>AD<Sub>0</Sub></M> הוא סך הביקוש האוטונומי (המספר החופשי במשוואת <M>AD</M>).</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: 'דרך פתרון מומלצת - הכפלת הביקוש האוטונומי במכפיל:' },
+          { type: 'text', content: <React.Fragment>שלב 1: נזהה את הביקוש האוטונומי מתוך משוואת הביקוש המצרפי:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>AD<Sub>0</Sub> = 2500</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נכפיל אותו במכפיל הקיינסיאני שמצאנו (<M>K = 4</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>E</Sub> = AD<Sub>0</Sub> <Dot/> K</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>E</Sub> = 2500 <Dot/> 4</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>E</Sub> = 10,000</React.Fragment> },
+          { type: 'text', content: 'דרך חלופית - השוואת ביקושים לתוצר במצב שיווי משקל:' },
+          { type: 'math', content: <React.Fragment>Y = AD <Arrow/> Y = 2500 + 0.75Y</React.Fragment> },
+          { type: 'math', content: <React.Fragment>0.25Y = 2500 <Arrow/> Y<Sub>E</Sub> = 10,000</React.Fragment> }
+        ]
+      },
+      {
+        id: 4,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">ידוע כי תוצר תעסוקה מלאה ותוצר שיווי המשקל שמצאנו הם:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>Y<Sub>F</Sub> = 11,600</QMath>
+              <QMath>Y<Sub>E</Sub> = 10,000</QMath>
+              <QMath>K = 4</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold mb-2">האם המשק נמצא בתעסוקה מלאה?</p>
+            <p className="text-lg text-slate-600 font-medium">אם לא, איזה פער קיים ומה גודלו?</p>
+          </React.Fragment>
+        ),
+        options: [
+          <React.Fragment>קיים פער דיפלציוני <En>Deflationary Gap</En> של <M>400</M></React.Fragment>, 
+          <React.Fragment>קיים פער דיפלציוני <En>Deflationary Gap</En> של <M>1,600</M></React.Fragment>, 
+          <React.Fragment>קיים פער אינפלציוני <En>Inflationary Gap</En> של <M>400</M></React.Fragment>, 
+          <React.Fragment>קיים פער אינפלציוני <En>Inflationary Gap</En> של <M>1,600</M></React.Fragment>,
+          <React.Fragment>לא קיים פער - המשק בתעסוקה מלאה</React.Fragment>
+        ],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>כאשר תוצר שיווי משקל (<M>Y<Sub>E</Sub></M>) נמוך מתוצר תעסוקה מלאה (<M>Y<Sub>F</Sub></M>), המשק סובל מאבטלה ולכן קיים <b>פער דיפלציוני</b> <En>Deflationary Gap</En>.</p>
+            <p>פער זה (שמייצג את החוסר בביקוש ההתחלתי) מחושב כך:</p>
+            <div className="flex flex-row items-center justify-start bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-indigo-950 font-semibold w-fit">
+              <span className="font-sans text-[0.85em] ml-2">פער דיפלציוני =</span>
+              <span dir="ltr" className="font-serif text-xl"><Frac n={<span className="font-sans">פער התוצר</span>} d="K"/></span>
+            </div>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: זיהוי מצב המשק. מאחר שתוצר שיווי המשקל קטן מתוצר התעסוקה המלאה, המשק מצוי באבטלה ולכן קיים פער דיפלציוני <En>Deflationary Gap</En>:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>E</Sub> = 10,000 {"<"} Y<Sub>F</Sub> = 11,600</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נחשב את פער התוצר (ההפרש הכולל בין התוצר הרצוי לתוצר המצוי <M><Delta/>Y</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment><Delta/>Y = Y<Sub>F</Sub> - Y<Sub>E</Sub> = 11,600 - 10,000 = 1,600</React.Fragment> },
+          { type: 'text', content: 'שלב 3: נחשב את הפער הדיפלציוני על ידי חלוקת פער התוצר במכפיל:' },
+          { type: 'math', content: <React.Fragment><span dir="rtl" className="font-sans mr-2">פער דיפלציוני =</span> <Frac n={<React.Fragment><Delta/>Y</React.Fragment>} d="K"/></React.Fragment> },
+          { type: 'math', content: <React.Fragment><span dir="rtl" className="font-sans mr-2">פער דיפלציוני =</span> <Frac n="1600" d="4"/> = 400</React.Fragment> }
+        ]
+      },
+      {
+        id: 5,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">בהמשך לנתוני המשק, בהם ידוע כי:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>MPC = 0.70</QMath>
+              <QMath>MPI = 0.05</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold mb-4">הפירמות החליטו להגדיל את הנטייה השולית שלהן להשקיע, כך שכעת:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit">
+              <QMath>MPI<Sub>new</Sub> = 0.10</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">מהו המכפיל הקיינסיאני החדש?</p>
+          </React.Fragment>
+        ),
+        options: ["5", "4", "10", "2.5"],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>הנטייה השולית להוציא (<M>MPE</M>) מורכבת מחיבור פשוט של שתי הנטיות (ללא השפעת מיסים במודל זה):</p>
+            <MathBlock>MPE = MPC + MPI</MathBlock>
+            <p>חשבו את ה-<M>MPE</M> החדש והציבו אותו מחדש בנוסחת המכפיל (<M>K</M>).</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: נחשב את הנטייה השולית המצרפית להוציא (<M>MPE</M>) עם הנתון החדש:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>MPE = MPC + MPI<Sub>new</Sub></React.Fragment> },
+          { type: 'math', content: <React.Fragment>MPE = 0.70 + 0.10 = 0.80</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נציב את ה-<M>MPE</M> החדש בנוסחת המכפיל (<M>K</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="1" d="1 - MPE"/></React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="1" d="1 - 0.80"/> = <Frac n="1" d="0.20"/></React.Fragment> },
+          { type: 'text', content: 'שלב 3: חישוב התוצאה הסופית:' },
+          { type: 'math', content: <React.Fragment>K = 5</React.Fragment> }
+        ]
+      },
+      {
+        id: 6,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-6 leading-relaxed">משק נמצא באבטלה. ידוע שפער התוצר הינו נתון וקבוע (למשל, <M>100</M>).</p>
+            <p className="text-xl md:text-2xl font-bold">איזה מהמשפטים הבאים נכון?</p>
+          </React.Fragment>
+        ),
+        options: [
+          <React.Fragment>ככל שהמכפיל גדול יותר, גודל הפער הדיפלציוני <En>Deflationary Gap</En> קטן יותר</React.Fragment>,
+          <React.Fragment>ככל שהמכפיל גדול יותר, גודל הפער הדיפלציוני <En>Deflationary Gap</En> גדול יותר</React.Fragment>,
+          <React.Fragment>אין קשר מתמטי בין גודל המכפיל לפער הדיפלציוני <En>Deflationary Gap</En></React.Fragment>,
+          <React.Fragment>ככל שהמכפיל קטן יותר, כך גודל הפער הדיפלציוני <En>Deflationary Gap</En> קטן יותר</React.Fragment>
+        ],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>היזכרו בנוסחה המקשרת בין המשתנים:</p>
+            <div className="flex flex-row items-center justify-start bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-indigo-950 font-semibold w-fit">
+              <span className="font-sans text-[0.85em] ml-2">פער דיפלציוני =</span>
+              <span dir="ltr" className="font-serif text-xl"><Frac n={<span className="font-sans">פער התוצר</span>} d="K"/></span>
+            </div>
+            <p>מתמטית, כשהמונה קבוע (פער התוצר נשאר אותו דבר) והמכנה הולך וגדל, מה קורה לתוצאת החלוקה הכוללת?</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: 'שלב 1: נתבונן בקשר המתמטי שבין המשתנים על פי הנוסחה:' },
+          { type: 'math', content: <React.Fragment><span dir="rtl" className="font-sans mr-2">פער דיפלציוני =</span> <Frac n={<span dir="rtl" className="font-sans">פער התוצר</span>} d="K"/></React.Fragment> },
+          { type: 'text', content: 'שלב 2: ננתח את המשוואה:' },
+          { type: 'text', content: <React.Fragment>המכפיל (<M>K</M>) ממוקם במכנה. על פי חוקי השברים, כאשר המונה קבוע (במקרה זה, פער התוצר), הגדלה של המכנה תקטין בהכרח את ערך השבר כולו.</React.Fragment> },
+          { type: 'text', content: 'מבחינה כלכלית: ככל שהמכפיל חזק יותר, כך נדרשת התערבות קטנה יותר מצד הממשלה (פער דיפלציוני קטן יותר) כדי לסגור את אותו פער בתוצר.' },
+          { type: 'math', content: <React.Fragment>K ↑ <Arrow/> <span dir="rtl" className="font-sans ml-2">פער דיפלציוני</span> ↓</React.Fragment> }
+        ]
+      },
+      {
+        id: 7,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">במשק מסוים ידועים הנתונים הבאים:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>פער התוצר (<Delta/>Y) = 1,000</QMath>
+              <QMath>פער דיפלציוני = 400</QMath>
+              <QMath>Y<Sub>E</Sub> = 7,500</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">מהי משוואת הביקוש המצרפי של המשק?</p>
+          </React.Fragment>
+        ),
+        options: [
+          "AD = 3000 + 0.6Y",
+          "AD = 1875 + 0.75Y",
+          "AD = 1500 + 0.8Y",
+          "AD = 3250 + 0.5Y"
+        ],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>זוהי שאלת הנדסה לאחור:</p>
+            <ul className="list-decimal list-inside space-y-2 marker:text-indigo-600 pr-2 font-medium text-slate-700">
+              <li>חלצו את המכפיל (<M>K</M>) מתוך היחס שבין פער התוצר לפער הדיפלציוני.</li>
+              <li>בעזרת המכפיל, חלצו את הנטייה השולית להוציא (<M>MPE</M>).</li>
+              <li>הציבו את ה-<M>MPE</M> ואת תוצר שיווי המשקל במשוואה הבאה:</li>
+            </ul>
+            <MathBlock>Y<Sub>E</Sub> = AD<Sub>0</Sub> + MPE <Dot/> Y<Sub>E</Sub></MathBlock>
+            <p>כך תוכלו למצוא את החלק האוטונומי (<M>AD<Sub>0</Sub></M>).</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: חילוץ המכפיל הקיינסיאני (<M>K</M>) על בסיס נתוני הפערים:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n={<span dir="rtl" className="font-sans">פער התוצר</span>} d={<span dir="rtl" className="font-sans">פער דיפלציוני</span>}/> = <Frac n="1000" d="400"/> = 2.5</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: חילוץ הנטייה השולית להוציא (<M>MPE</M>) מהמכפיל:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="1" d="1 - MPE"/> <Arrow/> 2.5 = <Frac n="1" d="1 - MPE"/></React.Fragment> },
+          { type: 'math', content: <React.Fragment>2.5(1 - MPE) = 1 <Arrow/> 1 - MPE = 0.4 <Arrow/> MPE = 0.6</React.Fragment> },
+          { type: 'text', content: 'שלב 3: מציאת הגודל האוטונומי מתוך תנאי שיווי משקל:' },
+          { type: 'math', content: <React.Fragment>Y<Sub>E</Sub> = AD<Sub>0</Sub> + MPE <Dot/> Y<Sub>E</Sub></React.Fragment> },
+          { type: 'math', content: <React.Fragment>7500 = AD<Sub>0</Sub> + 0.6 <Dot/> 7500</React.Fragment> },
+          { type: 'math', content: <React.Fragment>7500 = AD<Sub>0</Sub> + 4500 <Arrow/> AD<Sub>0</Sub> = 3000</React.Fragment> },
+          { type: 'text', content: 'שלב 4: הרכבת משוואת הביקוש המצרפי המלאה:' },
+          { type: 'math', content: <React.Fragment>AD = 3000 + 0.6Y</React.Fragment> }
+        ]
+      },
+      {
+        id: 8,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">במשק ללא שוק כסף, החליטה הממשלה להלחם בפער אינפלציוני <En>Inflationary Gap</En> באמצעות העלאת מיסים, וכתוצאה מכך הפער נסגר במלואו.</p>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">ידועים הנתונים הבאים על המשק והפער:</p>
+            <div className="flex flex-col items-start bg-slate-50 border border-slate-200 py-4 px-6 rounded-2xl mb-6 shadow-sm w-full md:w-fit space-y-1">
+              <QMath>פער אינפלציוני = 300</QMath>
+              <QMath>K = 4</QMath>
+              <QMath>MPI = 0.15</QMath>
+            </div>
+            <p className="text-xl md:text-2xl font-bold">בכמה העלתה הממשלה מיסים?</p>
+          </React.Fragment>
+        ),
+        options: ["500", "180", "75", "300"],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>סגירת פער אינפלציוני של 300 דורשת הקטנת הביקוש האוטונומי ב-300 בדיוק.</p>
+            <p>המיסים משפיעים על הביקוש המצרפי באופן עקיף דרך הצריכה הפרטית. נוסחת ההשפעה של מס היא:</p>
+            <MathBlock><Delta/>AD = -MPC <Dot/> <Delta/>T</MathBlock>
+            <p>לכן, עליכם לחלץ תחילה את הנטייה השולית לצרוך (<M>MPC</M>) מתוך הנתונים בשאלה.</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: חילוץ הנטייה השולית להוציא (<M>MPE</M>) מהמכפיל (<M>K=4</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = 4 <Arrow/> <Frac n="1" d="1 - MPE"/> = 4 <Arrow/> MPE = 0.75</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נשתמש בקשר של נטיות כדי למצוא את נטיית הצריכה (<M>MPC</M>):</React.Fragment> },
+          { type: 'math', content: <React.Fragment>MPE = MPC + MPI <Arrow/> 0.75 = MPC + 0.15 <Arrow/> MPC = 0.60</React.Fragment> },
+          { type: 'text', content: 'שלב 3: מטרת הממשלה היא להוריד את סך הביקושים בדיוק בגובה הפער האינפלציוני:' },
+          { type: 'math', content: <React.Fragment><Delta/>AD = -300</React.Fragment> },
+          { type: 'text', content: 'שלב 4: נשתמש בנוסחת השפעת המיסים על הביקוש המצרפי:' },
+          { type: 'math', content: <React.Fragment><Delta/>AD = -MPC <Dot/> <Delta/>T</React.Fragment> },
+          { type: 'math', content: <React.Fragment>-300 = -0.60 <Dot/> <Delta/>T</React.Fragment> },
+          { type: 'text', content: 'שלב 5: חילוץ התוספת הנדרשת למיסים:' },
+          { type: 'math', content: <React.Fragment><Delta/>T = <Frac n="-300" d="-0.60"/> = 500</React.Fragment> }
+        ]
+      },
+      {
+        id: 9,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">במשק הנמצא באבטלה ידוע שפער התוצר הינו 100 ואילו גודל הפער הדיפלציוני <En>Deflationary Gap</En> הינו 40.</p>
+            <p className="text-xl md:text-2xl font-bold">מהו המכפיל הקיינסיאני במשק?</p>
+          </React.Fragment>
+        ),
+        options: ["2.5", "4", "0.4", "2"],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>היזכרו בנוסחת הפער הדיפלציוני:</p>
+            <div className="flex flex-row items-center justify-start bg-indigo-50/80 p-3 rounded-lg border border-indigo-100 text-indigo-950 font-semibold w-fit">
+              <span className="font-sans text-[0.85em] ml-2">פער דיפלציוני =</span>
+              <span dir="ltr" className="font-serif text-xl"><Frac n={<span className="font-sans">פער התוצר</span>} d="K"/></span>
+            </div>
+            <p>הציבו את הנתונים המספריים הנתונים בשאלה, וחלצו מתוך המשוואה את ערכו של <M>K</M>.</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: 'שלב 1: נציב את הנתונים המספריים בנוסחת הפער הדיפלציוני:' },
+          { type: 'math', content: <React.Fragment>40 = <Frac n="100" d="K"/></React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: נכפיל ב- <M>K</M> ונחלק ב- 40 כדי לחלץ את המכפיל:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = <Frac n="100" d="40"/></React.Fragment> },
+          { type: 'math', content: <React.Fragment>K = 2.5</React.Fragment> }
+        ]
+      },
+      {
+        id: 10,
+        question: (
+          <React.Fragment>
+            <p className="text-xl md:text-2xl font-bold mb-4 leading-relaxed">הקטנת תשלומי העברה <En>Tr</En> מחד, והפחתת מיסים <En>T</En> מאידך, תגרום בוודאות ל:</p>
+          </React.Fragment>
+        ),
+        options: [
+          "לא ניתן לדעת מה יקרה להכנסה הפנויה",
+          "עליה בהכנסה הפנויה",
+          "ירידה בהכנסה הפנויה",
+          "אי שינוי בהכנסה הפנויה"
+        ],
+        correctAnswer: 0,
+        hint: (
+          <div className="space-y-4">
+            <p>ההכנסה הפנויה (<M>Y<Sub>D</Sub></M>) מושפעת חיובית מתשלומי העברה (<M>Tr</M>) ושלילית ממיסים (<M>T</M>).</p>
+            <p>מה קורה כאשר שני הרכיבים הללו יורדים במקביל באותו הזמן, ואין לנו נתונים כמותיים לגבי עוצמת הירידה של כל אחד מהם?</p>
+          </div>
+        ),
+        explanationSteps: [
+          { type: 'text', content: <React.Fragment>שלב 1: נבחן את נוסחת ההכנסה הפנויה המלאה:</React.Fragment> },
+          { type: 'math', content: <React.Fragment>Y<Sub>D</Sub> = Y - T + Tr</React.Fragment> },
+          { type: 'text', content: <React.Fragment>שלב 2: ננתח את ההשפעה של כל צעד בנפרד:</React.Fragment> },
+          { type: 'text', content: <React.Fragment>• הקטנת תשלומי העברה (<M>Tr</M> יורד) גורמת ל<strong>הקטנת</strong> ההכנסה הפנויה.</React.Fragment> },
+          { type: 'text', content: <React.Fragment>• הקטנת מיסים (<M>T</M> יורד) גורמת ל<strong>הגדלת</strong> ההכנסה הפנויה (כי פחות מס מנוכה מן ההכנסה).</React.Fragment> },
+          { type: 'text', content: 'שלב 3: מסקנה. מכיוון שישנן שתי השפעות מנוגדות ואין בידינו נתונים מספריים על גובה השינוי בכל פרמטר, לא ניתן לדעת בוודאות מה תהיה ההשפעה הסופית על ההכנסה הפנויה.' }
+        ]
+      }
+    ];
+
+    function App() {
+      const [started, setStarted] = useState(false);
+      const [currentIndex, setCurrentIndex] = useState(0);
+      const [isFinished, setIsFinished] = useState(false);
+      const [submissionCode, setSubmissionCode] = useState('');
+
+      const [userAnswers, setUserAnswers] = useState(Array(10).fill(null));
+      const [statuses, setStatuses] = useState(Array(10).fill('idle'));
+      const [mistakes, setMistakes] = useState(Array(10).fill(0));
+      const [firstTryCorrect, setFirstTryCorrect] = useState(Array(10).fill(false));
+      const [showExplanations, setShowExplanations] = useState(Array(10).fill(false));
+      const [showHints, setShowHints] = useState(Array(10).fill(false));
+
+      const currentQ = questions[currentIndex];
+      const currentStatus = statuses[currentIndex];
+      const currentSelected = userAnswers[currentIndex];
+      const currentMistakes = mistakes[currentIndex];
+
+      const handleSelectAnswer = (index) => {
+        if (currentStatus === 'correct' || currentStatus === 'failed') return;
+        
+        const newAnswers = [...userAnswers];
+        newAnswers[currentIndex] = index;
+        setUserAnswers(newAnswers);
+
+        if (currentStatus === 'wrong1' || currentStatus === 'wrong2') {
+          const newStatuses = [...statuses];
+          newStatuses[currentIndex] = 'idle';
+          setStatuses(newStatuses);
+        }
+      };
+
+      const handleCheck = () => {
+        if (currentSelected === null) return;
+
+        const newStatuses = [...statuses];
+        const newMistakesArr = [...mistakes];
+        const newFirstTry = [...firstTryCorrect];
+        const newExps = [...showExplanations];
+        const newHints = [...showHints];
+
+        if (currentSelected === currentQ.correctAnswer) {
+          newStatuses[currentIndex] = 'correct';
+          newExps[currentIndex] = true;
+          if (currentMistakes === 0) {
+            newFirstTry[currentIndex] = true;
+          }
+        } else {
+          const updatedMistakes = currentMistakes + 1;
+          newMistakesArr[currentIndex] = updatedMistakes;
+          
+          if (updatedMistakes === 1) {
+            newStatuses[currentIndex] = 'wrong1';
+            const newAnswers = [...userAnswers];
+            newAnswers[currentIndex] = null;
+            setUserAnswers(newAnswers);
+          } else if (updatedMistakes === 2) {
+            newStatuses[currentIndex] = 'wrong2';
+            newHints[currentIndex] = true;
+            const newAnswers = [...userAnswers];
+            newAnswers[currentIndex] = null;
+            setUserAnswers(newAnswers);
+          } else {
+            newStatuses[currentIndex] = 'failed';
+            newExps[currentIndex] = true;
+          }
+        }
+
+        setStatuses(newStatuses);
+        setMistakes(newMistakesArr);
+        setFirstTryCorrect(newFirstTry);
+        setShowExplanations(newExps);
+        setShowHints(newHints);
+      };
+
+      const handleNext = () => {
+        if (currentIndex < questions.length - 1) {
+          setCurrentIndex(currentIndex + 1);
+        }
+      };
+
+      const handlePrev = () => {
+        if (currentIndex > 0) {
+          setCurrentIndex(currentIndex - 1);
+        }
+      };
+
+      const handleFinish = () => {
+        setSubmissionCode('MACRO-' + Math.random().toString(36).substring(2, 8).toUpperCase());
+        setIsFinished(true);
+      };
+
+      const handleRestart = () => {
+        setStarted(false);
+        setCurrentIndex(0);
+        setUserAnswers(Array(10).fill(null));
+        setStatuses(Array(10).fill('idle'));
+        setMistakes(Array(10).fill(0));
+        setFirstTryCorrect(Array(10).fill(false));
+        setShowExplanations(Array(10).fill(false));
+        setShowHints(Array(10).fill(false));
+        setIsFinished(false);
+        setSubmissionCode('');
+      };
+
+      if (!started) {
+        return (
+          <div className="min-h-screen bg-slate-50 font-sans p-4 md:p-8 flex items-center justify-center">
+            <div className="max-w-5xl w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200">
+              
+              <div className="bg-indigo-700 p-8 text-center text-white relative">
+                <BookOpen className="w-16 h-16 mx-auto mb-4 text-indigo-200 opacity-90" />
+                <h1 className="text-3xl md:text-5xl font-black mb-3 tracking-tight">תרגיל הגשה 1 במאקרו כלכלה</h1>
+                <h2 className="text-xl md:text-2xl text-indigo-100 font-medium">ביקוש מצרפי ושיווי משקל (הרצאות 4, 5)</h2>
+              </div>
+
+              <div className="p-6 md:p-10">
+                <div className="bg-amber-50 border border-amber-200 text-amber-800 p-4 rounded-xl flex items-center justify-center mb-10 shadow-sm">
+                  <Camera className="w-7 h-7 ml-3 text-amber-600 flex-shrink-0" />
+                  <span className="font-bold text-lg">טיפ זהב: מומלץ לצלם מסך זה ולהיעזר בו במהלך הפתרון!</span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                  
+                  {/* Card 1 */}
+                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                      <Calculator className="w-5 h-5 ml-2 text-indigo-600" />
+                      צריכה וחיסכון
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          Y<Sub>D</Sub> = Y - T<Sub>N</Sub> - S<Sub>B</Sub>
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          <strong>מקרא:</strong> <M>Y<Sub>D</Sub></M> הכנסה פנויה, <M>Y</M> תוצר (הכנסה), <M>T<Sub>N</Sub></M> מיסים נטו (מיסים פחות תשלומי העברה), ו-<M>S<Sub>B</Sub></M> הם רווחים שלא חולקו (אפס, אלא אם נאמר אחרת).
+                        </p>
+                      </div>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          C = C<Sub>0</Sub> + MPC <Dot/> Y<Sub>D</Sub>
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          <strong>מקרא:</strong> <M>C<Sub>0</Sub></M> צריכה אוטונומית. נהוג פעמים רבות לכתוב את הצריכה כתלות ישירה בתוצר, ואז הרישום יהיה <span dir="ltr" className="font-serif font-semibold bg-slate-100 px-1 rounded mx-1">C = C<Sub>0</Sub> + MPC <Dot/> Y</span>.
+                        </p>
+                      </div>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          S<Sub>P</Sub> = Y<Sub>D</Sub> - C
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">חיסכון פרטי מוגדר כיתרת ההכנסה הפנויה שלא נצרכה.</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 2 */}
+                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                      <Calculator className="w-5 h-5 ml-2 text-indigo-600" />
+                      ביקוש מצרפי ושיווי משקל
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          AD = C + I + G
+                        </div>
+                      </div>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          AD = AD<Sub>0</Sub> + MPE <Dot/> Y
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          <strong>הערה חשובה:</strong> <M>AD<Sub>0</Sub></M> הוא סיכום הערכים האוטונומיים (שאינם תלויים בתוצר <M>Y</M>) שמתקבלים כתוצאה מפתיחת משוואת הביקוש המצרפי.
+                        </p>
+                      </div>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-[1.35rem] text-indigo-800 bg-indigo-100/50 py-2 px-3 rounded shadow-sm border border-indigo-200 inline-block font-serif tracking-wider">
+                          Y<Sub>E</Sub> = AD<Sub>0</Sub> <Dot/> K
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          <strong>מקרא:</strong> <M>Y<Sub>E</Sub></M> מבטא את <b>תוצר שיווי המשקל</b> במשק – הנקודה שבה סך הביקושים המצרפיים (<M>AD</M>) שווים בדיוק לסך הייצור/התוצר (<M>Y</M>). <M>K</M> הוא המכפיל הקיינסיאני.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 3 */}
+                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                      <Calculator className="w-5 h-5 ml-2 text-indigo-600" />
+                      מכפילים ונטיות שוליות
+                    </h3>
+                    <div className="space-y-4">
+                      <p className="text-sm text-slate-600 leading-tight">
+                        <strong className="text-slate-800 font-serif font-bold tracking-wide" dir="ltr">MPC</strong> - נטייה שולית לצרוך: הגידול בצריכה עקב גידול של שקל בהכנסה הפנויה.<br/>
+                        <strong className="text-slate-800 font-serif font-bold tracking-wide mt-1 inline-block" dir="ltr">MPI</strong> - נטייה שולית להשקיע: הגידול בהשקעה עקב גידול של שקל בתוצר.
+                      </p>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          MPE = MPC + MPI
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          <M>MPE</M> (הנטייה השולית להוציא) מוגדרת כחיבור פשוט של שתי הנטיות (מודל ללא מיסים יחסיים).
+                        </p>
+                      </div>
+                      <div>
+                        <div dir="ltr" className="text-left font-semibold text-[1.4rem] text-indigo-800 bg-indigo-100/50 py-2 px-3 rounded shadow-sm border border-indigo-200 inline-block font-serif tracking-wider">
+                          K = <Frac n="1" d="1 - MPE"/>
+                        </div>
+                        <p className="text-sm text-slate-600 mt-2 leading-tight">
+                          זהו <b>המכפיל הקיינסיאני הפשוט</b>, הקובע פי כמה יגדל התוצר כתוצאה משינוי בביקוש האוטונומי.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 4 */}
+                  <div className="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
+                    <h3 className="text-xl font-bold text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                      <Calculator className="w-5 h-5 ml-2 text-indigo-600" />
+                      פערים במשק
+                    </h3>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm text-slate-700 leading-tight mb-2">
+                          <strong className="text-slate-900 underline decoration-indigo-200 decoration-2">פער התוצר (<M><Delta/>Y</M>)</strong>: הפער במונחי ייצור. זהו ההפרש המוחלט בין פוטנציאל הייצור של המשק (תעסוקה מלאה <M>Y<Sub>F</Sub></M>) לבין הייצור בפועל (<M>Y<Sub>E</Sub></M>).
+                        </p>
+                        <div dir="ltr" className="text-left font-semibold text-xl text-indigo-950 bg-white py-2 px-3 rounded shadow-sm border border-indigo-100 inline-block font-serif tracking-wider">
+                          <Delta/>Y = Y<Sub>F</Sub> - Y<Sub>E</Sub>
+                        </div>
+                      </div>
+                      <div>
+                        <p className="text-sm text-slate-700 leading-tight mb-2">
+                          <strong className="text-slate-900 underline decoration-indigo-200 decoration-2">ההבדל בין סוגי הפערים</strong>:<br/>
+                          • <b>פער דיפלציוני <En>Deflationary Gap</En></b>: נוצר כשהמשק ב<b>אבטלה</b> (<M>Y<Sub>E</Sub> {"<"} Y<Sub>F</Sub></M>). מתאר מחסור התחלתי בביקוש.<br/>
+                          <span className="mt-1 inline-block">• <b>פער אינפלציוני <En>Inflationary Gap</En></b>: נוצר כשהמשק ב<b>תעסוקת יתר/אינפלציה</b> (<M>Y<Sub>E</Sub> {">"} Y<Sub>F</Sub></M>). מתאר עודף התחלתי בביקוש.</span>
+                        </p>
+                        <div className="flex flex-row items-center justify-start bg-rose-50 p-2.5 rounded-lg border border-rose-200 text-rose-900 font-semibold w-fit mt-2">
+                          <span className="font-sans text-[0.85em] ml-2">פער דיפלציוני / אינפלציוני</span>
+                          <span>=</span>
+                          <span dir="ltr" className="font-serif text-xl ml-2"><Frac n={<React.Fragment><Delta/>Y</React.Fragment>} d="K"/></span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div className="flex flex-col items-center">
+                  <button
+                    onClick={() => setStarted(true)}
+                    className="bg-indigo-600 hover:bg-indigo-700 text-white text-xl font-bold py-4 px-12 rounded-full shadow-lg transition-transform hover:scale-105 mb-6"
+                  >
+                    התחל תרגיל
+                  </button>
+                  
+                  <div className="text-center text-slate-500 text-sm border-t border-slate-200 pt-6 w-full">
+                    <p className="mb-2">פותח עבור הסטודנטים בקורס. קרדיט לתוכן: ד"ר שי צבאן.</p>
+                    <p className="flex items-center justify-center font-medium">
+                      <Mail className="w-4 h-4 ml-1" />
+                      זיהיתם תקלה? מוזמנים לפנות במייל: <span className="text-indigo-600 mr-1" dir="ltr">shay.tsaban@gmail.com</span>
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        );
+      }
+
+      // ----------------------------------------------------
+      // NOT ENOUGH ANSWERS PAGE
+      // ----------------------------------------------------
+      if (notEnoughAnswers) {
+        return (
+          <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans" dir="rtl">
+            <div className="bg-white max-w-lg w-full rounded-3xl shadow-xl p-8 text-center border border-slate-100">
+              <Info className="w-24 h-24 text-rose-500 mx-auto mb-6 drop-shadow-md" />
+              <h1 className="text-3xl font-black text-slate-800 mb-4">שים לב, לא ענית על מספיק שאלות.</h1>
+              <p className="text-lg text-slate-600 mb-8">דילגת על יותר מ-4 שאלות. עליך לענות על שאלות נוספות כדי לקבל קוד הגשה.</p>
+              <button
+                onClick={() => setNotEnoughAnswers(false)}
+                className="flex items-center justify-center w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 px-6 rounded-xl font-bold transition-colors text-lg"
+              >
+                <ArrowLeft className="w-5 h-5 ml-2" />
+                חזור לתרגיל לתיקון
+              </button>
+            </div>
+          </div>
+        );
+      }
+
+      // ----------------------------------------------------
+      // SUCCESS / PRINT PAGE
+      // ----------------------------------------------------
+      if (isFinished) {
+        const finalScore = firstTryCorrect.filter(Boolean).length * 10;
+        
+        let scoreTitle = "";
+        let scoreSubtitle = "";
+        if (finalScore === 100) {
+           scoreTitle = "מושלם!";
+           scoreSubtitle = "שליטה מלאה בחומר, עבודה מעולה.";
+        }
+        else if (finalScore >= 80) {
+           scoreTitle = "עבודה יפה מאוד!";
+           scoreSubtitle = "השלמת בהצלחה את התרגיל.";
+        }
+        else if (finalScore >= 60) {
+           scoreTitle = "ציון טוב!";
+           scoreSubtitle = "אבל יש עוד מקום לשיפור והבנה מעמיקה יותר.";
+        }
+        else {
+           scoreTitle = "לא נורא!";
+           scoreSubtitle = "כדאי לחזור על החומר ולתרגל שוב כדי להשתפר.";
+        }
+
+        return (
+          <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans" dir="rtl">
+            <style>{printStyles}</style>
+            
+            {/* VIEW MODE */}
+            <div className="no-print bg-white max-w-lg w-full rounded-3xl shadow-xl p-8 text-center border border-slate-100">
+              <Trophy className="w-24 h-24 text-yellow-500 mx-auto mb-6 drop-shadow-md" />
+              <h1 className="text-3xl font-black text-slate-800 mb-2">{scoreTitle}</h1>
+              <p className="text-lg text-slate-600 mb-8">{scoreSubtitle}</p>
+              
+              <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 shadow-sm">
+                <p className="text-sm text-indigo-800 font-semibold mb-2">הציון הסופי שלך (מתוך 100):</p>
+                <p className="text-6xl font-black text-indigo-600 mb-6">{finalScore}</p>
+                
+                <div className="border-t border-indigo-200 pt-5 text-right">
+                  <p className="text-sm text-rose-600 mb-3 font-bold bg-rose-50 p-3 rounded-lg border border-rose-100">
+                    הנחיות הגשה: עליך להעתיק את הקוד להלן לתיבת ההגשה באתר וזהו.
+                  </p>
+                  <p className="text-sm text-slate-600 mb-2 font-medium text-center">קוד ההגשה שלך:</p>
+                  <code className="bg-white px-6 py-3 rounded-xl text-2xl font-mono text-slate-800 border border-slate-200 shadow-inner select-all block text-center tracking-widest">
+                    {submissionCode}
+                  </code>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={() => window.print()}
+                  className="flex flex-col items-center justify-center w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-3 px-2 rounded-xl font-bold transition-colors border border-slate-300"
+                >
+                  <div className="flex items-center mb-1">
+                    <Printer className="w-5 h-5 ml-2" />
+                    <span>הדפס נסח</span>
+                  </div>
+                  <span className="text-[0.65rem] font-normal text-slate-500">(Ctrl+P במקרה שהכפתור לא מגיב)</span>
+                </button>
+                <button
+                  onClick={handleRestart}
+                  className="flex items-center justify-center w-full bg-slate-800 hover:bg-slate-700 text-white py-3 px-4 rounded-xl font-bold transition-colors"
+                >
+                  <RefreshCcw className="w-5 h-5 ml-2" />
+                  התחל מחדש
+                </button>
+              </div>
+            </div>
+
+            {/* PRINT MODE HIDDEN CONTAINER */}
+            <div id="print-area" className="text-right w-full bg-white p-8">
+              <div className="text-center border-b-2 border-slate-800 pb-6 mb-8">
+                <h1 className="text-3xl font-black mb-2">תרגיל הגשה 1 במאקרו כלכלה</h1>
+                <h2 className="text-xl">נסח שאלות ותשובות מסכם</h2>
+                <div className="flex justify-between mt-8 text-lg font-bold">
+                  <span>ציון סופי: {finalScore} / 100</span>
+                  <span>קוד הגשה: {submissionCode}</span>
+                </div>
+              </div>
+
+              <div className="space-y-10">
+                {questions.map((q, i) => (
+                  <div key={i} className="border border-slate-200 rounded-xl p-6 page-break-inside-avoid">
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="font-bold text-lg">שאלה {i + 1}</h3>
+                      <span className={`px-3 py-1 rounded-full text-sm font-bold ${firstTryCorrect[i] ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}`}>
+                        {firstTryCorrect[i] ? 'ענית נכון בניסיון ראשון (10 נק\')' : 'לא נענה נכון בניסיון ראשון (0 נק\')'}
+                      </span>
+                    </div>
+                    
+                    <div className="mb-6 text-slate-800">{q.question}</div>
+                    
+                    <div className="space-y-3">
+                      {q.options.map((opt, optIdx) => {
+                        const isCorrect = optIdx === q.correctAnswer;
+                        const isUserSelected = userAnswers[i] === optIdx;
+                        
+                        let bg = "bg-slate-50 text-slate-500 border-slate-200";
+                        let icon = null;
+                        let fontWeight = "font-normal";
+
+                        if (isCorrect) {
+                          bg = "bg-emerald-50 border-emerald-500 text-emerald-800";
+                          fontWeight = "font-bold";
+                          icon = <CheckCircle className="w-5 h-5 ml-2 text-emerald-600" />;
+                        } else if (isUserSelected && !isCorrect) {
+                          bg = "bg-rose-50 border-rose-500 text-rose-800";
+                          fontWeight = "font-bold";
+                          icon = <XCircle className="w-5 h-5 ml-2 text-rose-600" />;
+                        }
+
+                        return (
+                          <div key={optIdx} className={`flex items-center justify-between p-3 border rounded-lg ${bg} ${fontWeight}`}>
+                            <span className="flex-1 text-right">{opt}</span>
+                            {icon}
+                            {isUserSelected && !isCorrect && <span className="text-xs text-rose-600 mr-4 font-bold border border-rose-300 px-2 py-0.5 rounded bg-white">התשובה שסימנת בסוף</span>}
+                            {isCorrect && <span className="text-xs text-emerald-600 mr-4 font-bold border border-emerald-300 px-2 py-0.5 rounded bg-white">התשובה הנכונה</span>}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        );
+      }
+
+      const renderStep = (step, idx) => {
+        if (step.type === 'text') {
+          return <p key={idx} className="text-slate-700 font-medium mt-4 mb-2">{step.content}</p>;
+        } else if (step.type === 'math') {
+          return (
+            <MathBlock key={idx}>
+              {step.content}
+            </MathBlock>
+          );
+        }
+      };
+
+      return (
+        <div className="min-h-screen bg-slate-50 py-8 px-4 font-sans">
+          <div className="max-w-3xl mx-auto">
+            
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h1 className="text-2xl font-black text-slate-800">תרגיל הגשה 1</h1>
+                <p className="text-sm text-slate-500 font-medium">ביקוש מצרפי ושיווי משקל</p>
+              </div>
+              <div className="bg-white px-5 py-2 rounded-full shadow-sm border border-slate-200 flex items-center">
+                <span className="text-slate-400 text-sm ml-2">שאלה</span>
+                <span className="font-bold text-indigo-600 text-lg">{currentIndex + 1}</span>
+                <span className="text-slate-300 mx-1">/</span>
+                <span className="font-bold text-slate-600">{questions.length}</span>
+              </div>
+            </div>
+
+            {/* Questions Navigator (1 to 10) */}
+            <div className="flex justify-center flex-wrap gap-2 mb-6">
+              {questions.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx)}
+                  className={`w-10 h-10 rounded-full font-bold transition-colors ${currentIndex === idx ? 'bg-indigo-600 text-white' : statuses[idx] === 'correct' ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : statuses[idx] === 'failed' ? 'bg-rose-100 text-rose-800 border border-rose-300' : 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-100 shadow-sm'}`}
+                >
+                  {idx + 1}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex justify-between items-center mb-6 px-1">
+               <button
+                 onClick={handlePrev}
+                 disabled={currentIndex === 0}
+                 className={`flex items-center text-sm font-bold transition-colors ${currentIndex === 0 ? 'text-slate-300 cursor-not-allowed' : 'text-indigo-600 hover:text-indigo-800'}`}
+               >
+                 <ArrowRight className="w-4 h-4 ml-1" />
+                 שאלה קודמת
+               </button>
+               <button
+                 onClick={() => {
+                   if (currentIndex === questions.length - 1) {
+                      handleFinish();
+                   } else {
+                      handleNext();
+                   }
+                 }}
+                 className="flex items-center text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors bg-indigo-50 px-4 py-1.5 rounded-full"
+               >
+                 {currentIndex === questions.length - 1 ? 'לסיום והגשה' : 'שאלה הבאה'}
+                 {currentIndex !== questions.length - 1 && <ArrowLeft className="w-4 h-4 mr-1" />}
+               </button>
+            </div>
+
+            <div className="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+              <div className="p-6 md:p-8 md:pb-6">
+                <div className="text-slate-800 mb-8">
+                  {currentQ.question}
+                </div>
+
+                <div className="space-y-4">
+                  {currentQ.options.map((option, index) => {
+                    let btnStyle = "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300";
+                    
+                    if (currentSelected === index) {
+                      btnStyle = "bg-indigo-50 border-indigo-500 text-indigo-800 ring-2 ring-indigo-500/20";
+                    }
+                    
+                    if (currentStatus === 'correct' || currentStatus === 'failed') {
+                      if (index === currentQ.correctAnswer) {
+                        btnStyle = "bg-emerald-50 border-emerald-500 text-emerald-800 ring-2 ring-emerald-500/20";
+                      } else if (index === currentSelected && index !== currentQ.correctAnswer) {
+                        btnStyle = "bg-rose-50 border-rose-300 text-rose-500 opacity-60";
+                      } else {
+                        btnStyle = "bg-slate-50 border-slate-200 text-slate-400 opacity-50";
+                      }
+                    }
+
+                    if ((currentStatus === 'wrong1' || currentStatus === 'wrong2') && index === currentSelected) {
+                       btnStyle = "bg-rose-50 border-rose-500 text-rose-800 ring-2 ring-rose-500/20";
+                    }
+
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleSelectAnswer(index)}
+                        disabled={currentStatus === 'correct' || currentStatus === 'failed'}
+                        className={`w-full text-right p-5 rounded-2xl border-2 transition-all duration-200 md:text-lg ${btnStyle}`}
+                      >
+                        <div className="flex items-center justify-between font-medium leading-relaxed">
+                          <span className="text-right w-full">{option}</span>
+                          
+                          {(currentStatus === 'correct' || currentStatus === 'failed') && index === currentQ.correctAnswer && 
+                            <CheckCircle className="w-6 h-6 text-emerald-600 flex-shrink-0 ml-2" />
+                          }
+                          {(currentStatus === 'correct' || currentStatus === 'failed') && index === currentSelected && index !== currentQ.correctAnswer && 
+                            <XCircle className="w-6 h-6 text-rose-500 flex-shrink-0 ml-2" />
+                          }
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="px-6 md:px-8">
+                {currentStatus === 'wrong1' && (
+                  <div className="bg-amber-50 border border-amber-200 p-4 rounded-2xl mb-6 flex items-start animate-in fade-in slide-in-from-top-2">
+                    <Info className="w-6 h-6 text-amber-600 ml-3 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-bold text-amber-800">אופס! טעות.</h4>
+                      <p className="text-amber-700 text-sm mt-1">יש לך הזדמנות נוספת לנסות. קרא/י את השאלה שוב וסמן/י תשובה אחרת.</p>
+                    </div>
+                  </div>
+                )}
+
+                {showHints[currentIndex] && currentStatus !== 'failed' && currentStatus !== 'correct' && (
+                  <div className="bg-blue-50 border border-blue-200 p-5 rounded-2xl mb-6 flex items-start animate-in fade-in slide-in-from-top-2 shadow-sm w-full">
+                    <Lightbulb className="w-6 h-6 text-blue-600 ml-3 flex-shrink-0 mt-0.5" />
+                    <div className="w-full">
+                      <h4 className="font-bold text-blue-800 text-lg mb-2">טעות נוספת. הנה רמז שיעזור:</h4>
+                      <div className="text-blue-900 font-medium leading-relaxed w-full">
+                        {currentQ.hint}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {currentStatus === 'correct' && (
+                  <div className="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl mb-6 flex items-center animate-in fade-in zoom-in-95 shadow-sm">
+                    <CheckCircle className="w-8 h-8 text-emerald-600 ml-4 flex-shrink-0" />
+                    <h4 className="font-black text-emerald-800 text-xl">תשובה נכונה! מצוין.</h4>
+                  </div>
+                )}
+
+                {currentStatus === 'failed' && (
+                  <div className="bg-rose-50 border border-rose-200 p-5 rounded-2xl mb-6 flex items-center animate-in fade-in zoom-in-95 shadow-sm">
+                    <XCircle className="w-8 h-8 text-rose-600 ml-4 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-black text-rose-800 text-xl">שגוי.</h4>
+                      <p className="text-rose-700 mt-1">לא נורא! המטרה היא ללמוד. הנה הפתרון המלא והמפורט למטה.</p>
+                    </div>
+                  </div>
+                )}
+                
+                {showExplanations[currentIndex] && (
+                  <div className="bg-slate-50 border border-slate-200 p-6 md:p-8 rounded-2xl mb-6 shadow-inner animate-in fade-in slide-in-from-bottom-4 overflow-hidden">
+                    <h3 className="font-black text-slate-800 text-lg mb-2 flex items-center">
+                      <Calculator className="w-5 h-5 ml-2 text-indigo-600" />
+                      פיתוח הפתרון המלא:
+                    </h3>
+                    <div className="flex flex-col items-start w-full">
+                      {currentQ.explanationSteps.map((step, idx) => renderStep(step, idx))}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="bg-slate-50 border-t border-slate-100 p-6 flex justify-end">
+                {(currentStatus === 'idle' || currentStatus === 'wrong1' || currentStatus === 'wrong2') ? (
+                  <button
+                    onClick={handleCheck}
+                    disabled={currentSelected === null}
+                    className={`py-3 px-10 rounded-xl font-bold transition-all text-lg ${
+                      currentSelected === null 
+                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed' 
+                        : 'bg-indigo-600 text-white hover:bg-indigo-700 shadow-md hover:shadow-lg transform hover:-translate-y-0.5'
+                    }`}
+                  >
+                    בדוק תשובה
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                       if (currentIndex === questions.length - 1) {
+                          handleFinish();
+                       } else {
+                          handleNext();
+                       }
+                    }}
+                    className="py-3 px-10 rounded-xl font-bold bg-slate-800 text-white hover:bg-slate-700 shadow-md flex items-center transition-all text-lg hover:shadow-lg transform hover:-translate-y-0.5"
+                  >
+                    {currentIndex === questions.length - 1 ? 'סיום והגשה' : 'המשך לשאלה הבאה'}
+                    {currentIndex !== questions.length - 1 && <ArrowLeft className="w-6 h-6 mr-1" />}
+                  </button>
+                )}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
