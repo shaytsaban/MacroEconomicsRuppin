@@ -401,7 +401,6 @@ export default function App() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
   const [submissionCode, setSubmissionCode] = useState('');
-  const [notEnoughAnswers, setNotEnoughAnswers] = useState(false);
 
   // State Arrays for 10 questions
   const [userAnswers, setUserAnswers] = useState(Array(10).fill(null));
@@ -487,14 +486,6 @@ export default function App() {
   };
 
   const handleFinish = () => {
-    const answeredCount = userAnswers.filter(ans => ans !== null).length;
-    const skippedCount = 10 - answeredCount;
-    
-    if (skippedCount > 4) {
-      setNotEnoughAnswers(true);
-      return;
-    }
-    
     setSubmissionCode('MACRO-' + Math.random().toString(36).substring(2, 8).toUpperCase());
     setIsFinished(true);
   };
@@ -509,7 +500,6 @@ export default function App() {
     setShowExplanations(Array(10).fill(false));
     setShowHints(Array(10).fill(false));
     setIsFinished(false);
-    setNotEnoughAnswers(false);
     setSubmissionCode('');
   };
 
@@ -731,69 +721,6 @@ export default function App() {
             <div className="border-t border-indigo-200 pt-5 text-right">
               <p className="text-sm text-rose-600 mb-3 font-bold bg-rose-50 p-3 rounded-lg border border-rose-100">
                 הנחיות הגשה: עליך להעתיק את הקוד להלן לתיבת ההגשה. ההגשה תיחשב אוטומטית על פי קוד חד ערכי זה.
-              </p>
-              <p className="text-sm text-slate-600 mb-2 font-medium text-center">קוד ההגשה שלך:</p>
-              <code className="bg-white px-6 py-3 rounded-xl text-2xl font-mono text-slate-800 border border-slate-200 shadow-inner select-all block text-center tracking-widest">
-                {submissionCode}
-              </code>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // ----------------------------------------------------
-  // NOT ENOUGH ANSWERS PAGE
-  // ----------------------------------------------------
-  if (notEnoughAnswers) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans" dir="rtl">
-        <div className="bg-white max-w-lg w-full rounded-3xl shadow-xl p-8 text-center border border-slate-100">
-          <Info className="w-24 h-24 text-rose-500 mx-auto mb-6 drop-shadow-md" />
-          <h1 className="text-3xl font-black text-slate-800 mb-4">שים לב, לא ענית על מספיק שאלות.</h1>
-          <p className="text-lg text-slate-600 mb-8">דילגת על יותר מ-4 שאלות. עליך לענות על שאלות נוספות כדי לקבל קוד הגשה.</p>
-          <button
-            onClick={() => setNotEnoughAnswers(false)}
-            className="flex items-center justify-center w-full bg-indigo-600 hover:bg-indigo-700 text-white py-4 px-6 rounded-xl font-bold transition-colors text-lg"
-          >
-            <ArrowRight className="w-5 h-5 ml-2" />
-            חזור לתרגיל לתיקון
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // ----------------------------------------------------
-  // SUCCESS / PRINT PAGE
-  // ----------------------------------------------------
-  if (isFinished) {
-    const finalScore = firstTryCorrect.filter(Boolean).length * 10;
-    
-    let scoreMessage = "";
-    if (finalScore === 100) scoreMessage = "מושלם! שליטה מלאה בחומר.";
-    else if (finalScore >= 80) scoreMessage = "עבודה יפה מאוד!";
-    else if (finalScore >= 60) scoreMessage = "ציון טוב, אבל יש מקום לשיפור.";
-    else scoreMessage = "כדאי לחזור על החומר ולתרגל שוב.";
-
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 font-sans" dir="rtl">
-        <style>{printStyles}</style>
-        
-        {/* VIEW MODE */}
-        <div className="no-print bg-white max-w-lg w-full rounded-3xl shadow-xl p-8 text-center border border-slate-100">
-          <Trophy className="w-24 h-24 text-yellow-500 mx-auto mb-6 drop-shadow-md" />
-          <h1 className="text-3xl font-black text-slate-800 mb-2">{scoreMessage}</h1>
-          <p className="text-lg text-slate-600 mb-8">השלמת בהצלחה את תרגיל הגשה 1.</p>
-          
-          <div className="bg-indigo-50 border border-indigo-100 rounded-2xl p-6 mb-8 shadow-sm">
-            <p className="text-sm text-indigo-800 font-semibold mb-2">הציון הסופי שלך (מתוך 100):</p>
-            <p className="text-6xl font-black text-indigo-600 mb-6">{finalScore}</p>
-            
-            <div className="border-t border-indigo-200 pt-5 text-right">
-              <p className="text-sm text-rose-600 mb-3 font-bold bg-rose-50 p-3 rounded-lg border border-rose-100">
-                הנחיות הגשה: עליך להעתיק את הקוד להלן לתיבת ההגשה המוגדרת באתר.
               </p>
               <p className="text-sm text-slate-600 mb-2 font-medium text-center">קוד ההגשה שלך:</p>
               <code className="bg-white px-6 py-3 rounded-xl text-2xl font-mono text-slate-800 border border-slate-200 shadow-inner select-all block text-center tracking-widest">
