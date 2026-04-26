@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תרגול מאקרו כלכלה - ביקוש מצרפי, שיווי משקל, פערים ומדיניות פיסקלית</title>
     
+    <!-- ייבוא פונט נקי ומודרני לעברית -->
     <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
     
     <script>
@@ -439,7 +440,7 @@
 
     <script>
         const questionsData = [
-            // שאלה 1 - נבנתה כשאלה מורכבת (composite) המאפשרת משוב נפרד לכל תת-סעיף
+            // שאלה 1 - מתוקנת מתמטית (2410 + 950 + 1250 = 4610)
             {
                 id: 1,
                 type: 'composite',
@@ -458,14 +459,14 @@
                             { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q1_ad0', placeholder: 'ערך מספרי כגון 5000' },
                             { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q1_mpe', placeholder: 'ערך מספרי כגון 0.80' }
                         ],
-                        correctAnswer: { ad0: 4210, mpe: 0.75 },
+                        correctAnswer: { ad0: 4610, mpe: 0.75 },
                         tolerance: { ad0: 5, mpe: 0.015 },
                         hintText: 'פתחו את הביטוי <span dir="ltr">\\( Y_D = Y - T \\)</span>, הציבו בפונקציית הצריכה, כנסו איברים דומים, וחברו את כל רכיבי <span dir="ltr">\\( AD \\)</span>.',
                         feedbackCorrect: `<strong>חישוב נכון! הדרך המלאה:</strong><br>
                         <div dir="ltr" style="text-align:left;">\\[ C = 2800 + 0.65(Y-600) = 2410 + 0.65Y \\]</div>
-                        <div dir="ltr" style="text-align:left;">\\[ AD = 2410+0.65Y + 950+0.10Y + 1250 = 4210 + 0.75Y \\]</div>
-                        <p>לכן: <span dir="ltr">\\( AD_0 = 4210 \\)</span>, <span dir="ltr">\\( MPE = 0.75 \\)</span></p>`,
-                        feedbackWrong: 'חישוב שגוי. נסו שנית. ודאו שהכפלתם נכון את המקדם במיסים.'
+                        <div dir="ltr" style="text-align:left;">\\[ AD = (2410+0.65Y) + (950+0.10Y) + 1250 = 4610 + 0.75Y \\]</div>
+                        <p>לכן: <span dir="ltr">\\( AD_0 = 4610 \\)</span>, <span dir="ltr">\\( MPE = 0.75 \\)</span></p>`,
+                        feedbackWrong: 'חישוב שגוי. נסו שנית. ודאו שהכפלתם נכון את המקדם במיסים וסכמתם את המספרים החופשיים.'
                     },
                     {
                         id: '1_mcq1',
@@ -494,7 +495,7 @@
                         ],
                         correctIndex: 0,
                         hintText: 'זכרו את ראשי התיבות של Marginal Propensity to Expend ואת המרכיבים שלו במודל זה.',
-                        feedbackCorrect: 'מדויק! זוהי ההשפעה הכוללת של עלייה בהכנסה על סך ההוצאות المתוכננות.',
+                        feedbackCorrect: 'מדויק! זוהי ההשפעה הכוללת של עלייה בהכנסה על סך ההוצאות המתוכננות.',
                         feedbackWrong: 'תשובה שגויה. נסו שנית.'
                     }
                 ]
@@ -563,7 +564,8 @@
                 correctAnswer: { ad0: 5560, mpe: 0.67 },
                 tolerance: { ad0: 8, mpe: 0.015 },
                 feedbackCorrect: `<strong>חישוב נכון:</strong><br>
-                <div dir="ltr" style="text-align:left;">\\[ AD = [3500 - 0.55(800) + 1100 + 1400] + (0.55 + 0.12)Y \\]</div>
+                <div dir="ltr" style="text-align:left;">\\[ C = 3500 + 0.55(Y-800) = 3060 + 0.55Y \\]</div>
+                <div dir="ltr" style="text-align:left;">\\[ AD = (3060+0.55Y) + (1100+0.12Y) + 1400 = 5560 + 0.67Y \\]</div>
                 <p><span dir="ltr">\\( AD_0 = 5560 \\)</span>, <span dir="ltr">\\( MPE = 0.67 \\)</span></p>`,
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputs: [
@@ -642,7 +644,7 @@
                 hintText: 'השתמשו בנוסחת המכפיל של תקציב מאוזן: יש לחלק את הפער הדפלציוני ב-(1 פחות MPC).',
                 correctAnswer: 2311,
                 tolerance: 8,
-                feedbackCorrect: '<strong>נכון!</strong> <div dir="ltr" style="text-align:left;">\\[ \\Delta G = \\frac{1040}{1 - 0.55} \\approx 2311 \\]</div>',
+                feedbackCorrect: '<strong>נכון!</strong> <div dir="ltr" style="text-align:left;">\\[ \\Delta G = \\frac{1040}{1 - 0.55} = \\frac{1040}{0.45} \\approx 2311 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( \\Delta G = \\)</span>'
             },
@@ -818,7 +820,7 @@
                         hintText: 'כמו בשאלות הקודמות, פתחו את פונקציית הצריכה, הציבו את המיסים, וסכמו את הרכיבים האוטונומיים לחוד ואת מקדמי ה-Y לחוד.',
                         feedbackCorrect: `<strong>פתרון מלא - כל הכבוד:</strong><br>
                         <div dir="ltr" style="text-align:left;">\\[ C = 4200 + 0.72(Y-1200) = 3336 + 0.72Y \\]</div>
-                        <div dir="ltr" style="text-align:left;">\\[ AD = 3336+0.72Y + 880+0.08Y + 1600 = 5816 + 0.80Y \\]</div>
+                        <div dir="ltr" style="text-align:left;">\\[ AD = (3336+0.72Y) + (880+0.08Y) + 1600 = 5816 + 0.80Y \\]</div>
                         <p><span dir="ltr">\\( AD_0 = 5816 \\)</span>, <span dir="ltr">\\( MPE = 0.80 \\)</span></p>`,
                         feedbackWrong: 'חישוב שגוי. נסו שנית. בדקו את ההכפלה של מקדם הצריכה במיסים ואת החיסור משאר האיברים.'
                     }
