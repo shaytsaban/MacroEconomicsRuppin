@@ -895,7 +895,9 @@
                 container.appendChild(card);
             });
             updateProgress();
-            if (window.MathJax) MathJax.typesetPromise();
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise();
+            }
         }
 
         function renderQuestionInput(q) {
@@ -1062,7 +1064,9 @@
                 }
             }
             
-            if (window.MathJax) MathJax.typesetPromise([fbBox]);
+            if (window.MathJax && typeof MathJax.typesetPromise === 'function') {
+                MathJax.typesetPromise([fbBox]);
+            }
             updateProgress();
         }
 
