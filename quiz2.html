@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>תרגול מאקרו כלכלה - ביקוש מצרפי, שיווי משקל, פערים ומדיניות פיסקלית</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
     <script>
         MathJax = {
             tex: {
@@ -15,323 +18,233 @@
         };
     </script>
     <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" defer></script>
+    
     <style>
         :root {
-            --bg-start: #f0f4ff;
-            --bg-mid: #fdf6ff;
-            --bg-end: #fff5f0;
+            --bg-start: #f4f7fb;
+            --bg-end: #ffffff;
             --card-bg: #ffffff;
-            --primary: #4a3aff;
-            --primary-light: #7b73ff;
-            --secondary: #ff6b6b;
-            --accent: #00c9a7;
-            --gold: #f5a623;
-            --text: #2d2a4a;
-            --text-light: #5a5678;
-            --border: #e8e5f5;
-            --shadow: 0 8px 32px rgba(74, 58, 255, 0.08);
-            --shadow-hover: 0 16px 48px rgba(74, 58, 255, 0.16);
-            --radius: 20px;
-            --radius-sm: 12px;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #ef4444;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --input-bg: #f8fafc;
+            --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --radius-md: 16px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Segoe UI', 'Open Sans', 'Assistant', system-ui, sans-serif;
-            background: linear-gradient(135deg, #e8eeff 0%, #f5edff 25%, #fff0f5 50%, #fff8ed 75%, #e8f8ff 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
+            font-family: 'Assistant', system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
             min-height: 100vh;
-            color: var(--text);
+            color: var(--text-dark);
             line-height: 1.7;
-            position: relative;
-            overflow-x: hidden;
         }
-        @keyframes gradientShift {
-            0%, 100% { background-position: 0% 50%; }
-            25% { background-position: 100% 0%; }
-            50% { background-position: 100% 100%; }
-            75% { background-position: 0% 100%; }
-        }
-        .particles-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-        }
-        .particle {
-            position: absolute;
-            border-radius: 50%;
-            animation: floatUp 8s infinite ease-in;
-            opacity: 0.5;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            20% { opacity: 0.7; }
-            80% { opacity: 0.4; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
-        }
+
         .main-container {
-            max-width: 960px;
+            max-width: 900px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 30px 20px;
             position: relative;
             z-index: 1;
         }
+
+        /* כותרת ראשית */
         .header {
             background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 30px 35px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-lg);
             text-align: center;
-            border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
+            border-top: 6px solid var(--primary);
         }
-        .header::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: calc(var(--radius) + 3px);
-            background: linear-gradient(135deg, #4a3aff, #ff6b6b, #00c9a7, #f5a623);
-            z-index: -1;
-            animation: borderGlow 4s linear infinite;
-            background-size: 300% 300%;
-        }
-        @keyframes borderGlow {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-        }
+
         .header h1 {
-            font-size: 2em;
+            font-size: 2.2em;
             font-weight: 800;
-            background: linear-gradient(135deg, #4a3aff, #7b2fff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 8px;
+            color: var(--text-dark);
+            margin-bottom: 10px;
         }
+
         .header .subtitle {
-            font-size: 1.1em;
+            font-size: 1.2em;
             color: var(--text-light);
-            font-weight: 500;
+            font-weight: 600;
+            margin-bottom: 20px;
         }
-        .header .icons-row {
-            font-size: 2.5em;
-            margin-bottom: 6px;
-            animation: bounceIcons 2s infinite;
-        }
-        @keyframes bounceIcons {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-12px); }
-        }
+
         .moodle-highlight {
-            background: #fffbcc;
-            border: 2px solid #f5a623;
-            border-radius: 12px;
-            padding: 12px 20px;
+            background: #fffbeb;
+            border: 1px solid #fcd34d;
+            border-radius: var(--radius-sm);
+            padding: 12px 24px;
             font-weight: 700;
-            font-size: 1.05em;
+            font-size: 1.1em;
+            color: #b45309;
             display: inline-block;
-            margin: 8px 0;
         }
+
+        /* סרגל התקדמות */
         .progress-wrap {
             background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 18px 25px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
+            border-radius: var(--radius-md);
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-sm);
             display: flex;
             align-items: center;
-            gap: 18px;
-            flex-wrap: wrap;
+            gap: 20px;
         }
+
         .progress-bar-outer {
             flex: 1;
-            min-width: 180px;
-            height: 14px;
-            background: #e8e5f5;
+            height: 12px;
+            background: #e2e8f0;
             border-radius: 20px;
             overflow: hidden;
         }
+
         .progress-bar-inner {
             height: 100%;
-            background: linear-gradient(90deg, #4a3aff, #7b73ff, #00c9a7);
+            background: var(--primary);
             border-radius: 20px;
-            transition: width 0.5s ease;
+            transition: width 0.6s ease-out;
             width: 0%;
         }
-        .progress-text {
-            font-weight: 700;
-            color: var(--primary);
-            font-size: 1.05em;
-            white-space: nowrap;
-        }
+
         .score-badge {
-            background: linear-gradient(135deg, #4a3aff, #7b2fff);
-            color: #fff;
-            padding: 8px 18px;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.95em;
-            white-space: nowrap;
-        }
-        .formula-sheet {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px 30px;
-            margin-bottom: 25px;
-            box-shadow: var(--shadow);
-            border-right: 5px solid var(--primary);
-        }
-        .formula-sheet h2 {
-            font-size: 1.3em;
+            background: #f1f5f9;
             color: var(--primary);
-            margin-bottom: 16px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            user-select: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 1.1em;
         }
-        .formula-sheet h2 .toggle-icon {
-            transition: transform 0.3s;
-            font-size: 0.8em;
-        }
-        .formula-sheet.collapsed .formula-content { display: none; }
-        .formula-sheet.collapsed h2 .toggle-icon { transform: rotate(-90deg); }
-        .formula-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 14px;
-        }
-        .formula-card {
-            background: #f8f7ff;
-            border-radius: var(--radius-sm);
-            padding: 14px 18px;
-            border: 1px solid #e8e5f5;
-            transition: var(--transition);
-            font-size: 0.95em;
-        }
-        .formula-card:hover {
-            border-color: var(--primary-light);
-            box-shadow: 0 4px 16px rgba(74, 58, 255, 0.1);
-            transform: translateY(-2px);
-        }
-        .formula-card .formula-title {
-            font-weight: 700;
-            color: var(--primary);
-            margin-bottom: 4px;
-            font-size: 0.9em;
-        }
-        .formula-card .formula-expr {
-            background: #fff;
-            padding: 6px 10px;
-            border-radius: 8px;
-            display: inline-block;
-            margin-top: 4px;
-        }
+
+        /* כרטיסיית שאלה */
         .question-card {
             background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 25px 30px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
+            border-radius: var(--radius-md);
+            padding: 35px 40px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid transparent;
             transition: var(--transition);
             position: relative;
-            border: 2px solid transparent;
         }
+
         .question-card:hover {
-            box-shadow: var(--shadow-hover);
-            border-color: #e8e5f5;
+            box-shadow: var(--shadow-lg);
         }
-        .question-card.answered-correct { border-color: #00c9a7 !important; background: #f6fffb !important; }
-        .question-card.answered-wrong { border-color: #ff6b6b !important; background: #fff8f8 !important; }
+
+        .question-card.answered-correct { border-color: var(--success); background: #f0fdf4; }
+        .question-card.answered-wrong { border-color: var(--secondary); background: #fef2f2; }
+
         .question-number {
             position: absolute;
-            top: -16px;
-            right: 25px;
-            background: linear-gradient(135deg, #4a3aff, #7b2fff);
+            top: -15px;
+            right: 30px;
+            background: var(--primary);
             color: #fff;
-            width: 38px;
-            height: 38px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 800;
-            font-size: 1.1em;
-            box-shadow: 0 4px 14px rgba(74, 58, 255, 0.35);
+            font-size: 1.2em;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
         }
+
         .question-card h3 {
-            margin-top: 8px;
-            margin-bottom: 16px;
-            font-size: 1.1em;
-            color: var(--text);
-            padding-left: 40px;
+            font-size: 1.3em;
+            color: var(--text-dark);
+            margin-bottom: 20px;
+            padding-right: 50px;
+            font-weight: 700;
         }
+
+        /* קופסת נתונים */
         .data-box {
-            background: #fafaff;
+            background: #f8fafc;
             border-radius: var(--radius-sm);
-            padding: 15px 20px;
-            margin-bottom: 16px;
-            border: 1px dashed #d5d0f0;
-            font-size: 0.95em;
-            line-height: 1.8;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #e2e8f0;
+            font-size: 1.05em;
         }
-        .data-box .formula-block { margin: 8px 0; }
+
+        .data-box .formula-block {
+            margin: 10px 0;
+            padding-left: 15px;
+            border-left: 3px solid var(--primary);
+        }
+
+        /* רשימת אפשרויות אמריקאיות */
         .options-list {
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
+            gap: 12px;
+            margin-bottom: 20px;
         }
+
         .option-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px 16px;
+            gap: 15px;
+            padding: 15px 20px;
             border-radius: var(--radius-sm);
-            border: 2px solid #e8e5f5;
+            border: 2px solid #e2e8f0;
             cursor: pointer;
             transition: var(--transition);
-            font-weight: 500;
-            background: #fdfdff;
+            background: #ffffff;
+            font-weight: 600;
         }
+
         .option-item:hover {
-            border-color: var(--primary-light);
-            background: #f8f7ff;
-            transform: translateX(-4px);
+            border-color: #94a3b8;
+            background: #f8fafc;
         }
+
         .option-item.selected {
             border-color: var(--primary);
-            background: #eef0ff;
-            font-weight: 700;
+            background: #eff6ff;
         }
+
         .option-radio {
-            width: 22px;
-            height: 22px;
+            width: 24px;
+            height: 24px;
             border-radius: 50%;
-            border: 2px solid #c5c0e0;
+            border: 2px solid #cbd5e1;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
             transition: var(--transition);
         }
+
         .option-item.selected .option-radio {
             border-color: var(--primary);
             background: var(--primary);
         }
+
         .option-item.selected .option-radio::after {
             content: '';
             width: 8px;
@@ -339,411 +252,318 @@
             border-radius: 50%;
             background: #fff;
         }
+
+        /* שדות קלט (Inputs) */
         .input-row {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 10px;
+            gap: 15px;
+            margin-bottom: 15px;
             flex-wrap: wrap;
-            flex-direction: row;
         }
-        .input-row label { font-weight: 600; white-space: nowrap; }
-        .input-row input {
-            padding: 10px 14px;
+
+        .input-row label {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: var(--text-dark);
+        }
+
+        .input-row input, .gap-row input, .gap-row select {
+            padding: 12px 16px;
             border-radius: var(--radius-sm);
-            border: 2px solid #e8e5f5;
-            font-size: 1.05em;
+            border: 2px solid #e2e8f0;
+            font-size: 1.1em;
             transition: var(--transition);
-            background: #fdfdff;
+            background: var(--input-bg);
             direction: ltr;
             text-align: right;
-            min-width: 180px;
-            font-family: 'Segoe UI', monospace;
+            font-family: 'Assistant', monospace;
+            min-width: 200px;
+            color: var(--text-dark);
+            font-weight: 600;
         }
-        .input-row input:focus {
+
+        .input-row input:focus, .gap-row input:focus, .gap-row select:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(74, 58, 255, 0.08);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
         }
+
         .gap-row {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-bottom: 10px;
-            flex-direction: row;
+            margin-bottom: 20px;
         }
+
         .gap-row select {
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 2px solid #e8e5f5;
-            font-weight: 500;
-            font-size: 1em;
-            background: #fdfdff;
+            direction: rtl;
+            min-width: 150px;
             cursor: pointer;
         }
-        .gap-row input {
-            padding: 10px 14px;
-            border-radius: var(--radius-sm);
-            border: 2px solid #e8e5f5;
-            font-size: 1.05em;
-            width: 140px;
-            direction: ltr;
-            text-align: right;
-            font-family: 'Segoe UI', monospace;
+
+        /* כפתורים */
+        .controls-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            align-items: center;
         }
+
         .btn {
-            padding: 10px 20px;
+            padding: 12px 24px;
             border-radius: 30px;
             border: none;
             cursor: pointer;
             font-weight: 700;
-            font-size: 0.95em;
+            font-size: 1.05em;
             transition: var(--transition);
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            font-family: inherit;
+            font-family: 'Assistant', sans-serif;
         }
-        .btn-hint {
-            background: #fff3e0;
-            color: #e67e00;
-            border: 1px solid #ffd699;
-        }
-        .btn-hint:hover { background: #ffe6c0; transform: scale(1.03); }
-        .btn-check {
-            background: linear-gradient(135deg, #4a3aff, #7b2fff);
-            color: #fff;
-            box-shadow: 0 4px 14px rgba(74, 58, 255, 0.3);
-        }
-        .btn-check:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74, 58, 255, 0.4); }
-        .btn-check:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
-        .btn-reset {
-            background: #fff;
-            color: var(--text);
-            border: 2px solid #e8e5f5;
-        }
-        .btn-reset:hover { border-color: #c5c0e0; }
-        .btn-full-solution {
-            background: #ffe6e6;
-            color: #b53030;
-            border: 1px solid #ff6b6b;
-            font-weight: 700;
-            animation: pulseRed 1.5s infinite;
-        }
-        @keyframes pulseRed {
-            0%, 100% { background: #ffe6e6; }
-            50% { background: #ffd4d4; }
-        }
-        .btn-submit-final {
-            background: linear-gradient(135deg, #00c9a7, #00b894);
-            color: #fff;
-            font-size: 1.1em;
-            padding: 14px 30px;
-            box-shadow: 0 6px 20px rgba(0, 201, 167, 0.35);
-            animation: pulseBtn 2s infinite;
-        }
-        @keyframes pulseBtn {
-            0%, 100% { box-shadow: 0 6px 20px rgba(0, 201, 167, 0.35); }
-            50% { box-shadow: 0 10px 32px rgba(0, 201, 167, 0.6); }
-        }
-        .btn-submit-final:hover { transform: translateY(-3px); }
-        .btn-retry {
-            background: #fff;
-            color: var(--secondary);
-            border: 2px solid #ff6b6b;
-            font-weight: 700;
-        }
-        .btn-retry:hover { background: #fff5f5; }
+
+        .btn-check { background: var(--primary); color: #fff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2); }
+        .btn-check:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); }
+        .btn-check:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .btn-hint { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+        .btn-hint:hover { background: #fef3c7; }
+
+        .btn-reset { background: #f1f5f9; color: var(--text-light); }
+        .btn-reset:hover { background: #e2e8f0; color: var(--text-dark); }
+
+        .btn-full-solution { background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; }
+        .btn-full-solution:hover { background: #fee2e2; }
+
+        /* אזורי משוב */
         .feedback-box {
-            margin-top: 14px;
-            padding: 14px 18px;
+            margin-top: 15px;
+            padding: 18px 20px;
             border-radius: var(--radius-sm);
             display: none;
-            font-weight: 500;
+            font-weight: 600;
             line-height: 1.8;
             animation: fadeIn 0.4s ease;
-            direction: rtl;
         }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+
         .feedback-box.show { display: block; }
-        .feedback-box.correct-fb { background: #e6fff8; border: 1px solid #00c9a7; color: #007a60; }
-        .feedback-box.wrong-fb { background: #fff0f0; border: 1px solid #ff6b6b; color: #b53030; }
+        .feedback-box.correct-fb { background: #f0fdf4; border: 1px solid #86efac; color: #166534; }
+        .feedback-box.wrong-fb { background: #fef2f2; border: 1px solid #fca5a5; color: #991b1b; }
+
         .hint-box {
-            margin-top: 10px;
-            padding: 12px 16px;
-            background: #fffdf5;
-            border: 1px solid #f5d76e;
-            border-radius: var(--radius-sm);
+            margin-top: 15px;
+            padding: 15px 20px;
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
             display: none;
-            color: #8a6d14;
-            font-weight: 500;
-            animation: fadeIn 0.35s ease;
-        }
-        .hint-box.show { display: block; }
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(30, 25, 50, 0.7);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            color: #b45309;
+            font-weight: 600;
             animation: fadeIn 0.3s ease;
         }
+
+        .hint-box.show { display: block; }
+
+        /* סגנון לשאלות מורכבות (Composite) - כמו שאלה 1 */
+        .sub-question-block {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .sub-question-block h4 {
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 8px;
+        }
+
+        /* מודל סיום */
+        .modal-overlay {
+            position: fixed; inset: 0; background: rgba(15, 23, 42, 0.8); z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+        }
         .modal {
-            background: #fff;
-            border-radius: var(--radius);
-            padding: 35px;
-            max-width: 550px;
-            width: 90%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
-        }
-        .modal .success-icon {
-            font-size: 5em;
-            animation: bounceIcons 1s ease-in-out 3;
-        }
-        .modal .fail-icon {
-            font-size: 5em;
-            animation: shake 0.6s ease-in-out;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            50% { transform: translateX(10px); }
-            75% { transform: translateX(-6px); }
+            background: #fff; border-radius: var(--radius-md); padding: 40px; max-width: 500px; width: 90%; text-align: center;
         }
         .code-display {
-            background: #1a1a2e;
-            color: #00ff88;
-            font-size: 1.8em;
-            font-family: 'Courier New', monospace;
-            padding: 16px 24px;
-            border-radius: 14px;
-            letter-spacing: 3px;
-            display: inline-block;
-            margin: 16px 0;
-            direction: ltr;
-            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            background: #1e293b; color: #34d399; font-size: 1.8em; font-family: monospace;
+            padding: 15px; border-radius: var(--radius-sm); letter-spacing: 2px; margin: 20px 0; direction: ltr;
         }
-        .confetti-piece {
-            position: fixed;
-            width: 12px;
-            height: 12px;
-            border-radius: 3px;
-            pointer-events: none;
-            animation: confettiFall 3s ease-out forwards;
-            z-index: 200;
-        }
-        @keyframes confettiFall {
-            0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
-        }
+
         .credit-footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 0.9em;
-            color: #888;
+            text-align: center; margin-top: 40px; padding-bottom: 20px; font-size: 1em; color: var(--text-light); font-weight: 600;
         }
-        .mc-subtitle {
-            font-weight: 700;
-            margin-top: 16px;
-            margin-bottom: 4px;
-        }
-        @media (max-width:600px) {
-            .header h1 { font-size: 1.4em; }
-            .question-card { padding: 18px 14px; }
-            .formula-grid { grid-template-columns: 1fr; }
-            .input-row input { min-width: 140px; }
-        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="particles-container" id="particlesContainer"></div>
     <div class="main-container">
         <div class="header">
             <div class="icons-row">📊 🧮 📈</div>
             <h1>ביקוש מצרפי, שיווי משקל, פערים ומדיניות פיסקלית</h1>
             <p class="subtitle">מבחן תרגול אינטראקטיבי - 20 שאלות</p>
-            <div class="moodle-highlight">🎯 יש לענות נכון על <strong>12 שאלות לפחות</strong> כדי לקבל קוד הגשה לאתר <strong>Moodle</strong></div>
+            <div class="moodle-highlight">🎯 יש לענות נכון על 12 שאלות לפחות כדי לקבל קוד הגשה לאתר Moodle</div>
         </div>
 
         <div class="progress-wrap">
-            <span style="font-weight:700;">📋 התקדמות:</span>
+            <span style="font-weight:800; font-size:1.1em;">התקדמות:</span>
             <div class="progress-bar-outer"><div class="progress-bar-inner" id="progressBar"></div></div>
             <span class="progress-text" id="progressLabel">0 / 20</span>
             <span class="score-badge" id="scoreBadge">✅ 0 נכונות</span>
         </div>
 
-        <div class="formula-sheet" id="formulaSheet">
-            <h2 onclick="toggleFormulaSheet()">📚 דף נוסחאות מרוכז <span class="toggle-icon">▼</span></h2>
-            <div class="formula-content">
-                <div class="formula-grid">
-                    <div class="formula-card"><div class="formula-title">ביקוש מצרפי (AD)</div><div class="formula-expr" dir="ltr">\[AD = C + I + G\]</div></div>
-                    <div class="formula-card"><div class="formula-title">הכנסה פנויה</div><div class="formula-expr" dir="ltr">\[Y_D = Y - T\]</div></div>
-                    <div class="formula-card"><div class="formula-title">נטייה שולית להוציא (MPE)</div><div class="formula-expr" dir="ltr">\[MPE = MPC + MPI\]</div></div>
-                    <div class="formula-card"><div class="formula-title">המכפיל הקיינסיאני (K)</div><div class="formula-expr" dir="ltr">\[K = \frac{1}{1 - MPE}\]</div></div>
-                    <div class="formula-card"><div class="formula-title">תוצר שיווי משקל (<span dir="ltr">\(Y^*\)</span> / <span dir="ltr">\(Y_E\)</span>)</div><div class="formula-expr" dir="ltr">\[Y^* = AD_0 \times K\]</div></div>
-                    <div class="formula-card"><div class="formula-title">פער תוצר</div><div class="formula-expr" dir="ltr">\[Y_F - Y^*\]</div></div>
-                    <div class="formula-card"><div class="formula-title">פער דפלציוני / אינפלציוני</div><div class="formula-expr" dir="ltr">\[\frac{Y_F - Y^*}{K}\]</div></div>
-                    <div class="formula-card"><div class="formula-title">הגדלת G במימון אג"ח</div><div class="formula-expr" dir="ltr">\[\Delta G = \Delta AD\]</div></div>
-                    <div class="formula-card"><div class="formula-title">הגדלת G בתקציב מאוזן</div><div class="formula-expr" dir="ltr">\[\Delta G = \frac{\Delta AD}{1 - MPC}\]</div></div>
-                    <div class="formula-card"><div class="formula-title">הפחתת מסים במימון אג"ח</div><div class="formula-expr" dir="ltr">\[\Delta T = \frac{\Delta AD}{MPC}\]</div></div>
-                </div>
-            </div>
-        </div>
-
         <div id="questionsContainer"></div>
 
-        <div style="text-align:center;margin-top:30px;padding:20px;" id="finalSubmitArea">
-            <button class="btn btn-submit-final" onclick="submitFinal()">🎯 הגישו ובקשו קוד הגשה</button>
-            <p style="margin-top:10px;color:var(--text-light);">הקוד יופיע רק לאחר מענה נכון על 12 שאלות לפחות</p>
+        <div style="text-align:center; margin-top:40px; padding:30px; background:var(--card-bg); border-radius:var(--radius-md); box-shadow:var(--shadow-md);">
+            <button class="btn btn-check" style="font-size:1.3em; padding:15px 40px;" onclick="submitFinal()">🎯 הגישו ובקשו קוד הגשה</button>
+            <p style="margin-top:15px; color:var(--text-light); font-weight:600;">הקוד יופיע רק לאחר מענה נכון על 12 שאלות (או תתי-סעיפים) לפחות</p>
         </div>
 
         <div class="credit-footer">
-            <p>© כל הזכויות שמורות לד"ר שי צבאן | לזיהוי שגיאות או הערות: <a href="mailto:shay.tsaban@gmail.com">shay.tsaban@gmail.com</a></p>
+            <p>© כל הזכויות שמורות לד"ר שי צבאן | לזיהוי שגיאות או הערות: <a href="mailto:shay.tsaban@gmail.com" style="color:var(--primary); text-decoration:none;">shay.tsaban@gmail.com</a></p>
         </div>
     </div>
 
     <div class="modal-overlay" id="modalOverlay" style="display:none;"></div>
 
     <script>
-        (function() {
-            const container = document.getElementById('particlesContainer');
-            const colors = ['#4a3aff33', '#ff6b6b33', '#00c9a733', '#f5a62333', '#7b73ff33', '#ff9ff333'];
-            for (let i = 0; i < 35; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                const s = Math.random() * 20 + 6;
-                p.style.width = s + 'px';
-                p.style.height = s + 'px';
-                p.style.left = Math.random() * 100 + '%';
-                p.style.background = colors[Math.floor(Math.random() * colors.length)];
-                p.style.animationDelay = Math.random() * 8 + 's';
-                p.style.animationDuration = (Math.random() * 10 + 6) + 's';
-                container.appendChild(p);
-            }
-        })();
-
-        function toggleFormulaSheet() { document.getElementById('formulaSheet').classList.toggle('collapsed'); }
-
         const questionsData = [
-            // Q1
+            // שאלה 1 - נבנתה כשאלה מורכבת (composite) המאפשרת משוב נפרד לכל תת-סעיף
             {
                 id: 1,
-                type: 'numeric_multi',
-                title: 'חשבו את ערכי הפונקציה ובחרו את המשמעות הכלכלית',
-                dataDisplay: `<p>נתוני המשק "חממת הזהב":</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ C = 2800 + 0.65Y_D \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ I = 950 + 0.10Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ G = 1250 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ T = 600 \\]</div>`,
-                question: 'חשבו את הערכים הבאים:',
-                hintText: 'פתחו את הביטוי <span dir="ltr">\\( Y_D = Y - T \\)</span>, הציבו בפונקציית הצריכה, כנסו איברים דומים, וחברו את כל רכיבי <span dir="ltr">\\( AD \\)</span>.',
-                numericInputs: [
-                    { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q1_ad0', placeholder: 'ערך מספרי כגון 5000' },
-                    { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q1_mpe', placeholder: 'ערך מספרי כגון 0.80' }
-                ],
-                correctNumeric: { ad0: 4210, mpe: 0.75 },
-                tolerance: { ad0: 5, mpe: 0.015 },
-                mcQuestions: [{
-                    text: 'מה מייצג <span dir="ltr">\\( AD_0 \\)</span>?',
-                    options: [
-                        'גודל אוטונומי של פונקציית הביקוש המצרפי',
-                        'שיפוע עקומת AD',
-                        'סך הצריכה האוטונומית',
-                        'הביקוש המצרפי הכולל'
-                    ],
-                    correctIndex: 0
-                }, {
-                    text: 'מה מייצג <span dir="ltr">\\( MPE \\)</span>?',
-                    options: [
-                        'נטייה שולית להוציא שמהווה חיבור של נטייה שולית לצרוך עם נטייה שולית להשקיע',
-                        'נטייה שולית לצרוך בלבד',
-                        'המכפיל הקיינסיאני',
-                        'שיעור המס הממוצע'
-                    ],
-                    correctIndex: 0
-                }],
-                feedbackCorrect: `<strong>פתרון מלא:</strong><br>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ C = 2800 + 0.65(Y-600) = 2410 + 0.65Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ AD = 2410+0.65Y + 950+0.10Y + 1250 = 4210 + 0.75Y \\]</div>
-                <p>לכן: <span dir="ltr">\\( AD_0 = 4210 \\)</span>, <span dir="ltr">\\( MPE = 0.75 \\)</span></p>`,
-                feedbackWrong: 'תשובה שגויה. נסו שנית.'
+                type: 'composite',
+                title: 'חישוב ערכי הפונקציה ומשמעות כלכלית',
+                dataDisplay: `<p><strong>נתוני המשק "חממת הזהב":</strong></p>
+                <div class="formula-block" dir="ltr">\\[ C = 2800 + 0.65Y_D \\]</div>
+                <div class="formula-block" dir="ltr">\\[ I = 950 + 0.10Y \\]</div>
+                <div class="formula-block" dir="ltr">\\[ G = 1250 \\]</div>
+                <div class="formula-block" dir="ltr">\\[ T = 600 \\]</div>`,
+                subQuestions: [
+                    {
+                        id: '1_calc',
+                        type: 'numeric',
+                        question: 'חשבו את הערכים הבאים:',
+                        inputs: [
+                            { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q1_ad0', placeholder: 'ערך מספרי כגון 5000' },
+                            { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q1_mpe', placeholder: 'ערך מספרי כגון 0.80' }
+                        ],
+                        correctAnswer: { ad0: 4210, mpe: 0.75 },
+                        tolerance: { ad0: 5, mpe: 0.015 },
+                        hintText: 'פתחו את הביטוי <span dir="ltr">\\( Y_D = Y - T \\)</span>, הציבו בפונקציית הצריכה, כנסו איברים דומים, וחברו את כל רכיבי <span dir="ltr">\\( AD \\)</span>.',
+                        feedbackCorrect: `<strong>חישוב נכון! הדרך המלאה:</strong><br>
+                        <div dir="ltr" style="text-align:left;">\\[ C = 2800 + 0.65(Y-600) = 2410 + 0.65Y \\]</div>
+                        <div dir="ltr" style="text-align:left;">\\[ AD = 2410+0.65Y + 950+0.10Y + 1250 = 4210 + 0.75Y \\]</div>
+                        <p>לכן: <span dir="ltr">\\( AD_0 = 4210 \\)</span>, <span dir="ltr">\\( MPE = 0.75 \\)</span></p>`,
+                        feedbackWrong: 'חישוב שגוי. נסו שנית. ודאו שהכפלתם נכון את המקדם במיסים.'
+                    },
+                    {
+                        id: '1_mcq1',
+                        type: 'mc',
+                        question: 'מה משמעות המונח <span dir="ltr">\\( AD_0 \\)</span>?',
+                        options: [
+                            'הגודל האוטונומי של פונקציית הביקוש המצרפי',
+                            'שיפוע עקומת הביקוש המצרפי',
+                            'סך הצריכה האוטונומית במשק',
+                            'הביקוש המצרפי הכולל'
+                        ],
+                        correctIndex: 0,
+                        hintText: 'האם המשתנה הזה תלוי בהכנסה הלאומית (Y) או שהוא קבוע?',
+                        feedbackCorrect: 'נכון מאוד. זהו סכום כל הרכיבים שאינם תלויים ברמת התוצר.',
+                        feedbackWrong: 'תשובה שגויה. נסו שנית.'
+                    },
+                    {
+                        id: '1_mcq2',
+                        type: 'mc',
+                        question: 'מה משמעות המונח <span dir="ltr">\\( MPE \\)</span>?',
+                        options: [
+                            'נטייה שולית להוציא המהווה חיבור של נטייה שולית לצרוך עם נטייה שולית להשקיע',
+                            'הנטייה השולית לצרוך בלבד',
+                            'המכפיל הקיינסיאני של המשק',
+                            'שיעור המס הממוצע'
+                        ],
+                        correctIndex: 0,
+                        hintText: 'זכרו את ראשי התיבות של Marginal Propensity to Expend ואת המרכיבים שלו במודל זה.',
+                        feedbackCorrect: 'מדויק! זוהי ההשפעה הכוללת של עלייה בהכנסה על סך ההוצאות المתוכננות.',
+                        feedbackWrong: 'תשובה שגויה. נסו שנית.'
+                    }
+                ]
             },
-            // Q2
+            // שאלה 2
             {
                 id: 2,
                 type: 'numeric_single',
                 title: 'חשבו את המכפיל הקיינסיאני K',
                 dataDisplay: `<p>נתונה פונקציית הביקוש המצרפי:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ AD = 4210 + 0.75Y \\]</div>`,
+                <div class="formula-block" dir="ltr">\\[ AD = 4210 + 0.75Y \\]</div>`,
                 question: 'חשבו את <span dir="ltr">\\( K \\)</span>. עגלו ל-3 ספרות אחרי הנקודה העשרונית במידת הצורך.',
                 hintText: 'השתמשו בנוסחה <span dir="ltr">\\( K = 1 / (1 - MPE) \\)</span>. זהו את <span dir="ltr">\\( MPE \\)</span> מתוך הפונקציה הנתונה.',
                 correctAnswer: 4,
                 tolerance: 0.05,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ K = \\frac{1}{1-0.75} = \\frac{1}{0.25} = 4 \\]</div>',
+                feedbackCorrect: '<strong>פתרון נכון:</strong> <div dir="ltr" style="text-align:left;">\\[ K = \\frac{1}{1-0.75} = \\frac{1}{0.25} = 4 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( K = \\)</span>'
             },
-            // Q3
+            // שאלה 3
             {
                 id: 3,
                 type: 'numeric_single',
-                title: 'חשבו את תוצר שיווי המשקל <span dir="ltr">\\( Y^* \\)</span> (המסומן גם <span dir="ltr">\\( Y_E \\)</span>)',
+                title: 'חשבו את תוצר שיווי המשקל',
                 dataDisplay: `<p>נתונים:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ AD_0 = 4210 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ K = 4 \\]</div>`,
+                <div class="formula-block" dir="ltr">\\[ AD_0 = 4210 \\quad , \\quad K = 4 \\]</div>`,
                 question: 'חשבו את <span dir="ltr">\\( Y^* \\)</span>.',
-                hintText: 'השתמשו בנוסחה <span dir="ltr">\\( Y^* = AD_0 \\times K \\)</span>.',
+                hintText: 'השתמשו בנוסחה המקשרת בין הגודל האוטונומי, המכפיל ותוצר שיווי משקל.',
                 correctAnswer: 16840,
                 tolerance: 20,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ Y^* = 4210 \\times 4 = 16840 \\]</div>',
+                feedbackCorrect: '<strong>פתרון נכון:</strong> <div dir="ltr" style="text-align:left;">\\[ Y^* = 4210 \\times 4 = 16840 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( Y^* = \\)</span>'
             },
-            // Q4
+            // שאלה 4
             {
                 id: 4,
                 type: 'gap',
-                title: 'קבעו האם קיים פער דפלציוני או אינפלציוני ומה גודלו',
-                dataDisplay: `<p>נתונים:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ Y^* = 16840 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ Y_F = 22000 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ K = 4 \\]</div>`,
-                question: 'בחרו את סוג הפער והזינו את גודלו בערך מוחלט:',
-                hintText: 'השוו בין <span dir="ltr">\\( Y^* \\)</span> ל-<span dir="ltr">\\( Y_F \\)</span>. גודל הפער מחושב כיחס בין פער התוצר למכפיל.',
+                title: 'קביעת סוג הפער וגודלו',
+                dataDisplay: `<p>נתונים המשק:</p>
+                <div class="formula-block" dir="ltr">\\[ Y^* = 16840 \\quad , \\quad Y_F = 22000 \\quad , \\quad K = 4 \\]</div>`,
+                question: 'בחרו את סוג הפער והזינו את גודלו (בערך מוחלט):',
+                hintText: 'השוו בין התוצר המצוי (שיווי משקל) לתוצר תעסוקה מלאה. את הגודל מחשבים כיחס שבין פער התוצר למכפיל.',
                 correctGapType: 'deflationary',
                 correctGapSize: 1290,
                 tolerance: 5,
                 feedbackCorrect: `<strong>פתרון מלא:</strong><br>
-                <span dir="ltr">\\( Y^* < Y_F \\)</span> - לכן קיים פער דפלציוני.<br>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ \\frac{22000-16840}{4} = \\frac{5160}{4} = 1290 \\]</div>`,
-                feedbackWrong: 'תשובה שגויה. נסו שנית.',
+                מכיוון ש-<span dir="ltr">\\( Y^* < Y_F \\)</span> המשק באבטלה ולכן קיים פער דפלציוני.<br>
+                <div dir="ltr" style="text-align:left;">\\[ \\frac{22000-16840}{4} = 1290 \\]</div>`,
+                feedbackWrong: 'תשובה שגויה. נסו שנית. בדקו את בחירת סוג הפער ואת חלוקת פער התוצר במכפיל.',
                 gapSelectLabel: 'סוג הפער:',
                 gapSizeLabel: 'גודל הפער:'
             },
-            // Q5
+            // שאלה 5
             {
                 id: 5,
                 type: 'numeric',
-                title: 'מצאו את <span dir="ltr">\\( AD_0 \\)</span> ואת <span dir="ltr">\\( MPE \\)</span> במשק "ברוש הגליל"',
+                title: 'משק "ברוש הגליל" - חילוץ נתונים',
                 dataDisplay: `<p>נתוני המשק:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ C = 3500 + 0.55Y_D \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ I = 1100 + 0.12Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ G = 1400 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ T = 800 \\]</div>`,
-                question: 'חשבו את <span dir="ltr">\\( AD_0 \\)</span> (ערך אוטונומי) ואת <span dir="ltr">\\( MPE \\)</span> (מקדם Y).',
-                hintText: 'פתחו את <span dir="ltr">\\( Y_D \\)</span>, כנסו איברים, וחברו את כל רכיבי <span dir="ltr">\\( AD \\)</span>. שימו לב למקדמים.',
+                <div class="formula-block" dir="ltr">\\[ C = 3500 + 0.55Y_D \\]</div>
+                <div class="formula-block" dir="ltr">\\[ I = 1100 + 0.12Y \\]</div>
+                <div class="formula-block" dir="ltr">\\[ G = 1400 \\]</div>
+                <div class="formula-block" dir="ltr">\\[ T = 800 \\]</div>`,
+                question: 'חשבו את <span dir="ltr">\\( AD_0 \\)</span> ואת <span dir="ltr">\\( MPE \\)</span>.',
+                hintText: 'הציבו את המיסים בפונקציית ההכנסה הפנויה, כנסו איברים חופשיים לחוד ואיברים התלויים ב-Y לחוד.',
                 correctAnswer: { ad0: 5560, mpe: 0.67 },
                 tolerance: { ad0: 8, mpe: 0.015 },
-                feedbackCorrect: `<strong>פתרון מלא:</strong><br>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ C = 3500 + 0.55(Y-800) = 3060 + 0.55Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ AD = 3060+0.55Y + 1100+0.12Y + 1400 = 5560 + 0.67Y \\]</div>
+                feedbackCorrect: `<strong>חישוב נכון:</strong><br>
+                <div dir="ltr" style="text-align:left;">\\[ AD = [3500 - 0.55(800) + 1100 + 1400] + (0.55 + 0.12)Y \\]</div>
                 <p><span dir="ltr">\\( AD_0 = 5560 \\)</span>, <span dir="ltr">\\( MPE = 0.67 \\)</span></p>`,
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputs: [
@@ -751,122 +571,120 @@
                     { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q5_mpe', placeholder: 'ערך מספרי כגון 0.70' }
                 ]
             },
-            // Q6
+            // שאלה 6
             {
                 id: 6,
                 type: 'numeric_single',
-                title: 'חשבו את המכפיל K במשק "ברוש הגליל"',
+                title: 'המכפיל במשק "ברוש הגליל"',
                 dataDisplay: `<p>נתונה פונקציית AD:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ AD = 5560 + 0.67Y \\]</div>`,
+                <div class="formula-block" dir="ltr">\\[ AD = 5560 + 0.67Y \\]</div>`,
                 question: 'חשבו את <span dir="ltr">\\( K \\)</span>. עגלו ל-3 ספרות אחרי הנקודה העשרונית.',
-                hintText: 'השתמשו בנוסחת המכפיל הקיינסיאני <span dir="ltr">\\( K \\)</span>.',
+                hintText: 'השתמשו בנוסחת המכפיל המבוססת על הנטייה השולית להוציא.',
                 correctAnswer: 3.030,
                 tolerance: 0.015,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ K = \\frac{1}{1-0.67} = \\frac{1}{0.33} \\approx 3.0303 \\]</div>',
+                feedbackCorrect: '<strong>פתרון:</strong> <div dir="ltr" style="text-align:left;">\\[ K = \\frac{1}{1-0.67} \\approx 3.0303 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( K = \\)</span>'
             },
-            // Q7
+            // שאלה 7
             {
                 id: 7,
                 type: 'numeric_single',
-                title: 'חשבו את תוצר שיווי המשקל <span dir="ltr">\\( Y^* \\)</span> במשק "ברוש הגליל"',
+                title: 'תוצר שיווי המשקל במשק "ברוש הגליל"',
                 dataDisplay: `<p>נתונים:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ AD_0 = 5560 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ K \\approx 3.0303 \\]</div>`,
+                <div class="formula-block" dir="ltr">\\[ AD_0 = 5560 \\quad , \\quad K \\approx 3.0303 \\]</div>`,
                 question: 'חשבו את <span dir="ltr">\\( Y^* \\)</span>. עגלו לשלם הקרוב.',
-                hintText: 'הכפילו את הגודל האוטונומי במכפיל.',
+                hintText: 'מכפלה פשוטה של שני הנתונים המופיעים מעלה.',
                 correctAnswer: 16848,
                 tolerance: 30,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ Y^* = 5560 \\times 3.0303 \\approx 16848 \\]</div>',
+                feedbackCorrect: '<strong>נכון:</strong> <div dir="ltr" style="text-align:left;">\\[ Y^* = 5560 \\times 3.0303 \\approx 16848 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( Y^* = \\)</span>'
             },
-            // Q8
+            // שאלה 8
             {
                 id: 8,
                 type: 'gap',
-                title: 'קבעו האם קיים פער דפלציוני או אינפלציוני ומה גודלו',
+                title: 'פער התוצר במשק "ברוש הגליל"',
                 dataDisplay: `<p>נתונים:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ Y^* \\approx 16848 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ Y_F = 20000 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ K \\approx 3.0303 \\]</div>`,
+                <div class="formula-block" dir="ltr">\\[ Y^* \\approx 16848 \\quad , \\quad Y_F = 20000 \\quad , \\quad K \\approx 3.0303 \\]</div>`,
                 question: 'בחרו סוג פער והזינו גודל (ערך מוחלט):',
-                hintText: 'השוו בין התוצר התעסוקה המלאה לתוצר שיווי משקל וחשבו את היחס למכפיל.',
+                hintText: 'התוצר המצוי נמוך מתוצר תעסוקה מלאה. חשבו את ההפרש וחלקו במכפיל.',
                 correctGapType: 'deflationary',
                 correctGapSize: 1040,
                 tolerance: 15,
-                feedbackCorrect: '<strong>פתרון:</strong> פער דפלציוני - <span dir="ltr">\\( \\approx 1040 \\)</span>',
+                feedbackCorrect: '<strong>תשובה נכונה:</strong> פער דפלציוני שגודלו <span dir="ltr">\\( \\approx 1040 \\)</span>.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 gapSelectLabel: 'סוג הפער:',
                 gapSizeLabel: 'גודל הפער:'
             },
-            // Q9
+            // שאלה 9
             {
                 id: 9,
                 type: 'numeric_single',
-                title: 'הגדלת הוצאות ממשלה במימון אג"ח',
+                title: 'מדיניות פיסקלית - מימון אג"ח',
                 dataDisplay: `<p>קיים פער דפלציוני בגודל 1040. הממשלה מחליטה לסגור אותו באמצעות הגדלת <span dir="ltr">\\( G \\)</span> הממומנת באג"ח.</p>`,
-                question: 'חשבו בכמה יש להגדיל את <span dir="ltr">\\( G \\)</span>. (<span dir="ltr">\\( \\Delta G \\)</span>)',
-                hintText: 'במימון באמצעות אגרות חוב, השינוי הנדרש בהוצאה הממשלתית זהה בדיוק לגובה הפער הדפלציוני.',
+                question: 'חשבו בכמה יש להגדיל את <span dir="ltr">\\( G \\)</span>.',
+                hintText: 'במימון באמצעות אגרות חוב, השינוי הנדרש בהוצאה הממשלתית חופף בדיוק לגובה הפער הדפלציוני.',
                 correctAnswer: 1040,
                 tolerance: 10,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ \\Delta G = 1040 \\]</div> (בדיוק כגובה הפער הדפלציוני).',
+                feedbackCorrect: '<strong>נכון:</strong> בסוג מימון זה, הגדלת ההוצאה הממשלתית שווה בדיוק לפער הדפלציוני. <span dir="ltr">\\( \\Delta G = 1040 \\)</span>.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( \\Delta G = \\)</span>'
             },
-            // Q10
+            // שאלה 10
             {
                 id: 10,
                 type: 'numeric_single',
-                title: 'הגדלת הוצאות ממשלה תוך שמירה על תקציב מאוזן',
+                title: 'מדיניות פיסקלית - תקציב מאוזן',
                 dataDisplay: `<p>פער דפלציוני = 1040, <span dir="ltr">\\( MPC = 0.55 \\)</span>.</p>`,
-                question: 'חשבו בכמה יש להגדיל את <span dir="ltr">\\( G \\)</span> (ואת המסים).',
-                hintText: 'השתמשו בנוסחת המכפיל של תקציב מאוזן כדי למצוא את השינוי הנדרש.',
+                question: 'חשבו בכמה יש להגדיל את <span dir="ltr">\\( G \\)</span> (ואת המסים במקביל).',
+                hintText: 'השתמשו בנוסחת המכפיל של תקציב מאוזן: יש לחלק את הפער הדפלציוני ב-(1 פחות MPC).',
                 correctAnswer: 2311,
                 tolerance: 8,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ \\Delta G = \\frac{1040}{1 - 0.55} \\approx 2311 \\]</div>',
+                feedbackCorrect: '<strong>נכון!</strong> <div dir="ltr" style="text-align:left;">\\[ \\Delta G = \\frac{1040}{1 - 0.55} \\approx 2311 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( \\Delta G = \\)</span>'
             },
-            // Q11
+            // שאלה 11
             {
                 id: 11,
                 type: 'numeric_single',
-                title: 'הפחתת מסים במימון אג"ח',
+                title: 'מדיניות פיסקלית - הפחתת מסים',
                 dataDisplay: `<p>פער דפלציוני = 1040, <span dir="ltr">\\( MPC = 0.55 \\)</span>.</p>`,
-                question: 'חשבו בכמה יש להפחית מסים (<span dir="ltr">\\( \\Delta T \\)</span>). הזינו ערך חיובי.',
-                hintText: 'השתמשו בנוסחת מכפיל המסים כדי למצוא את השינוי הנדרש.',
+                question: 'חשבו בכמה יש להפחית מסים. הזינו את הערך התאורטי המוחלט (<span dir="ltr">\\( \\Delta T \\)</span>).',
+                hintText: 'השתמשו בנוסחת מכפיל המסים: חלקו את הפער הדפלציוני ב-MPC.',
                 correctAnswer: 1891,
                 tolerance: 8,
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ \\Delta T = \\frac{1040}{0.55} \\approx 1891 \\]</div>',
+                feedbackCorrect: '<strong>נכון!</strong> <div dir="ltr" style="text-align:left;">\\[ \\Delta T = \\frac{1040}{0.55} \\approx 1891 \\]</div>',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputLabel: '<span dir="ltr">\\( \\Delta T = \\)</span>'
             },
-            // Q12
+            // שאלה 12
             {
                 id: 12,
                 type: 'numeric',
-                title: 'שינוי בנטייה השולית להשקיע - חישוב AD חדשה',
+                title: 'שינוי פרמטרים - חישוב מחדש',
                 dataDisplay: `<p>במשק מסוים נתונה פונקציית הביקוש המצרפי:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ AD = 4210 + 0.75Y \\]</div>
+                <div class="formula-block" dir="ltr">\\[ AD = 4210 + 0.75Y \\]</div>
                 <p>בעקבות עלייה בנטייה השולית להשקיע (MPI) ב-0.06, עליכם לחשב את רכיבי פונקציית AD החדשה.</p>`,
                 question: 'חשבו את <span dir="ltr">\\( AD_0 \\)</span> החדש ואת <span dir="ltr">\\( MPE \\)</span> החדש.',
-                hintText: 'עדכנו רק את הנטייה השולית להוציא לפי השינוי הנתון. הגודל האוטונומי נותר ללא שינוי.',
+                hintText: 'השינוי התרחש רק בנטייה השולית. הגודל האוטונומי נותר כפי שהיה במשוואה המקורית.',
                 correctAnswer: { ad0: 4210, mpe: 0.81 },
                 tolerance: { ad0: 5, mpe: 0.015 },
-                feedbackCorrect: '<strong>פתרון מלא:</strong><br> <span dir="ltr">\\( AD_0 = 4210 \\)</span>, <span dir="ltr">\\( MPE = 0.75 + 0.06 = 0.81 \\)</span>. לכן <span dir="ltr">\\( AD = 4210 + 0.81Y \\)</span>.',
+                feedbackCorrect: '<strong>פתרון מלא:</strong><br> הגודל האוטונומי לא מושפע מהשינוי ב-MPI ולכן נשאר <span dir="ltr">\\( 4210 \\)</span>. ה-<span dir="ltr">\\( MPE \\)</span> גדל ב-0.06 ל-<span dir="ltr">\\( 0.81 \\)</span>.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.',
                 inputs: [
                     { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q12_ad0', placeholder: 'ערך מספרי כגון 5000' },
                     { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q12_mpe', placeholder: 'ערך מספרי כגון 0.85' }
                 ]
             },
-            // Q13
+            // שאלות אמריקאיות נטו 13-19
             {
                 id: 13,
                 type: 'mc',
-                title: 'ככל שהנטייה השולית לצרוך (MPC) גבוהה יותר:',
+                title: 'השפעת הנטייה השולית לצרוך',
+                question: 'ככל שהנטייה השולית לצרוך (MPC) גבוהה יותר:',
                 options: [
                     'המכפיל הקיינסיאני נמוך יותר',
                     'המכפיל הקיינסיאני גבוה יותר',
@@ -875,15 +693,15 @@
                     'כל הטענות שגויות'
                 ],
                 correctIndex: 1,
-                hintText: 'זכרו את הקשר החיובי בין הנטייה השולית לצרוך, הנטייה השולית להוציא והמכפיל.',
-                feedbackCorrect: 'נכון! עלייה ב-MPC מעלה את MPE ולכן את המכפיל.',
+                hintText: 'היזכרו בקשר המתמטי בין MPC, MPE והמכפיל (K). הקשר הוא ישיר.',
+                feedbackCorrect: 'מדויק. עלייה ב-MPC מעלה את הנטייה השולית להוציא (MPE) מה שמקטין את המכנה בנוסחת המכפיל ומגדיל אותו.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q14
             {
                 id: 14,
                 type: 'mc',
-                title: 'ככל שהנטייה השולית לחסוך (MPS) גבוהה יותר:',
+                title: 'השפעת הנטייה השולית לחסוך',
+                question: 'ככל שהנטייה השולית לחסוך (MPS) גבוהה יותר:',
                 options: [
                     'המכפיל הקיינסיאני גבוה יותר',
                     'המכפיל הקיינסיאני נמוך יותר',
@@ -892,15 +710,15 @@
                     'תשובות א+ג נכונות'
                 ],
                 correctIndex: 1,
-                hintText: 'זכרו כי סכום הנטייה השולית לחסוך והנטייה השולית לצרוך שווה לאחד.',
-                feedbackCorrect: 'נכון! חסכון גבוה פירושו צריכה נמוכה, ולכן מכפיל נמוך.',
+                hintText: 'זכרו שסכום הנטיות השוליות (לחסוך ולצרוך) שווה תמיד ל-1. כשאחת עולה, השנייה יורדת.',
+                feedbackCorrect: 'נכון. חיסכון גבוה פירושו נטייה שולית לצרוך נמוכה יותר, מה שגורר מכפיל נמוך יותר.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q15
             {
                 id: 15,
                 type: 'mc',
-                title: 'אם משק נמצא באבטלה (<span dir="ltr">\\( Y^* < Y_F \\)</span>), ככל שהמכפיל גדול יותר:',
+                title: 'קשר בין מכפיל לפער דפלציוני',
+                question: 'אם משק נמצא באבטלה (<span dir="ltr">\\( Y^* < Y_F \\)</span>), ככל שהמכפיל גדול יותר:',
                 options: [
                     'הפער הדפלציוני גדול יותר',
                     'הפער הדפלציוני קטן יותר',
@@ -909,26 +727,26 @@
                     'אף תשובה אינה נכונה'
                 ],
                 correctIndex: 1,
-                hintText: 'הפער הדפלציוני מוגדר כיחס שבין פער התוצר למכפיל. חשבו מה קורה לשבר כאשר המכנה גדל.',
-                feedbackCorrect: 'נכון! הפער הדפלציוני קטן יותר כי מחלקים במכנה גדול יותר.',
+                hintText: 'הפער הדפלציוני מוגדר כיחס שבין פער התוצר למכפיל. חשבו מה קורה לתוצאת החילוק כאשר המכנה גדול יותר.',
+                feedbackCorrect: 'נכון מאוד. המכפיל נמצא במכנה, ולכן הגדלתו מקטינה את הפער הדפלציוני הנדרש לסגירת פער התוצר.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q16
             {
                 id: 16,
                 type: 'mc',
-                title: 'במשק באבטלה, פער התוצר הוא 200 והפער הדפלציוני הוא 50. מהו המכפיל?',
+                title: 'חילוץ המכפיל מתוך נתוני פער',
+                question: 'במשק באבטלה, פער התוצר הוא 200 והפער הדפלציוני הוא 50. מהו המכפיל?',
                 options: ['2', '2.5', '4', '5', 'לא ניתן לדעת'],
                 correctIndex: 2,
-                hintText: 'הציבו את הנתונים בנוסחת הפער הדפלציוני וחלצו את הנעלם.',
-                feedbackCorrect: '<strong>פתרון מלא:</strong> <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ K = \\frac{200}{50} = 4 \\]</div>',
+                hintText: 'הציבו את הנתונים בנוסחה הבסיסית: פער התוצר חלקי המכפיל שווה לפער הדפלציוני.',
+                feedbackCorrect: 'מעולה! <span dir="ltr">\\( K = 200 / 50 = 4 \\)</span>.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q17
             {
                 id: 17,
                 type: 'mc',
-                title: 'הנטייה השולית להוציא (MPE) מוגדרת כ:',
+                title: 'הגדרת MPE',
+                question: 'הנטייה השולית להוציא (MPE) מוגדרת כ:',
                 options: [
                     'MPC - MPI',
                     'MPC + MPI',
@@ -937,15 +755,15 @@
                     'MPC × MPI'
                 ],
                 correctIndex: 1,
-                hintText: 'הנטייה השולית להוציא מורכבת מסכום הנטיות השוליות של המגזר הפרטי והעסקי (לפי המודל).',
-                feedbackCorrect: 'נכון! <span dir="ltr">\\( MPE = MPC + MPI \\)</span>.',
+                hintText: 'זוהי סכימה פשוטה של הנטיות של המגזרים המהווים חלק מן הביקוש המצרפי התלוי בהכנסה.',
+                feedbackCorrect: 'נכון. <span dir="ltr">\\( MPE = MPC + MPI \\)</span>.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q18
             {
                 id: 18,
                 type: 'mc',
-                title: 'כאשר תוצר שיווי המשקל גבוה מתוצר תעסוקה מלאה (<span dir="ltr">\\( Y^* > Y_F \\)</span>):',
+                title: 'זיהוי מצב המשק',
+                question: 'כאשר תוצר שיווי המשקל גבוה מתוצר תעסוקה מלאה (<span dir="ltr">\\( Y^* > Y_F \\)</span>):',
                 options: [
                     'קיים פער דפלציוני ויש להגדיל ביקושים',
                     'קיים פער אינפלציוני ויש להקטין ביקושים',
@@ -954,15 +772,14 @@
                     'אין צורך בהתערבות'
                 ],
                 correctIndex: 1,
-                hintText: 'כאשר התוצר גבוה מתוצר תעסוקה מלאה, נוצר לחץ לעליית מחירים.',
-                feedbackCorrect: 'נכון! פער אינפלציוני - יש לצנן את הביקושים.',
+                hintText: 'כאשר התוצר ה"מתוכנן" חורג מקיבולת הייצור הפיזית של המשק, נוצר לחץ לעליית מחירים.',
+                feedbackCorrect: 'מדויק! עודף ביקוש מייצר פער אינפלציוני שיש לצננו באמצעות הקטנת ביקושים.',
                 feedbackWrong: 'תשובה שגויה. נסו שנית.'
             },
-            // Q19
             {
                 id: 19,
                 type: 'mc',
-                title: 'הגדלת G במימון מסים (תקציב מאוזן) לעומת מימון באג"ח',
+                title: 'תקציב מאוזן מול מימון אג"ח',
                 dataDisplay: `<p>הממשלה מעוניינת לסגור פער דפלציוני.</p>`,
                 question: 'הגדלת <span dir="ltr">\\( G \\)</span> בתקציב מאוזן לשם סגירת פער דפלציוני דורשת...',
                 options: [
@@ -972,65 +789,106 @@
                     'תלוי בשיעור המס',
                     'אף תשובה אינה נכונה'
                 ],
-                correctIndex: 0,
-                hintText: 'מכפיל תקציב מאוזן שווה לאחד, ולכן השינוי הנדרש בתוצר שווה בדיוק לשינוי הנדרש בהוצאה הממשלתית.',
-                feedbackCorrect: 'מצוין! סגירת הפער דורשת הגדלת ההוצאה הממשלתית בסכום זהה לגובה הפער הדפלציוני (כמו במימון אג"ח), אך במקרה זה גם המסים יעלו באותו סכום.',
-                feedbackWrong: 'תשובה שגויה. נסו שנית.'
+                correctIndex: 1,
+                hintText: 'במימון באמצעות מיסים (תקציב מאוזן), הממשלה גם "לוקחת" כסף מהציבור ובכך מקטינה את הצריכה הפרטית. כיצד זה משפיע על כמות ה-G הנדרשת?',
+                feedbackCorrect: 'תשובה נכונה וחשובה! מאחר והמיסים פוגעים בביקוש המצרפי, הממשלה צריכה להגדיל את ההוצאה שלה בסכום גדול יותר לעומת מצב שבו היא מממנת באמצעות אג"ח (שם מכפיל ההוצאה הוא 1 מלא מול הפער).',
+                feedbackWrong: 'תשובה שגויה. נסו שנית. זכרו שמיסוי מקטין צריכה, ולכן הממשלה צריכה "לעבוד קשה יותר".'
             },
-            // Q20
+            // שאלה 20 משולבת (composite)
             {
                 id: 20,
-                type: 'numeric',
-                title: 'מצאו את <span dir="ltr">\\( AD_0 \\)</span> ואת <span dir="ltr">\\( MPE \\)</span> במשק "ארזי הלבנון"',
+                type: 'composite',
+                title: 'משק "ארזי הלבנון"',
                 dataDisplay: `<p>נתוני המשק:</p>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ C = 4200 + 0.72Y_D \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ I = 880 + 0.08Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ G = 1600 \\]</div>
-                <div dir="ltr" style="text-align:left;margin:8px 0;">\\[ T = 1200 \\]</div>`,
-                question: 'חשבו את <span dir="ltr">\\( AD_0 \\)</span> (ערך אוטונומי) ואת <span dir="ltr">\\( MPE \\)</span> (מקדם Y).',
-                hintText: 'זהה לשאלה הקודמת מסוג זה - פתחו את המשוואות, הציבו וכנסו איברים.',
-                correctAnswer: { ad0: 5816, mpe: 0.80 },
-                tolerance: { ad0: 10, mpe: 0.015 },
-                feedbackCorrect: `<strong>פתרון מלא:</strong><br>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ C = 4200 + 0.72(Y-1200) = 3336 + 0.72Y \\]</div>
-                <div dir="ltr" style="text-align:left;margin:6px 0;">\\[ AD = 3336+0.72Y + 880+0.08Y + 1600 = 5816 + 0.80Y \\]</div>
-                <p><span dir="ltr">\\( AD_0 = 5816 \\)</span>, <span dir="ltr">\\( MPE = 0.80 \\)</span></p>`,
-                feedbackWrong: 'תשובה שגויה. נסו שנית.',
-                inputs: [
-                    { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q20_ad0', placeholder: 'ערך מספרי כגון 6000' },
-                    { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q20_mpe', placeholder: 'ערך מספרי כגון 0.75' }
+                <div class="formula-block" dir="ltr">\\[ C = 4200 + 0.72Y_D \\]</div>
+                <div class="formula-block" dir="ltr">\\[ I = 880 + 0.08Y \\]</div>
+                <div class="formula-block" dir="ltr">\\[ G = 1600 \\]</div>
+                <div class="formula-block" dir="ltr">\\[ T = 1200 \\]</div>`,
+                subQuestions: [
+                    {
+                        id: '20_calc',
+                        type: 'numeric',
+                        question: 'חשבו את <span dir="ltr">\\( AD_0 \\)</span> ואת <span dir="ltr">\\( MPE \\)</span>.',
+                        inputs: [
+                            { label: '<span dir="ltr">\\( AD_0 = \\)</span>', id: 'q20_ad0', placeholder: 'ערך מספרי כגון 6000' },
+                            { label: '<span dir="ltr">\\( MPE = \\)</span>', id: 'q20_mpe', placeholder: 'ערך מספרי כגון 0.75' }
+                        ],
+                        correctAnswer: { ad0: 5816, mpe: 0.80 },
+                        tolerance: { ad0: 10, mpe: 0.015 },
+                        hintText: 'כמו בשאלות הקודמות, פתחו את פונקציית הצריכה, הציבו את המיסים, וסכמו את הרכיבים האוטונומיים לחוד ואת מקדמי ה-Y לחוד.',
+                        feedbackCorrect: `<strong>פתרון מלא - כל הכבוד:</strong><br>
+                        <div dir="ltr" style="text-align:left;">\\[ C = 4200 + 0.72(Y-1200) = 3336 + 0.72Y \\]</div>
+                        <div dir="ltr" style="text-align:left;">\\[ AD = 3336+0.72Y + 880+0.08Y + 1600 = 5816 + 0.80Y \\]</div>
+                        <p><span dir="ltr">\\( AD_0 = 5816 \\)</span>, <span dir="ltr">\\( MPE = 0.80 \\)</span></p>`,
+                        feedbackWrong: 'חישוב שגוי. נסו שנית. בדקו את ההכפלה של מקדם הצריכה במיסים ואת החיסור משאר האיברים.'
+                    }
                 ]
             }
         ];
 
-        let answeredQuestions = {};
+        let answeredItems = {};
         let wrongAttempts = {};
+
+        // אינטגרציה מלאה של כמות התשובות הנדרשת להתקדמות
+        let totalItemsToAnswer = 0;
         questionsData.forEach(q => {
-            answeredQuestions[q.id] = null;
-            wrongAttempts[q.id] = 0;
+            if (q.type === 'composite') {
+                q.subQuestions.forEach(sq => {
+                    answeredItems[sq.id] = null;
+                    wrongAttempts[sq.id] = 0;
+                    totalItemsToAnswer++;
+                });
+            } else {
+                answeredItems[q.id] = null;
+                wrongAttempts[q.id] = 0;
+                totalItemsToAnswer++;
+            }
         });
-        let totalCorrect = 0;
 
         function renderAllQuestions() {
             const container = document.getElementById('questionsContainer');
             container.innerHTML = '';
+            
             questionsData.forEach(q => {
                 const card = document.createElement('div');
                 card.className = 'question-card';
-                card.id = 'qcard-' + q.id;
+                card.id = `qcard-${q.id}`;
+                
                 let inner = `<div class="question-number">${q.id}</div>
-                <h3>שאלה ${q.id} - ${q.title}</h3>`;
+                             <h3>שאלה ${q.id} - ${q.title}</h3>`;
+                
                 if (q.dataDisplay) inner += `<div class="data-box">${q.dataDisplay}</div>`;
-                inner += `<p style="margin-bottom:10px;font-weight:600;">${q.question}</p>`;
-                inner += renderQuestionInput(q);
-                inner += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px;">
-                    <button class="btn btn-hint" onclick="toggleHint(${q.id})">💡 רמז</button>
-                    <button class="btn btn-check" id="btnCheck-${q.id}" onclick="checkAnswer(${q.id})">✅ בדיקה</button>
-                    <button class="btn btn-reset" onclick="resetQuestion(${q.id})">🔄 איפוס</button>
-                    <span id="fullSolutionBtn-${q.id}" style="display:none;"></span>
-                </div>
-                <div class="hint-box" id="hint-${q.id}">${q.hintText || ''}</div>
-                <div class="feedback-box" id="feedback-${q.id}"></div>`;
+                
+                if (q.type === 'composite') {
+                    // טיפול בשאלות מורכבות (כמו שאלה 1)
+                    q.subQuestions.forEach(sq => {
+                        inner += `<div class="sub-question-block" id="sqblock-${sq.id}">
+                                    <h4>${sq.question}</h4>
+                                    ${renderQuestionInput(sq)}
+                                    <div class="controls-group">
+                                        <button class="btn btn-hint" onclick="toggleHint('${sq.id}')">💡 רמז</button>
+                                        <button class="btn btn-check" id="btnCheck-${sq.id}" onclick="checkCompositeAnswer(${q.id}, '${sq.id}')">✅ בדיקה</button>
+                                        <button class="btn btn-reset" onclick="resetItem('${sq.id}')">🔄 איפוס</button>
+                                        <span id="fullSolutionBtn-${sq.id}" style="display:none;"></span>
+                                    </div>
+                                    <div class="hint-box" id="hint-${sq.id}">${sq.hintText || ''}</div>
+                                    <div class="feedback-box" id="feedback-${sq.id}"></div>
+                                  </div>`;
+                    });
+                } else {
+                    // טיפול בשאלות רגילות
+                    inner += `<h4 style="margin-bottom:15px; font-weight:700;">${q.question}</h4>
+                              ${renderQuestionInput(q)}
+                              <div class="controls-group">
+                                  <button class="btn btn-hint" onclick="toggleHint('${q.id}')">💡 רמז</button>
+                                  <button class="btn btn-check" id="btnCheck-${q.id}" onclick="checkAnswer(${q.id})">✅ בדיקה</button>
+                                  <button class="btn btn-reset" onclick="resetItem('${q.id}')">🔄 איפוס</button>
+                                  <span id="fullSolutionBtn-${q.id}" style="display:none;"></span>
+                              </div>
+                              <div class="hint-box" id="hint-${q.id}">${q.hintText || ''}</div>
+                              <div class="feedback-box" id="feedback-${q.id}"></div>`;
+                }
+                
                 card.innerHTML = inner;
                 container.appendChild(card);
             });
@@ -1040,292 +898,331 @@
 
         function renderQuestionInput(q) {
             if (q.type === 'mc') {
-                if (!q.options || !Array.isArray(q.options) || q.options.length === 0) {
-                    return '<p style="color:red;">שגיאה בטעינת אפשרויות.</p>';
-                }
                 let opts = q.options.map((text, i) => ({ text: text, originalIndex: i }));
+                // ערבוב קל (Shuffle)
                 for (let i = opts.length - 1; i > 0; i--) {
                     const j = Math.floor(Math.random() * (i + 1));
-                    const temp = opts[i];
-                    opts[i] = opts[j];
-                    opts[j] = temp;
+                    [opts[i], opts[j]] = [opts[j], opts[i]];
                 }
                 q._shuffledOptions = opts;
                 q._correctShuffledIndex = opts.findIndex(o => o.originalIndex === q.correctIndex);
                 q._selectedOptionIndex = null;
+                
                 let html = '<ul class="options-list">';
                 opts.forEach((opt, idx) => {
-                    html += `<li class="option-item" id="opt-${q.id}-${idx}" onclick="selectOption(${q.id},${idx})"><div class="option-radio"></div><span>${opt.text}</span></li>`;
+                    html += `<li class="option-item" id="opt-${q.id}-${idx}" onclick="selectOption('${q.id}',${idx})">
+                                <div class="option-radio"></div>
+                                <span>${opt.text}</span>
+                             </li>`;
                 });
                 html += '</ul>';
                 return html;
             } else if (q.type === 'numeric_single') {
-                return `<div class="input-row"><label>${q.inputLabel || ''}</label>
-                <input type="text" id="input-${q.id}" placeholder="ערך מספרי כגון 1000"></div>`;
+                return `<div class="input-row">
+                            <label>${q.inputLabel || ''}</label>
+                            <input type="text" id="input-${q.id}" placeholder="ערך מספרי כגון 1000">
+                        </div>`;
             } else if (q.type === 'numeric') {
                 let html = '';
                 q.inputs.forEach(inp => {
-                    html += `<div class="input-row"><label>${inp.label}</label>
-                    <input type="text" id="${inp.id}" placeholder="${inp.placeholder}"></div>`;
+                    html += `<div class="input-row">
+                                <label>${inp.label}</label>
+                                <input type="text" id="${inp.id}" placeholder="${inp.placeholder}">
+                             </div>`;
                 });
                 return html;
             } else if (q.type === 'gap') {
                 return `<div class="gap-row">
-                    <label>${q.gapSelectLabel}</label>
-                    <select id="gapType-${q.id}"><option value="">בחרו</option><option value="deflationary">פער דפלציוני</option><option value="inflationary">פער אינפלציוני</option></select>
-                    <label>${q.gapSizeLabel}</label>
-                    <input type="text" id="gapSize-${q.id}" placeholder="ערך מספרי כגון 500">
-                </div>`;
-            } else if (q.type === 'numeric_multi') {
-                let html = '';
-                q.numericInputs.forEach(inp => {
-                    html += `<div class="input-row"><label>${inp.label}</label>
-                    <input type="text" id="${inp.id}" placeholder="${inp.placeholder}"></div>`;
-                });
-                if (q.mcQuestions && Array.isArray(q.mcQuestions)) {
-                    q.mcQuestions.forEach((mc, mcIdx) => {
-                        if (!mc.options || !Array.isArray(mc.options) || mc.options.length === 0) return;
-                        let opts = mc.options.map((text, i) => ({ text: text, originalIndex: i }));
-                        for (let i = opts.length - 1; i > 0; i--) {
-                            const j = Math.floor(Math.random() * (i + 1));
-                            const temp = opts[i];
-                            opts[i] = opts[j];
-                            opts[j] = temp;
-                        }
-                        mc._shuffled = opts;
-                        mc._correctIdx = opts.findIndex(o => o.originalIndex === mc.correctIndex);
-                        mc._selected = null;
-                        html += `<div class="mc-subtitle">${mc.text}</div><ul class="options-list" id="mc-${q.id}-${mcIdx}" style="margin-top:6px;">`;
-                        opts.forEach((opt, idx) => {
-                            html += `<li class="option-item" id="optmc-${q.id}-${mcIdx}-${idx}" onclick="selectMCOption(${q.id},${mcIdx},${idx})"><div class="option-radio"></div><span>${opt.text}</span></li>`;
-                        });
-                        html += '</ul>';
-                    });
-                }
-                return html;
+                            <label>${q.gapSelectLabel}</label>
+                            <select id="gapType-${q.id}">
+                                <option value="">בחרו סוג</option>
+                                <option value="deflationary">פער דפלציוני</option>
+                                <option value="inflationary">פער אינפלציוני</option>
+                            </select>
+                            <label style="margin-right:15px;">${q.gapSizeLabel}</label>
+                            <input type="text" id="gapSize-${q.id}" placeholder="ערך כגון 500">
+                        </div>`;
             }
             return '';
         }
 
-        function selectOption(qid, idx) {
-            if (answeredQuestions[qid] !== null) return;
-            const q = questionsData.find(q => q.id === qid);
-            if (!q || !q._shuffledOptions) return;
-            q._shuffledOptions.forEach((_, i) => {
-                document.getElementById('opt-' + qid + '-' + i).classList.remove('selected');
+        function selectOption(itemId, idx) {
+            if (answeredItems[itemId] === 'correct') return;
+            
+            // מציאת הפריט (יכול להיות שאלה ראשית או תת-שאלה)
+            let item = questionsData.find(q => q.id == itemId);
+            if (!item) {
+                // חיפוש בתתי שאלות
+                for (let q of questionsData) {
+                    if (q.type === 'composite') {
+                        item = q.subQuestions.find(sq => sq.id == itemId);
+                        if (item) break;
+                    }
+                }
+            }
+            
+            if (!item || !item._shuffledOptions) return;
+            
+            item._shuffledOptions.forEach((_, i) => {
+                const el = document.getElementById(`opt-${itemId}-${i}`);
+                if(el) el.classList.remove('selected');
             });
-            document.getElementById('opt-' + qid + '-' + idx).classList.add('selected');
-            q._selectedOptionIndex = idx;
+            document.getElementById(`opt-${itemId}-${idx}`).classList.add('selected');
+            item._selectedOptionIndex = idx;
         }
 
-        function selectMCOption(qid, mcIdx, idx) {
-            if (answeredQuestions[qid] === 'correct') return;
-            const q = questionsData.find(q => q.id === qid);
-            if (!q || !q.mcQuestions || !q.mcQuestions[mcIdx]) return;
-            const mc = q.mcQuestions[mcIdx];
-            if (!mc._shuffled) return;
-            mc._shuffled.forEach((_, i) => {
-                document.getElementById('optmc-' + qid + '-' + mcIdx + '-' + i).classList.remove('selected');
-            });
-            document.getElementById('optmc-' + qid + '-' + mcIdx + '-' + idx).classList.add('selected');
-            mc._selected = idx;
+        function toggleHint(itemId) {
+            const el = document.getElementById(`hint-${itemId}`);
+            if(el) el.classList.toggle('show');
         }
 
-        function toggleHint(qid) {
-            document.getElementById('hint-' + qid).classList.toggle('show');
-        }
-
-        function checkAnswer(qid) {
-            if (answeredQuestions[qid] === 'correct') return;
-            const q = questionsData.find(q => q.id === qid);
-            if (!q) return;
+        function evaluateItemCondition(item) {
             let isCorrect = false;
-            let feedbackHtml = '';
-
-            if (q.type === 'mc') {
-                if (q._selectedOptionIndex === null || q._selectedOptionIndex === undefined) {
-                    alert('יש לבחור תשובה.');
-                    return;
+            
+            if (item.type === 'mc') {
+                if (item._selectedOptionIndex === null || item._selectedOptionIndex === undefined) {
+                    alert('אנא בחרו תשובה לפני הבדיקה.');
+                    return null;
                 }
-                isCorrect = (q._selectedOptionIndex === q._correctShuffledIndex);
-            } else if (q.type === 'numeric_single') {
-                const val = parseFloat(document.getElementById('input-' + qid).value.trim());
-                if (isNaN(val)) { alert('יש להזין מספר.'); return; }
-                isCorrect = Math.abs(val - q.correctAnswer) <= q.tolerance;
-            } else if (q.type === 'numeric') {
-                const v1 = parseFloat(document.getElementById(q.inputs[0].id).value.trim());
-                const v2 = parseFloat(document.getElementById(q.inputs[1].id).value.trim());
-                if (isNaN(v1) || isNaN(v2)) { alert('יש להזין מספרים בשני השדות.'); return; }
-                const ok1 = Math.abs(v1 - q.correctAnswer.ad0) <= q.tolerance.ad0;
-                const ok2 = Math.abs(v2 - q.correctAnswer.mpe) <= q.tolerance.mpe;
+                isCorrect = (item._selectedOptionIndex === item._correctShuffledIndex);
+            } else if (item.type === 'numeric_single') {
+                const val = parseFloat(document.getElementById(`input-${item.id}`).value.trim());
+                if (isNaN(val)) { alert('אנא הזינו ערך מספרי תקין.'); return null; }
+                isCorrect = Math.abs(val - item.correctAnswer) <= item.tolerance;
+            } else if (item.type === 'numeric') {
+                const v1 = parseFloat(document.getElementById(item.inputs[0].id).value.trim());
+                const v2 = parseFloat(document.getElementById(item.inputs[1].id).value.trim());
+                if (isNaN(v1) || isNaN(v2)) { alert('יש להזין מספרים בשני השדות כדי לבדוק.'); return null; }
+                const ok1 = Math.abs(v1 - item.correctAnswer.ad0) <= item.tolerance.ad0;
+                const ok2 = Math.abs(v2 - item.correctAnswer.mpe) <= item.tolerance.mpe;
                 isCorrect = ok1 && ok2;
-            } else if (q.type === 'gap') {
-                const gapType = document.getElementById('gapType-' + qid).value;
-                const gapSize = parseFloat(document.getElementById('gapSize-' + qid).value.trim());
-                if (!gapType) { alert('יש לבחור סוג פער.'); return; }
-                if (isNaN(gapSize)) { alert('יש להזין גודל מספרי.'); return; }
-                const typeOk = (gapType === q.correctGapType);
-                const sizeOk = Math.abs(gapSize - q.correctGapSize) <= q.tolerance;
+            } else if (item.type === 'gap') {
+                const gapType = document.getElementById(`gapType-${item.id}`).value;
+                const gapSize = parseFloat(document.getElementById(`gapSize-${item.id}`).value.trim());
+                if (!gapType) { alert('יש לבחור את סוג הפער.'); return null; }
+                if (isNaN(gapSize)) { alert('יש להזין את גודל הפער כמספר.'); return null; }
+                const typeOk = (gapType === item.correctGapType);
+                const sizeOk = Math.abs(gapSize - item.correctGapSize) <= item.tolerance;
                 isCorrect = typeOk && sizeOk;
-            } else if (q.type === 'numeric_multi') {
-                const v1 = parseFloat(document.getElementById(q.numericInputs[0].id).value.trim());
-                const v2 = parseFloat(document.getElementById(q.numericInputs[1].id).value.trim());
-                if (isNaN(v1) || isNaN(v2)) { alert('יש להזין מספרים בשני השדות.'); return; }
-                const numOk = Math.abs(v1 - q.correctNumeric.ad0) <= q.tolerance.ad0 &&
-                              Math.abs(v2 - q.correctNumeric.mpe) <= q.tolerance.mpe;
-                let mcOk = true;
-                if (q.mcQuestions && Array.isArray(q.mcQuestions)) {
-                    q.mcQuestions.forEach(mc => {
-                        if (mc._selected === null || mc._selected === undefined) mcOk = false;
-                        else if (mc._selected !== mc._correctIdx) mcOk = false;
-                    });
-                }
-                isCorrect = numOk && mcOk;
+            }
+            
+            return isCorrect;
+        }
+
+        function applyFeedback(itemId, isCorrect, item) {
+            const fbBox = document.getElementById(`feedback-${itemId}`);
+            const checkBtn = document.getElementById(`btnCheck-${itemId}`);
+            const solBtn = document.getElementById(`fullSolutionBtn-${itemId}`);
+            
+            let parentCardId = null;
+            let sqBlockId = null;
+            
+            // זיהוי אם זה כרטיס ראשי או תת-בלוק
+            const isSub = isNaN(itemId);
+            if (isSub) {
+                sqBlockId = `sqblock-${itemId}`;
+            } else {
+                parentCardId = `qcard-${itemId}`;
             }
 
             if (isCorrect) {
-                feedbackHtml = q.feedbackCorrect || 'תשובה נכונה!';
-                answeredQuestions[qid] = 'correct';
-                totalCorrect++;
-                document.getElementById('qcard-' + qid).classList.add('answered-correct');
-                document.getElementById('qcard-' + qid).classList.remove('answered-wrong');
-                document.getElementById('btnCheck-' + qid).disabled = true;
-                const fbBox = document.getElementById('feedback-' + qid);
+                answeredItems[itemId] = 'correct';
                 fbBox.className = 'feedback-box show correct-fb';
-                fbBox.innerHTML = feedbackHtml;
-                document.getElementById('fullSolutionBtn-' + qid).style.display = 'none';
-                if (window.MathJax) MathJax.typesetPromise([fbBox]);
+                fbBox.innerHTML = item.feedbackCorrect || 'תשובה נכונה!';
+                checkBtn.disabled = true;
+                solBtn.style.display = 'none';
+                
+                if (parentCardId) {
+                    document.getElementById(parentCardId).classList.add('answered-correct');
+                    document.getElementById(parentCardId).classList.remove('answered-wrong');
+                } else if (sqBlockId) {
+                    document.getElementById(sqBlockId).style.borderColor = 'var(--success)';
+                    document.getElementById(sqBlockId).style.backgroundColor = '#f0fdf4';
+                }
             } else {
-                wrongAttempts[qid] = (wrongAttempts[qid] || 0) + 1;
-                answeredQuestions[qid] = 'wrong';
-                document.getElementById('qcard-' + qid).classList.add('answered-wrong');
+                answeredItems[itemId] = 'wrong';
+                wrongAttempts[itemId]++;
                 
-                feedbackHtml = (q.feedbackWrong || 'תשובה שגויה. נסו שנית.') + 
-                               '<br><br><em>רמז: ' + (q.hintText || '') + '</em>';
-                
-                const fbBox = document.getElementById('feedback-' + qid);
                 fbBox.className = 'feedback-box show wrong-fb';
-                fbBox.innerHTML = feedbackHtml;
+                fbBox.innerHTML = item.feedbackWrong || 'תשובה שגויה. נסו שנית.';
                 
-                if (wrongAttempts[qid] >= 2) {
-                    document.getElementById('fullSolutionBtn-' + qid).style.display = 'inline-block';
-                    document.getElementById('fullSolutionBtn-' + qid).innerHTML =
-                        '<button class="btn btn-full-solution" onclick="showFullSolution(' + qid + ')">📖 אני מיואש - הראה לי פתרון מלא</button>';
+                if (parentCardId) {
+                    document.getElementById(parentCardId).classList.add('answered-wrong');
+                } else if (sqBlockId) {
+                    document.getElementById(sqBlockId).style.borderColor = 'var(--secondary)';
+                    document.getElementById(sqBlockId).style.backgroundColor = '#fef2f2';
                 }
-                if (window.MathJax) MathJax.typesetPromise([fbBox]);
+                
+                // כפתור פתרון מלא אחרי 2 טעויות
+                if (wrongAttempts[itemId] >= 2) {
+                    solBtn.style.display = 'inline-block';
+                    solBtn.innerHTML = `<button class="btn btn-full-solution" onclick="forceCorrectItem('${itemId}')">📖 הצג פתרון מלא</button>`;
+                }
             }
-            updateProgress();
-        }
-
-        function showFullSolution(qid) {
-            const q = questionsData.find(q => q.id === qid);
-            if (!q) return;
-            const fbBox = document.getElementById('feedback-' + qid);
-            fbBox.className = 'feedback-box show correct-fb';
-            fbBox.innerHTML = q.feedbackCorrect;
-            if (answeredQuestions[qid] !== 'correct') {
-                answeredQuestions[qid] = 'correct';
-                totalCorrect++;
-                document.getElementById('qcard-' + qid).classList.add('answered-correct');
-                document.getElementById('qcard-' + qid).classList.remove('answered-wrong');
-                document.getElementById('btnCheck-' + qid).disabled = true;
-            }
-            document.getElementById('fullSolutionBtn-' + qid).style.display = 'none';
-            updateProgress();
+            
             if (window.MathJax) MathJax.typesetPromise([fbBox]);
+            updateProgress();
         }
 
-        function resetQuestion(qid) {
-            if (answeredQuestions[qid] === 'correct') totalCorrect--;
-            answeredQuestions[qid] = null;
-            wrongAttempts[qid] = 0;
-            document.getElementById('qcard-' + qid).classList.remove('answered-correct', 'answered-wrong');
-            document.getElementById('feedback-' + qid).className = 'feedback-box';
-            document.getElementById('feedback-' + qid).innerHTML = '';
-            document.getElementById('btnCheck-' + qid).disabled = false;
-            document.getElementById('fullSolutionBtn-' + qid).style.display = 'none';
+        function checkAnswer(qid) {
+            if (answeredItems[qid] === 'correct') return;
             const q = questionsData.find(q => q.id === qid);
             if (!q) return;
-            if (q.type === 'mc') {
-                q._selectedOptionIndex = null;
-                if (q._shuffledOptions) {
-                    q._shuffledOptions.forEach((_, i) => {
-                        document.getElementById('opt-' + qid + '-' + i).classList.remove('selected');
-                    });
-                }
-            } else if (q.type === 'numeric_single') {
-                document.getElementById('input-' + qid).value = '';
-            } else if (q.type === 'numeric') {
-                q.inputs.forEach(inp => { document.getElementById(inp.id).value = ''; });
-            } else if (q.type === 'gap') {
-                document.getElementById('gapType-' + qid).value = '';
-                document.getElementById('gapSize-' + qid).value = '';
-            } else if (q.type === 'numeric_multi') {
-                q.numericInputs.forEach(inp => { document.getElementById(inp.id).value = ''; });
-                if (q.mcQuestions && Array.isArray(q.mcQuestions)) {
-                    q.mcQuestions.forEach((mc, mcIdx) => {
-                        mc._selected = null;
-                        if (mc._shuffled) {
-                            mc._shuffled.forEach((_, i) => {
-                                document.getElementById('optmc-' + qid + '-' + mcIdx + '-' + i).classList.remove('selected');
-                            });
-                        }
-                    });
+            
+            const isCorrect = evaluateItemCondition(q);
+            if (isCorrect !== null) {
+                applyFeedback(qid, isCorrect, q);
+            }
+        }
+
+        function checkCompositeAnswer(qid, sqid) {
+            if (answeredItems[sqid] === 'correct') return;
+            const parent = questionsData.find(q => q.id === qid);
+            const sq = parent.subQuestions.find(s => s.id === sqid);
+            if (!sq) return;
+            
+            const isCorrect = evaluateItemCondition(sq);
+            if (isCorrect !== null) {
+                applyFeedback(sqid, isCorrect, sq);
+                
+                // בדיקה אם כל תתי הסעיפים נכונים כדי לצבוע את הכרטיס הגדול בירוק
+                const allSubCorrect = parent.subQuestions.every(sub => answeredItems[sub.id] === 'correct');
+                if (allSubCorrect) {
+                    document.getElementById(`qcard-${qid}`).classList.add('answered-correct');
                 }
             }
+        }
+
+        function forceCorrectItem(itemId) {
+            let item = questionsData.find(q => q.id == itemId);
+            if (!item) {
+                for (let q of questionsData) {
+                    if (q.type === 'composite') {
+                        item = q.subQuestions.find(sq => sq.id == itemId);
+                        if (item) break;
+                    }
+                }
+            }
+            if(item) applyFeedback(itemId, true, item);
+        }
+
+        function resetItem(itemId) {
+            answeredItems[itemId] = null;
+            wrongAttempts[itemId] = 0;
+            
+            const fbBox = document.getElementById(`feedback-${itemId}`);
+            const checkBtn = document.getElementById(`btnCheck-${itemId}`);
+            const solBtn = document.getElementById(`fullSolutionBtn-${itemId}`);
+            
+            if(fbBox) { fbBox.className = 'feedback-box'; fbBox.innerHTML = ''; }
+            if(checkBtn) checkBtn.disabled = false;
+            if(solBtn) solBtn.style.display = 'none';
+            
+            let item = questionsData.find(q => q.id == itemId);
+            let isSub = false;
+            let parentQid = null;
+            
+            if (!item) {
+                for (let q of questionsData) {
+                    if (q.type === 'composite') {
+                        item = q.subQuestions.find(sq => sq.id == itemId);
+                        if (item) {
+                            isSub = true;
+                            parentQid = q.id;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            if (!item) return;
+
+            // הסרת עיצובי שגיאה/הצלחה
+            if (isSub) {
+                const sqBlock = document.getElementById(`sqblock-${itemId}`);
+                if(sqBlock) {
+                    sqBlock.style.borderColor = '#e2e8f0';
+                    sqBlock.style.backgroundColor = '#ffffff';
+                }
+                document.getElementById(`qcard-${parentQid}`).classList.remove('answered-correct');
+            } else {
+                const card = document.getElementById(`qcard-${itemId}`);
+                if(card) card.classList.remove('answered-correct', 'answered-wrong');
+            }
+            
+            // איפוס ערכים בפועל
+            if (item.type === 'mc') {
+                item._selectedOptionIndex = null;
+                if (item._shuffledOptions) {
+                    item._shuffledOptions.forEach((_, i) => {
+                        const el = document.getElementById(`opt-${itemId}-${i}`);
+                        if(el) el.classList.remove('selected');
+                    });
+                }
+            } else if (item.type === 'numeric_single') {
+                document.getElementById(`input-${itemId}`).value = '';
+            } else if (item.type === 'numeric') {
+                item.inputs.forEach(inp => { document.getElementById(inp.id).value = ''; });
+            } else if (item.type === 'gap') {
+                document.getElementById(`gapType-${itemId}`).value = '';
+                document.getElementById(`gapSize-${itemId}`).value = '';
+            }
+            
             updateProgress();
         }
 
         function updateProgress() {
-            let correct = 0;
-            questionsData.forEach(q => { if (answeredQuestions[q.id] === 'correct') correct++; });
-            totalCorrect = correct;
-            const pct = Math.round((correct / 20) * 100);
+            let correctCount = Object.values(answeredItems).filter(status => status === 'correct').length;
+            
+            // המרה לאחוזים מתוך סך השאלות ותתי השאלות
+            const pct = Math.round((correctCount / totalItemsToAnswer) * 100);
+            
             document.getElementById('progressBar').style.width = pct + '%';
-            document.getElementById('progressLabel').textContent = correct + ' / 20';
-            document.getElementById('scoreBadge').textContent = '✅ ' + correct + ' נכונות';
+            document.getElementById('progressLabel').textContent = `${correctCount} / ${totalItemsToAnswer}`;
+            document.getElementById('scoreBadge').textContent = `✅ ${correctCount} נכונות`;
         }
 
         function submitFinal() {
-            let correct = 0;
-            questionsData.forEach(q => { if (answeredQuestions[q.id] === 'correct') correct++; });
+            let correctCount = Object.values(answeredItems).filter(status => status === 'correct').length;
             const overlay = document.getElementById('modalOverlay');
             overlay.style.display = 'flex';
             overlay.innerHTML = '';
-            if (correct >= 12) {
+            
+            // דורשים מינימום 12 פריטים נכונים
+            if (correctCount >= 12) {
                 const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
                 let code = '';
                 for (let i = 0; i < 8; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
                 const num = Math.floor(Math.random() * 900000 + 100000);
-                const finalCode = 'MACRO-' + code + '-' + num;
-                overlay.innerHTML = '<div class="modal">' +
-                    '<div class="success-icon">🎉🏆🎉</div>' +
-                    '<h2 style="color:#00b894;">כל הכבוד! עברתם!</h2>' +
-                    '<p>עניתם נכון על ' + correct + ' מתוך 20 שאלות.</p>' +
-                    '<p style="font-weight:700;">קוד ההגשה ל-Moodle:</p>' +
-                    '<div class="code-display">' + finalCode + '</div>' +
-                    '<p style="font-size:0.9em;">העתיקו והדביקו באתר המודל.</p>' +
-                    '<button class="btn btn-check" onclick="closeModal()">סגירה</button>' +
-                    '</div>';
+                const finalCode = `MACRO-${code}-${num}`;
+                
+                overlay.innerHTML = `<div class="modal">
+                    <div style="font-size:5em; margin-bottom:10px;">🎉🏆🎉</div>
+                    <h2 style="color:var(--success); font-weight:800; font-size:2em; margin-bottom:15px;">כל הכבוד! עברתם!</h2>
+                    <p style="font-size:1.1em; color:var(--text-dark);">עניתם נכון על <strong>${correctCount}</strong> מתוך ${totalItemsToAnswer} סעיפים ושאלות.</p>
+                    <div class="code-display">${finalCode}</div>
+                    <p style="font-size:1.1em; font-weight:700; color:var(--text-light); margin-bottom:25px;">העתיקו והדביקו את הקוד באתר ה-Moodle.</p>
+                    <button class="btn btn-check" style="font-size:1.2em; padding:10px 30px;" onclick="closeModal()">סגירה</button>
+                </div>`;
                 spawnConfetti();
             } else {
-                overlay.innerHTML = '<div class="modal">' +
-                    '<div class="fail-icon">😔📚</div>' +
-                    '<h2 style="color:#ff6b6b;">עדיין לא מספיק</h2>' +
-                    '<p>עניתם נכון על ' + correct + ' שאלות בלבד.</p>' +
-                    '<p><strong>דרושות 12 תשובות נכונות לפחות</strong> לקבלת קוד הגשה.</p>' +
-                    '<button class="btn btn-retry" onclick="closeModal()">🔙 חזרה לשאלות</button>' +
-                    '</div>';
+                overlay.innerHTML = `<div class="modal">
+                    <div style="font-size:5em; margin-bottom:10px;">📚</div>
+                    <h2 style="color:var(--secondary); font-weight:800; font-size:2em; margin-bottom:15px;">חסרות תשובות נכונות</h2>
+                    <p style="font-size:1.1em; color:var(--text-dark); margin-bottom:20px;">עניתם נכון רק על <strong>${correctCount}</strong> סעיפים ושאלות.</p>
+                    <p style="font-size:1.05em; font-weight:700; color:var(--text-light); margin-bottom:25px;">דרושות לפחות 12 תשובות נכונות לקבלת קוד ההגשה. המשיכו לתרגל!</p>
+                    <button class="btn btn-check" style="background:var(--secondary); font-size:1.1em;" onclick="closeModal()">🔙 חזרה לשאלות</button>
+                </div>`;
             }
         }
 
         function closeModal() {
             document.getElementById('modalOverlay').style.display = 'none';
-            document.querySelectorAll('.confetti-piece').forEach(el => { el.remove(); });
+            document.querySelectorAll('.confetti-piece').forEach(el => el.remove());
         }
 
         function spawnConfetti() {
-            const colors = ['#ff6b6b', '#4a3aff', '#00c9a7', '#f5a623', '#ff9ff3', '#54a0ff'];
+            const colors = ['#2563eb', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
             for (let i = 0; i < 80; i++) {
                 const piece = document.createElement('div');
                 piece.className = 'confetti-piece';
@@ -1334,7 +1231,7 @@
                 piece.style.background = colors[Math.floor(Math.random() * colors.length)];
                 piece.style.animationDelay = Math.random() * 1.5 + 's';
                 document.body.appendChild(piece);
-                setTimeout(() => { piece.remove(); }, 4000);
+                setTimeout(() => piece.remove(), 4000);
             }
         }
 
