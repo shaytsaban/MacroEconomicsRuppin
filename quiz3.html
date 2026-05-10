@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטלה מקוונת: שוק הכסף והריבית</title>
+    <style>
+        :root {
+            --bg: #f8fafc; --card-bg: #ffffff; --text: #0f172a; --text-muted: #64748b;
+            --primary: #2563eb; --primary-hover: #1d4ed8; --secondary: #475569;
+            --success: #16a34a; --warning: #d97706; --danger: #dc2626; --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; font-family: system-ui, -apple-system, sans-serif; }
+        body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; font-size: 16px; }
+        header { background-color: var(--card-bg); border-bottom: 2px solid var(--border); padding: 1rem 5%; position: sticky; top: 0; z-index: 100; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); flex-wrap: wrap; gap: 1rem; }
+        h1 { margin: 0; font-size: 1.5rem; color: var(--primary); }
+        .score-board { background-color: var(--primary); color: white; padding: 0.5rem 1.5rem; border-radius: 9999px; font-weight: bold; font-size: 1.25rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        main { max-width: 800px; margin: 2rem auto; padding: 0 1rem; }
+        .question-card { background-color: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; margin-bottom: 2rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: opacity 0.3s; }
+        .question-card.locked { opacity: 0.9; border-color: var(--success); background-color: #f8fafc; }
+        .question-card.error { border-color: var(--danger); }
+        .question-card h3 { margin-top: 0; color: var(--primary); font-size: 1.25rem; border-bottom: 2px solid var(--bg); padding-bottom: 0.5rem; }
+        .options-list { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.5rem 0; }
+        .options-list label { display: flex; align-items: center; padding: 1rem; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: background 0.2s, border-color 0.2s; background: white; }
+        .options-list label:hover:not(.disabled) { background-color: #f1f5f9; border-color: var(--primary); }
+        .options-list input[type="radio"] { margin-left: 12px; transform: scale(1.3); cursor: pointer; }
+        .options-list label.disabled { cursor: not-allowed; opacity: 0.7; }
+        .actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1.5rem; border-top: 1px solid var(--bg); padding-top: 1rem; }
+        button { padding: 0.75rem 1.25rem; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.2s; font-size: 0.95rem; }
+        button:active:not(:disabled) { transform: translateY(1px); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; filter: grayscale(50%); }
+        .btn-check { background-color: var(--primary); color: white; flex-grow: 1; }
+        .btn-check:hover:not(:disabled) { background-color: var(--primary-hover); }
+        .btn-hint { background-color: var(--warning); color: white; }
+        .btn-reveal { background-color: var(--danger); color: white; }
+        .btn-retry { background-color: #6366f1; color: white; display: none; margin-top: 0.5rem; }
+        .btn-retry:hover:not(:disabled) { background-color: #4f46e5; }
+        .btn-finish { background-color: var(--success); color: white; width: 100%; padding: 1.25rem; font-size: 1.25rem; margin: 2rem 0 4rem 0; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .btn-finish:hover:not(:disabled) { background-color: #047857; }
+        .feedback, .hint-box, .solution-box, .wrong-exp { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; animation: fadeIn 0.3s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+        .feedback { font-weight: bold; font-size: 1.1rem; }
+        .feedback.correct { background-color: #dcfce7; color: #166534; display: block; border: 1px solid #bbf7d0; }
+        .feedback.wrong { background-color: #fee2e2; color: #991b1b; display: block; border: 1px solid #fecaca; }
+        .hint-box { background-color: #fef3c7; border: 1px solid #fde68a; color: #92400e; }
+        .solution-box { background-color: #f8fafc; border: 1px solid #cbd5e1; color: #1e293b; }
+        .wrong-exp { background-color: #fef2f2; border: 1px solid #fecaca; color: #991b1b; font-size: 0.95rem; }
+        svg { width: 100%; max-width: 400px; height: auto; background: white; border: 1px solid var(--border); border-radius: 8px; margin: 1rem auto; display: block; direction: ltr; }
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.8); display: none; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(4px); }
+        .modal-content { background: var(--card-bg); padding: 2.5rem; border-radius: 16px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .modal-content h2 { color: var(--primary); margin-top: 0; }
+        .final-score { font-size: 3rem; font-weight: bold; color: var(--success); margin: 1rem 0; }
+        .code-box { background: #f1f5f9; padding: 1.25rem; font-size: 1.75rem; letter-spacing: 4px; font-family: monospace; font-weight: bold; margin: 1.5rem 0; border-radius: 8px; color: var(--primary); border: 2px dashed var(--border); direction: ltr; }
+        .copy-btn { background: var(--secondary); color: white; width: 100%; font-size: 1.1rem; }
+        @media (max-width: 600px) { header { flex-direction: column; gap: 1rem; text-align: center; } .actions { flex-direction: column; } button { width: 100%; } }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>מטלה מקוונת: שוק הכסף (גרסה ב')</h1>
+    <div class="score-board">ציון נוכחי: <span id="score-display">0</span></div>
+</header>
+
+<main id="quiz-container">
+    <!-- Question 1 -->
+    <div class="question-card" id="card-0">
+        <h3>שאלה 1</h3>
+        <p>בכלכלת "זטא", חלה לאחרונה ירידה משמעותית ברצון הציבור להחזיק במזומן ונזילות (הביקוש לכסף קטן). במקביל, נגיד הבנק המרכזי הכריז על הפעלת מדיניות מוניטרית מצמצמת. מה תהיה ההשפעה על שער הריבית של שיווי משקל?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q0" value="0"> שער הריבית יעלה בהכרח.</label>
+            <label><input type="radio" name="q0" value="1"> שער הריבית ירד בהכרח.</label>
+            <label><input type="radio" name="q0" value="2"> לא ניתן לדעת בוודאות מה יקרה לשער הריבית.</label>
+            <label><input type="radio" name="q0" value="3"> שער הריבית יישאר ללא שינוי.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-0" onclick="submitAnswer(0, '2')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-0" onclick="useHint(0)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-0" onclick="revealSolution(0)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-0" onclick="retryQuestion(0)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-0"></div>
+        <div class="wrong-exp" id="wrong-exp-0"><strong>מדוע זו טעות?</strong> בשוק הכסף, הריבית נקבעת על ידי מפגש הביקוש וההיצע. כאן פועלים שני כוחות מנוגדים: ירידה בביקוש לכסף לוחצת את הריבית מטה, בעוד שמדיניות מצמצמת (הקטנת היצע) לוחצת אותה מעלה. ללא נתונים כמותיים על עוצמת כל שינוי, לא ניתן לקבוע איזה כוח ינצח. בחירה ב"יעלה" או "ירד" מתעלמת מאחד הכוחות.</div>
+        <div class="hint-box" id="hint-0"><strong>רמז:</strong> נתח את שני הכוחות בנפרד. מה עושה מדיניות מצמצמת להיצע (ולריבית)? ומה עושה ירידה בביקוש לריבית? האם הכיוונים זהים?</div>
+        <div class="solution-box" id="solution-0">
+            <strong>פתרון שלב-אחר-שלב:</strong><br>
+            1. מדיניות מוניטרית מצמצמת מקטינה את היצע הכסף (Ms שמאלה) - פעולה המפעילה לחץ <strong>לעליית הריבית</strong>.<br>
+            2. קיטון בביקוש לכסף (L זז למטה) מפעיל לחץ <strong>לירידת הריבית</strong>.<br>
+            3. מכיוון ששני הכוחות מנוגדים ואין לנו נתונים כמותיים על עוצמת השינויים, <strong>לא ניתן לדעת</strong> מה תהיה התוצאה הסופית על הריבית.
+            <svg viewBox="0 0 300 220">
+                <line x1="30" y1="190" x2="280" y2="190" stroke="#0f172a" stroke-width="2"/>
+                <line x1="30" y1="20" x2="30" y2="190" stroke="#0f172a" stroke-width="2"/>
+                <text x="285" y="195" font-size="12">M</text> <text x="15" y="20" font-size="12">r</text>
+                <line x1="200" y1="30" x2="200" y2="190" stroke="#1e40af" stroke-width="2"/>
+                <text x="205" y="40" font-size="10" fill="#1e40af">Ms0</text>
+                <line x1="120" y1="30" x2="120" y2="190" stroke="#dc2626" stroke-dasharray="5" stroke-width="2"/>
+                <text x="125" y="40" font-size="10" fill="#dc2626">Ms1</text>
+                <path d="M 190 60 L 135 60 L 145 55 M 135 60 L 145 65" fill="none" stroke="#64748b" stroke-width="2"/>
+                <path d="M 50 40 Q 120 150 270 160" fill="none" stroke="#059669" stroke-width="2"/>
+                <text x="275" y="165" font-size="10" fill="#059669">L0</text>
+                <path d="M 35 80 Q 80 180 270 185" fill="none" stroke="#d97706" stroke-dasharray="5" stroke-width="2"/>
+                <text x="275" y="185" font-size="10" fill="#d97706">L1</text>
+                <path d="M 220 150 L 190 175 L 198 175 M 190 175 L 190 165" fill="none" stroke="#64748b" stroke-width="2"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Question 2 -->
+    <div class="question-card" id="card-1">
+        <h3>שאלה 2</h3>
+        <p>נגיד הבנק של "אומיקרון" מעוניין לעודד השקעות מקומיות של פירמות על ידי הוזלת עלויות האשראי (הורדת ריבית). איזה מבין הצעדים הבאים הוא הכלי המוניטרי המתאים ביותר לכך?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q1" value="0"> מכירת איגרות חוב ממשלתיות לציבור.</label>
+            <label><input type="radio" name="q1" value="1"> הגדלת יחס הרזרבה החוקי לבנקים המסחריים.</label>
+            <label><input type="radio" name="q1" value="2"> רכישת איגרות חוב ממשלתיות מהציבור.</label>
+            <label><input type="radio" name="q1" value="3"> העלאת מדרגות מס ההכנסה.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-1" onclick="submitAnswer(1, '2')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-1" onclick="useHint(1)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-1" onclick="revealSolution(1)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-1" onclick="retryQuestion(1)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-1"></div>
+        <div class="wrong-exp" id="wrong-exp-1"><strong>מדוע זו טעות?</strong> הורדת ריבית דורשת הגדלת היצע הכסף (מדיניות מרחיבה). מכירת אג"ח או הגדלת רזרבה הן פעולות מצמצמות ששואבות כסף ומעלות ריבית. העלאת מיסים היא כלי פיסקלי של הממשלה, לא כלי מוניטרי של הבנק המרכזי, ולכן אינה רלוונטית למטרה זו.</div>
+        <div class="hint-box" id="hint-1"><strong>רמז:</strong> כדי להוריד את מחיר הכסף (ריבית), צריך להגדיל את היצע הכסף במשק (מדיניות מרחיבה). איזה צעד מזרים מזומנים לציבור?</div>
+        <div class="solution-box" id="solution-1">
+            <strong>פתרון:</strong> המטרה היא להוריד ריבית, ולכן נדרשת <strong>מדיניות מוניטרית מרחיבה</strong> (הגדלת Ms).<br>
+            - קניית אג"ח מהציבור (עירוי חיצוני חיובי) מזרימה כסף למשק ומגדילה את היצע הכסף.<br>
+            - מכירת אג"ח שואבת כסף (מצמצמת).<br>
+            - הגדלת רזרבה מקטינה אשראי (מצמצמת).<br>
+            - מיסים הם כלי פיסקלי של הממשלה, לא מוניטרי של הבנק המרכזי.
+        </div>
+    </div>
+
+    <!-- Question 3 -->
+    <div class="question-card" id="card-2">
+        <h3>שאלה 3</h3>
+        <p>בשל תקנות פיננסיות חדשות, הועלה יחס הרזרבה המינימלי לבנקים במיידית מ-5% ל-15%. בהנחה ששאר משתני המשק נותרים קבועים, מה תהיה ההשפעה המקרו-כלכלית של צעד זה?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q2" value="0"> היצע הכסף יקטן ושער הריבית יעלה.</label>
+            <label><input type="radio" name="q2" value="1"> היצע הכסף יגדל ושער הריבית ירד.</label>
+            <label><input type="radio" name="q2" value="2"> היצע הכסף יקטן ושער הריבית ירד.</label>
+            <label><input type="radio" name="q2" value="3"> התוצר המקומי יעלה והאבטלה תרד.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-2" onclick="submitAnswer(2, '0')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-2" onclick="useHint(2)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-2" onclick="revealSolution(2)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-2" onclick="retryQuestion(2)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-2"></div>
+        <div class="wrong-exp" id="wrong-exp-2"><strong>מדוע זו טעות?</strong> יחס רזרבה גבוה יותר אומר שהבנקים חייבים "להקפיא" חלק גדול יותר מהפיקדונות ולא יכולים להלוות אותו. זה מקטין את מכפיל הפיקדונות ואת היצע הכסף. כשיש פחות כסף זמין, מחירו (הריבית) עולה, לא יורד. טענה שהתוצר יעלה מתעלמת מהשפעת הריבית הגבוהה על ההשקעות.</div>
+        <div class="hint-box" id="hint-2"><strong>רמז:</strong> יחס הרזרבה קובע כמה כסף בנקים יכולים להלוות. כשהדרישה לרזרבה עולה, הבנקים נאלצים להלוות פחות. מה קורה למכפיל הפיקדונות ולהיצע הכסף?</div>
+        <div class="solution-box" id="solution-2">
+            <strong>פתרון:</strong> העלאת יחס הרזרבה (R) מ-5% ל-15% מקטינה את מכפיל הפיקדונות (שהוא 1/R). כתוצאה מכך, יכולת ייצור האשראי של המערכת הבנקאית קטנה, והיצע הכסף הכולל (Ms) קטן.<br>
+            ירידה בהיצע הכסף יוצרת מחסור, אשר גורם למחיר הכסף - <strong>שער הריבית - לעלות</strong>. זהו צעד קלאסי של מדיניות מצמצמת.
+        </div>
+    </div>
+
+    <!-- Question 4 -->
+    <div class="question-card" id="card-3">
+        <h3>שאלה 4</h3>
+        <p>מדינת האי "סיגמא" סובלת מקיפאון כלכלי עמוק, אבטלה גדולה ופער תוצר שלילי חמור. נגיד הבנק המרכזי נדרש לפעול להחזרת המשק לתעסוקה מלאה. איזו פעולה מוניטרית עליו לנקוט?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q3" value="0"> לבצע עירוי חיצוני שלילי.</label>
+            <label><input type="radio" name="q3" value="1"> להעלות את יחס הרזרבה.</label>
+            <label><input type="radio" name="q3" value="2"> להוריד את יחס הרזרבה או לקנות אג"ח ממשלתי.</label>
+            <label><input type="radio" name="q3" value="3"> תשובות 0 ו-1 נכונות.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-3" onclick="submitAnswer(3, '2')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-3" onclick="useHint(3)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-3" onclick="revealSolution(3)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-3" onclick="retryQuestion(3)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-3"></div>
+        <div class="wrong-exp" id="wrong-exp-3"><strong>מדוע זו טעות?</strong> אבטלה ופער שלילי דורשים "חימום" המשק באמצעות מדיניות מרחיבה. עירוי שלילי או העלאת רזרבה הם כלים מצמצמים ששואבים נזילות, מעלים ריבית ומעמיקים מיתון. בחירה בהם תחמיר את האבטלה במקום לפתור אותה.</div>
+        <div class="hint-box" id="hint-3"><strong>רמז:</strong> המשק באבטלה (פער דפלציוני), לכן דרוש תמריץ (מדיניות מרחיבה). כיצד הבנק "מרחיב" את השוק?</div>
+        <div class="solution-box" id="solution-3">
+            <strong>פתרון:</strong> במצב של אבטלה (פער דפלציוני), נדרשת מדיניות מוניטרית <strong>מרחיבה</strong> כדי להוזיל את האשראי ולעודד ביקושים. הכלים המרחיבים העומדים לרשות הנגיד הם:<br>
+            1. הקטנת יחס הרזרבה (מאפשר לבנקים להלוות יותר).<br>
+            2. עירוי חיצוני חיובי - קניית אג"ח (מזרים מזומן חדש לציבור).
+        </div>
+    </div>
+
+    <!-- Question 5 -->
+    <div class="question-card" id="card-4">
+        <h3>שאלה 5</h3>
+        <p>שני כלכלנים מתווכחים על אסטרטגיית היציאה ממיתון. ד"ר כהן מציע לקצץ במיסי ההכנסה. ד"ר לוי מתנגד וממליץ על <strong>מדיניות מוניטרית מרחיבה</strong>. אם הממשלה מחליטה לאמץ את המלצתו של ד"ר לוי, מהו הצעד הספציפי שייושם?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q4" value="0"> הקטנת מס החברות במשק.</label>
+            <label><input type="radio" name="q4" value="1"> הדפסת כסף כדי לממן את גירעון התקציב של הממשלה.</label>
+            <label><input type="radio" name="q4" value="2"> חקיקה המחייבת צרכנים להגדיל קניות.</label>
+            <label><input type="radio" name="q4" value="3"> ביצוע עירוי חיצוני חיובי על ידי הבנק המרכזי.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-4" onclick="submitAnswer(4, '3')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-4" onclick="useHint(4)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-4" onclick="revealSolution(4)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-4" onclick="retryQuestion(4)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-4"></div>
+        <div class="wrong-exp" id="wrong-exp-4"><strong>מדוע זו טעות?</strong> השאלה מבקשת כלי מוניטרי מרחיב. קיצוץ מיסים הוא כלי פיסקלי. הדפסת כסף למימון גירעון היא פרקטיקה בעייתית (ולא כלי מדיניות סטנדרטי במודל). חקיקה לצריכה אינה כלי כלכלי מקובל. רק עירוי חיצוני חיובי הוא כלי מוניטרי תקני שמגדיל היצע כסף ומוריד ריבית.</div>
+        <div class="hint-box" id="hint-4"><strong>רמז:</strong> הבחן בין מדיניות פיסקלית (של משרד האוצר: מיסים, תקציב) לבין מדיניות מוניטרית (של הבנק המרכזי: היצע כסף, ריבית).</div>
+        <div class="solution-box" id="solution-4">
+            <strong>פתרון:</strong> מיסים ותקציב ממשלתי הם כלים של <strong>מדיניות פיסקלית</strong>. המלצתו של ד"ר לוי היא חד משמעית למדיניות <strong>מוניטרית</strong>. האפשרות היחידה ברשימה שמהווה כלי מוניטרי (ועוד כלי מרחיב) היא פעולה של הבנק המרכזי לייצור עירוי חיצוני חיובי (כגון רכישת אג"ח בשוק הפתוח).
+        </div>
+    </div>
+
+    <!-- Question 6 -->
+    <div class="question-card" id="card-5">
+        <h3>שאלה 6</h3>
+        <p>המשק המקומי רותח. הצמיחה עוקפת את התוצר הפוטנציאלי, נוצרו עודפי ביקוש עצומים, והאינפלציה מזנקת לרמות מסוכנות. כדי לעצור את השתוללות המחירים, על מה ימליצו מומחי הבנק המרכזי?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q5" value="0"> הפעלת מדיניות מוניטרית מרחיבה.</label>
+            <label><input type="radio" name="q5" value="1"> הפעלת מדיניות מוניטרית מצמצמת.</label>
+            <label><input type="radio" name="q5" value="2"> הורדת יחס הרזרבה למינימום האפשרי.</label>
+            <label><input type="radio" name="q5" value="3"> התערבות בשוק כדי להוריד את שער הריבית.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-5" onclick="submitAnswer(5, '1')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-5" onclick="useHint(5)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-5" onclick="revealSolution(5)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-5" onclick="retryQuestion(5)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-5"></div>
+        <div class="wrong-exp" id="wrong-exp-5"><strong>מדוע זו טעות?</strong> אינפלציה דוהרת נובעת מעודף ביקושים (פער אינפלציוני). מדיניות מרחיבה או הורדת רזרבה/ריבית תזרים עוד כסף למשק, תגביר את הביקושים ותאיץ את האינפלציה. הפתרון חייב להיות "קירור" באמצעות צמצום היצע הכסף והעלאת ריבית.</div>
+        <div class="hint-box" id="hint-5"><strong>רמז:</strong> התיאור מצביע על פער אינפלציוני. כדי לסגור אותו, צריך "לקרר" את המשק ולהקטין ביקושים על ידי ייקור הכסף.</div>
+        <div class="solution-box" id="solution-5">
+            <strong>פתרון:</strong> השתוללות מחירים עקב ביקושי יתר היא הגדרה קלאסית של <strong>פער אינפלציוני</strong>. התרופה המוניטרית למצב זה היא "קירור" המשק באמצעות <strong>מדיניות מוניטרית מצמצמת</strong>. מדיניות זו תקטין את כמות הכסף, תעלה את הריבית, ותקטין את רצון הציבור והפירמות לצרוך ולהשקיע, מה שיבלום את האינפלציה.
+        </div>
+    </div>
+
+    <!-- Question 7 -->
+    <div class="question-card" id="card-6">
+        <h3>שאלה 7</h3>
+        <p>הבנק המרכזי של מדינת "קאפה" החליט למכור כמות מאסיבית של איגרות חוב ממשלתיות לציבור. מהי שרשרת האירועים המקרו-כלכלית שתנבע ממהלך זה?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q6" value="0"> כמות הכסף תגדל, הריבית תרד, ההשקעות יגדלו והתוצר יעלה.</label>
+            <label><input type="radio" name="q6" value="1"> כמות הכסף תקטן, הריבית תעלה, ההשקעות יקטנו והתוצר ירד.</label>
+            <label><input type="radio" name="q6" value="2"> כמות הכסף תקטן, הריבית תרד, ההשקעות יקטנו והתוצר יעלה.</label>
+            <label><input type="radio" name="q6" value="3"> כמות הכסף תגדל, הריבית תעלה, ההשקעות יגדלו והתוצר ירד.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-6" onclick="submitAnswer(6, '1')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-6" onclick="useHint(6)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-6" onclick="revealSolution(6)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-6" onclick="retryQuestion(6)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-6"></div>
+        <div class="wrong-exp" id="wrong-exp-6"><strong>מדוע זו טעות?</strong> מכירת אג"ח שואבת מזומן מהציבור לבנק המרכזי → היצע הכסף קטן. כשהיצע קטן, המחיר (ריבית) עולה. ריבית גבוהה מייקרת הלוואות → השקעות וצריכה יורדות → התוצר יורד. כל שרשרת שסותרת את הכיווניות הזו שוברת את הלוגיקה המקרו-כלכלית הבסיסית.</div>
+        <div class="hint-box" id="hint-6"><strong>רמז:</strong> כשהבנק מוכר אג"ח, הציבור משלם עליו במזומן - כלומר כסף "נשאב" מהמשק. זהו עירוי שלילי. עקוב אחרי שרשרת ההשפעות משוק הכסף לשוק המוצרים.</div>
+        <div class="solution-box" id="solution-6">
+            <strong>פתרון:</strong> מכירת אג"ח לציבור שואבת מזומן ומהווה <strong>עירוי חיצוני שלילי</strong> (מדיניות מצמצמת).<br>
+            שרשרת התגובות:<br>
+            1. היצע הכסף מקטין (Ms זז שמאלה).<br>
+            2. המחסור בכסף מעלה את שער הריבית (r).<br>
+            3. ריבית גבוהה מייקרת הלוואות, ולכן הביקוש להשקעות (I) ולצריכה (C) יורד.<br>
+            4. כתוצאה מירידת הביקוש המצרפי, <strong>התוצר (Y) יורד</strong>.
+            <svg viewBox="0 0 300 220">
+                <line x1="30" y1="190" x2="280" y2="190" stroke="#0f172a" stroke-width="2"/>
+                <line x1="30" y1="20" x2="30" y2="190" stroke="#0f172a" stroke-width="2"/>
+                <path d="M 50 40 Q 100 160 260 170" fill="none" stroke="#059669" stroke-width="2"/>
+                <text x="265" y="180" font-size="12" fill="#059669">L</text>
+                <line x1="180" y1="30" x2="180" y2="190" stroke="#1e40af" stroke-width="2"/>
+                <text x="185" y="40" font-size="10" fill="#1e40af">Ms0</text>
+                <line x1="100" y1="30" x2="100" y2="190" stroke="#dc2626" stroke-dasharray="5" stroke-width="2"/>
+                <text x="105" y="40" font-size="10" fill="#dc2626">Ms1</text>
+                <path d="M 170 80 L 115 80 L 125 75 M 115 80 L 125 85" fill="none" stroke="#0f172a" stroke-width="2"/>
+                <line x1="30" y1="148" x2="180" y2="148" stroke="#64748b" stroke-dasharray="3"/>
+                <text x="5" y="152" font-size="10">r0</text>
+                <line x1="30" y1="95" x2="100" y2="95" stroke="#64748b" stroke-dasharray="3"/>
+                <text x="5" y="99" font-size="10" font-weight="bold" fill="#dc2626">r1</text>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Question 8 -->
+    <div class="question-card" id="card-7">
+        <h3>שאלה 8</h3>
+        <p>משק מצוי במיתון וקיים בו פער תוצר של 800 מיליון ש"ח. המכפיל הקיינסיאני של המשק עומד על 4. שער הריבית הנוכחי הוא 7%. מודלים כלכליים מראים שכל ירידה של 1% בריבית מגדילה את ההשקעות (I) ב-15 מיליון ש"ח ואת הצריכה הפרטית (C) ב-5 מיליון ש"ח.<br>בכמה אחוזים במצטבר חייב הבנק המרכזי להוריד את הריבית כדי להביא את המשק לתעסוקה מלאה?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q7" value="0"> ב-5%</label>
+            <label><input type="radio" name="q7" value="1"> ב-8%</label>
+            <label><input type="radio" name="q7" value="2"> ב-10%</label>
+            <label><input type="radio" name="q7" value="3"> ב-12%</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-7" onclick="submitAnswer(7, '2')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-7" onclick="useHint(7)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-7" onclick="revealSolution(7)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-7" onclick="retryQuestion(7)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-7"></div>
+        <div class="wrong-exp" id="wrong-exp-7"><strong>מדוע זו טעות?</strong> טעות נפוצה היא לחלק את פער התוצר (800) ישירות בהשפעת הריבית (20), או לשכוח את המכפיל. הזכור: המכפיל מגביר את השפעת הזרמת הביקוש. קודם מחשבים את הפער הדפלציוני (800/4=200), ורק אז בודקים כמה אחוזי ריבית דרושים כדי לייצר תוספת ביקוש של 200.</div>
+        <div class="hint-box" id="hint-7"><strong>רמז 1:</strong> תחילה, חשב את "הפער הדפלציוני" (פער התוצר לחלק למכפיל). זהו גודל התוספת הנדרשת לביקושים.<br><br><strong>רמז 2:</strong> כל ירידה של 1% מוסיפה לביקוש 20 (15+5). כמה אחוזים נדרשים כדי לכסות את הפער שחישבת?</div>
+        <div class="solution-box" id="solution-7">
+            <strong>חישוב מתמטי:</strong><br>
+            1. <strong>מציאת הפער הדפלציוני (הזרקת הביקוש הנדרשת):</strong><br>
+            פער דפלציוני = פער תוצר / מכפיל<br>
+            פער דפלציוני = 800 / 4 = <strong>200</strong>.<br><br>
+            2. <strong>השפעת שינוי בריבית על הביקוש:</strong><br>
+            ירידה של 1% בריבית תורמת 15 להשקעות + 5 לצריכה = <strong>20 בסה"כ לביקוש המצרפי</strong>.<br><br>
+            3. <strong>חישוב הריבית הנדרשת:</strong><br>
+            כדי להשיג תוספת של 200 לביקושים, נחלק את הסך הנדרש בתרומה של אחוז בודד:<br>
+            200 / 20 = <strong>10</strong>.<br>
+            מסקנה: נדרשת הורדת ריבית מצטברת של <strong>10%</strong>.
+        </div>
+    </div>
+
+    <!-- Question 9 -->
+    <div class="question-card" id="card-8">
+        <h3>שאלה 9</h3>
+        <p>משבר עולמי בשרשראות האספקה הוביל להיווצרות פער אינפלציוני חמור. הנהלת הבנק המרכזי התכנסה לישיבת חירום לאישור חבילת מדיניות "קירור". מבין ההצעות הבאות, איזו מתאימה לחבילה זו?</p>
+        <div class="options-list">
+            <label><input type="radio" name="q8" value="0"> ביצוע עירוי פנימי חיובי על ידי הציבור.</label>
+            <label><input type="radio" name="q8" value="1"> ביצוע עירוי חיצוני חיובי בשוק הפתוח.</label>
+            <label><input type="radio" name="q8" value="2"> העלאת יחס הרזרבה המינימלי למערכת הבנקאית.</label>
+            <label><input type="radio" name="q8" value="3"> הוצאת צו מינהלי המחייב הורדת ריבית שיווי המשקל.</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-8" onclick="submitAnswer(8, '2')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-8" onclick="useHint(8)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-8" onclick="revealSolution(8)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-8" onclick="retryQuestion(8)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-8"></div>
+        <div class="wrong-exp" id="wrong-exp-8"><strong>מדוע זו טעות?</strong> "קירור" דורש מדיניות מצמצמת. עירוי פנימי הוא התנהגות ציבור ולא כלי בנקאי. עירוי חיצוני חיובי הוא מרחיב (יחמיר אינפלציה). צו מנהלי להורדת ריבית סותר את חוקי השוק ויגרום לעודף ביקוש לכסף. רק העלאת רזרבה היא כלי מוניטרי תקני שמצמצם היצע ומקרר ביקושים.</div>
+        <div class="hint-box" id="hint-8"><strong>רמז:</strong> מדיניות "קירור" משמעה מדיניות מצמצמת. זכור כי "עירוי פנימי" הוא התנהגות ציבור ולא כלי בנקאי. איזה כלי נותר שהוא מצמצם?</div>
+        <div class="solution-box" id="solution-8">
+            <strong>פתרון:</strong> התמודדות עם פער אינפלציוני מחייבת <strong>מדיניות מוניטרית מצמצמת</strong> על ידי הבנק המרכזי.<br>
+            - עירוי פנימי (0) אינו כלי מדיניות אלא התנהגות הציבור.<br>
+            - עירוי חיצוני חיובי (1) הוא מדיניות מרחיבה (מחמיר אינפלציה).<br>
+            - קביעת ריבית מנהלית (3) אינה כלי מקובל במודל שוק הכסף (הריבית נקבעת בשוק).<br>
+            הכלי המצמצם הנכון היחיד הוא <strong>העלאת יחס הרזרבה</strong> (2), אשר יקטין את יצירת הכסף ויעלה את הריבית.
+        </div>
+    </div>
+
+    <!-- Question 10 -->
+    <div class="question-card" id="card-9">
+        <h3>שאלה 10</h3>
+        <p>השלם את המשפט: "כלכלת מדינת 'אפסילון' שקועה במיתון עמוק המאופיין בפער _____. כדי להציל את המשק ולעודד צמיחה, על הנגיד לאמץ מדיניות מוניטרית _____, אשר תוביל ל_____ של שער הריבית."</p>
+        <div class="options-list">
+            <label><input type="radio" name="q9" value="0"> דפלציוני, מרחיבה, ירידה</label>
+            <label><input type="radio" name="q9" value="1"> דפלציוני, מצמצמת, עלייה</label>
+            <label><input type="radio" name="q9" value="2"> אינפלציוני, מרחיבה, ירידה</label>
+            <label><input type="radio" name="q9" value="3"> אינפלציוני, מצמצמת, עלייה</label>
+        </div>
+        <div class="actions">
+            <button class="btn-check" id="check-9" onclick="submitAnswer(9, '0')">הגש תשובה</button>
+            <button class="btn-hint" id="hint-btn-9" onclick="useHint(9)">רמז (-5 נק')</button>
+            <button class="btn-reveal" id="reveal-btn-9" onclick="revealSolution(9)">הצג פתרון (-15 נק')</button>
+            <button class="btn-retry" id="retry-9" onclick="retryQuestion(9)">נסה שוב (-3 נק')</button>
+        </div>
+        <div class="feedback" id="feedback-9"></div>
+        <div class="wrong-exp" id="wrong-exp-9"><strong>מדוע זו טעות?</strong> מיתון = תוצר נמוך מהפוטנציאל = פער דפלציוני. כדי לצאת ממנו צריך להגדיל ביקושים באמצעות מדיניות מרחיבה. מדיניות מרחיבה מגדילה היצע כסף, ולכן הריבית יורדת. ערבוב בין מונחים (אינפלציוני/מצמצמת/עלייה) מתאר מצב הפוך לחלוטין (התחממות משק).</div>
+        <div class="hint-box" id="hint-9"><strong>רמז:</strong> מיתון מוגדר כתוצר נמוך מהפוטנציאל. איזה פער זה מייצר? כדי לצמוח צריכים להגדיל ביקושים. איך קוראים למדיניות כזו ומה היא עושה לריבית?</div>
+        <div class="solution-box" id="solution-9">
+            <strong>פתרון:</strong><br>
+            - מיתון משמעו שהביקוש נמוך מההיצע, ולכן מדובר ב<strong>פער דפלציוני</strong>.<br>
+            - כדי לעודד צמיחה, נדרשת הזרמת כספים - זוהי <strong>מדיניות מרחיבה</strong>.<br>
+            - מדיניות מוניטרית מרחיבה מגדילה את היצע הכסף, מה שמוביל ל<strong>ירידה</strong> בשער הריבית (והוזלת הלוואות לפירמות).
+        </div>
+    </div>
+
+    <button class="btn-finish" id="finish-btn" onclick="finishAssignment()">סיום והגשת מטלה</button>
+</main>
+
+<!-- Results Modal -->
+<div class="modal-overlay" id="results-modal">
+    <div class="modal-content">
+        <h2>המטלה הוגשה בהצלחה!</h2>
+        <p>הציון הסופי שלך הוא:</p>
+        <div class="final-score" id="modal-score">0</div>
+        <p>קוד האישור שלך (העתק והגש במערכת):</p>
+        <div class="code-box" id="auth-code">--------</div>
+        <button class="copy-btn" id="copy-btn" onclick="copyAuthCode()">העתק קוד אישור</button>
+    </div>
+</div>
+
+<script>
+    const state = {
+        score: 0,
+        answered: new Array(10).fill(false),
+        retries: new Array(10).fill(0),
+        hintsUsed: new Array(10).fill(false),
+        solutionsRevealed: new Array(10).fill(false),
+        isFinished: false
+    };
+
+    const TOTAL_QUESTIONS = 10;
+    const SCORE_DISPLAY = document.getElementById('score-display');
+
+    function updateScoreDOM() {
+        let finalScore = Math.max(0, Math.min(100, state.score));
+        SCORE_DISPLAY.textContent = finalScore;
+        return finalScore;
+    }
+
+    function submitAnswer(index, correctValue) {
+        if (state.answered[index] || state.isFinished) return;
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (!selected) { alert('אנא בחר תשובה לפני ההגשה.'); return; }
+
+        const feedbackEl = document.getElementById(`feedback-${index}`);
+        const solutionEl = document.getElementById(`solution-${index}`);
+        const wrongExpEl = document.getElementById(`wrong-exp-${index}`);
+        const retryBtn = document.getElementById(`retry-${index}`);
+        const radios = document.querySelectorAll(`input[name="q${index}"]`);
+        const checkBtn = document.getElementById(`check-${index}`);
+        const hintBtn = document.getElementById(`hint-btn-${index}`);
+        const revealBtn = document.getElementById(`reveal-btn-${index}`);
+
+        if (selected.value === correctValue) {
+            // CORRECT
+            const points = Math.max(0, 10 - state.retries[index] * 3);
+            state.score += points;
+            state.answered[index] = true;
+            feedbackEl.textContent = `✓ תשובה נכונה! (+${points} נקודות)`;
+            feedbackEl.className = 'feedback correct';
+            feedbackEl.style.display = 'block';
+            
+            // Show solution automatically
+            solutionEl.style.display = 'block';
+            wrongExpEl.style.display = 'none';
+            retryBtn.style.display = 'none';
+
+            // Lock permanently
+            radios.forEach(r => { r.disabled = true; r.parentElement.classList.add('disabled'); });
+            checkBtn.disabled = true;
+            hintBtn.disabled = true;
+            revealBtn.style.display = 'none';
+        } else {
+            // WRONG
+            feedbackEl.textContent = '✗ תשובה שגויה. קרא את ההסבר ונסה שוב.';
+            feedbackEl.className = 'feedback wrong';
+            feedbackEl.style.display = 'block';
+            wrongExpEl.style.display = 'block';
+            solutionEl.style.display = 'block';
+            retryBtn.style.display = 'inline-block';
+
+            // Temporarily lock
+            radios.forEach(r => { r.disabled = true; r.parentElement.classList.add('disabled'); });
+            checkBtn.disabled = true;
+        }
+        updateScoreDOM();
+    }
+
+    function retryQuestion(index) {
+        if (state.isFinished) return;
+        state.retries[index]++;
+        state.score = Math.max(0, state.score - 3);
+        updateScoreDOM();
+
+        // Reset UI for retry
+        document.getElementById(`feedback-${index}`).style.display = 'none';
+        document.getElementById(`wrong-exp-${index}`).style.display = 'none';
+        document.getElementById(`solution-${index}`).style.display = 'none';
+        document.getElementById(`retry-${index}`).style.display = 'none';
+
+        const radios = document.querySelectorAll(`input[name="q${index}"]`);
+        radios.forEach(r => {
+            r.disabled = false;
+            r.checked = false;
+            r.parentElement.classList.remove('disabled');
+        });
+        document.getElementById(`check-${index}`).disabled = false;
+    }
+
+    function useHint(index) {
+        if (state.answered[index] || state.hintsUsed[index] || state.isFinished) return;
+        state.hintsUsed[index] = true;
+        state.score = Math.max(0, state.score - 5);
+        document.getElementById(`hint-${index}`).style.display = 'block';
+        document.getElementById(`hint-btn-${index}`).disabled = true;
+        updateScoreDOM();
+    }
+
+    function revealSolution(index) {
+        if (state.solutionsRevealed[index] || state.isFinished) return;
+        state.solutionsRevealed[index] = true;
+        state.score = Math.max(0, state.score - 15);
+        document.getElementById(`solution-${index}`).style.display = 'block';
+        document.getElementById(`reveal-btn-${index}`).disabled = true;
+        if (!state.answered[index]) {
+            state.answered[index] = true;
+            const feedbackEl = document.getElementById(`feedback-${index}`);
+            feedbackEl.textContent = 'נחשף פתרון - השאלה ננעלה.';
+            feedbackEl.className = 'feedback wrong';
+            feedbackEl.style.display = 'block';
+            const radios = document.querySelectorAll(`input[name="q${index}"]`);
+            radios.forEach(r => { r.disabled = true; r.parentElement.classList.add('disabled'); });
+            document.getElementById(`check-${index}`).disabled = true;
+            document.getElementById(`hint-btn-${index}`).disabled = true;
+            document.getElementById(`retry-${index}`).style.display = 'none';
+        }
+        updateScoreDOM();
+    }
+
+    function generateAuthCode() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+        let code = '';
+        for (let i = 0; i < 8; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+        return code;
+    }
+
+    function finishAssignment() {
+        if (state.isFinished) return;
+        const confirmFinish = confirm("האם אתה בטוח שברצונך לסיים? לא ניתן יהיה לשנות תשובות לאחר מכן.");
+        if (!confirmFinish) return;
+
+        state.isFinished = true;
+        for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+            if (!state.answered[i]) {
+                const radios = document.querySelectorAll(`input[name="q${i}"]`);
+                radios.forEach(r => { r.disabled = true; r.parentElement.classList.add('disabled'); });
+                document.getElementById(`check-${i}`).disabled = true;
+                document.getElementById(`hint-btn-${i}`).disabled = true;
+                document.getElementById(`reveal-btn-${i}`).disabled = true;
+                document.getElementById(`retry-${i}`).style.display = 'none';
+            }
+        }
+        document.getElementById('finish-btn').disabled = true;
+        const finalScore = updateScoreDOM();
+        const authCode = generateAuthCode();
+        document.getElementById('modal-score').textContent = finalScore;
+        document.getElementById('auth-code').textContent = authCode;
+        document.getElementById('results-modal').style.display = 'flex';
+    }
+
+    function copyAuthCode() {
+        const code = document.getElementById('auth-code').textContent;
+        const textArea = document.createElement("textarea");
+        textArea.value = code;
+        textArea.style.position = "fixed";
+        textArea.style.left = "-999999px";
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            const btn = document.getElementById('copy-btn');
+            btn.textContent = 'הועתק!';
+            btn.style.backgroundColor = 'var(--success)';
+            setTimeout(() => { btn.textContent = 'העתק קוד אישור'; btn.style.backgroundColor = 'var(--secondary)'; }, 2000);
+        } catch (err) { alert("שגיאה בהעתקה, אנא העתק ידנית: " + code); }
+        finally { textArea.remove(); }
+    }
+</script>
+</body>
+</html>
