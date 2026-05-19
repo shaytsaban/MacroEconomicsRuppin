@@ -241,6 +241,7 @@
         let questionPointsEligible = true;
 
         const ui = {
+            questionBlock: document.getElementById('question-block'),
             questionTitle: document.getElementById('question-title'),
             optionsContainer: document.getElementById('options-container'),
             hintBox: document.getElementById('hint-box'),
@@ -414,7 +415,7 @@
         }
 
         function finishQuiz() {
-            ui.quizContainer.classList.add('hidden');
+            ui.questionBlock.classList.add('hidden');
             ui.endScreen.classList.remove('hidden');
             ui.progressBar.style.width = '100%';
             
@@ -451,17 +452,17 @@
             if (passed) {
                 ui.endIcon.innerText = "🎓";
                 ui.endTitle.innerText = "כל הכבוד, סיימת!";
-                ui.endTitle.classList.replace('text-red-600', 'text-gray-800');
+                ui.endTitle.className = 'text-3xl font-bold text-gray-800 mb-2';
                 ui.endSubtitle.innerText = "השלמת את מטלת ההגשה בהצלחה.";
                 
                 ui.successSection.classList.remove('hidden');
                 ui.failSection.classList.add('hidden');
                 ui.submissionCode.innerText = generateCode();
             } else {
-                ui.endIcon.innerText = "🔄";
+                ui.endIcon.innerText = "🛑";
                 ui.endTitle.innerText = "לא עברת את רף המעבר";
-                ui.endTitle.classList.replace('text-gray-800', 'text-red-600');
-                ui.endSubtitle.innerText = "עליך לענות נכונה על לפחות 5 שאלות כדי להגיש.";
+                ui.endTitle.className = 'text-3xl font-bold text-red-600 mb-2';
+                ui.endSubtitle.innerText = "כדי לקבל קוד הגשה עליך להשיג לפחות 50 נקודות (5 תשובות נכונות).";
                 
                 ui.successSection.classList.add('hidden');
                 ui.failSection.classList.remove('hidden');
@@ -472,7 +473,7 @@
             currentQuestionIndex = 0;
             score = 0;
             ui.endScreen.classList.add('hidden');
-            ui.quizContainer.classList.remove('hidden');
+            ui.questionBlock.classList.remove('hidden');
             loadQuestion();
         }
 
