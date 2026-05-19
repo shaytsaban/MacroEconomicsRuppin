@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מטלת הגשה בכלכלה - מקרו</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f3f4f6;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden fade-in">
+        <!-- Header -->
+        <div class="bg-blue-600 text-white p-6 text-center relative">
+            <h1 class="text-2xl font-bold mb-2">מטלת הגשה: מקרו כלכלה</h1>
+            <p class="text-blue-100 text-sm">המטלה באדיבות רותם חכים</p>
+            <div id="progress-container" class="mt-4 bg-blue-800 rounded-full h-2 w-full max-w-md mx-auto overflow-hidden">
+                <div id="progress-bar" class="bg-yellow-400 h-2 transition-all duration-300" style="width: 0%;"></div>
+            </div>
+            <p id="progress-text" class="text-xs mt-2">שאלה 1 מתוך 4</p>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="p-6 md:p-8">
+            <div id="question-block">
+                <h2 id="question-title" class="text-xl font-semibold text-gray-800 mb-6 leading-relaxed"></h2>
+                
+                <div id="options-container" class="space-y-3 mb-8">
+                    <!-- Options will be injected here via JS -->
+                </div>
+
+                <!-- Helper Buttons -->
+                <div id="helpers-container" class="flex flex-wrap gap-3 mb-6">
+                    <button id="btn-hint" onclick="showHint()" class="text-sm px-4 py-2 bg-yellow-100 text-yellow-700 rounded-lg hover:bg-yellow-200 transition">
+                        💡 קבל רמז
+                    </button>
+                    <button id="btn-reveal" onclick="revealAnswer()" class="text-sm px-4 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition">
+                        👁️ גלה לי את התשובה (מבטל ניקוד בשאלה זו)
+                    </button>
+                </div>
+
+                <!-- Hint Box -->
+                <div id="hint-box" class="hidden mb-6 p-4 bg-yellow-50 border-r-4 border-yellow-400 rounded-l-lg text-sm text-yellow-800">
+                    <strong>רמז:</strong> <span id="hint-text"></span>
+                </div>
+
+                <!-- Explanation Box -->
+                <div id="explanation-box" class="hidden mb-6 p-5 rounded-lg text-sm leading-relaxed border-2">
+                    <h3 id="explanation-title" class="font-bold mb-2 text-lg"></h3>
+                    <p id="explanation-text" class="text-gray-700"></p>
+                </div>
+
+                <!-- Action Button -->
+                <div class="mt-8 flex justify-end">
+                    <button id="btn-submit" onclick="submitAnswer()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-xl transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+                        בדוק תשובה
+                    </button>
+                    <button id="btn-next" onclick="nextQuestion()" class="hidden bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-8 rounded-xl transition shadow-lg">
+                        לשאלה הבאה
+                    </button>
+                </div>
+            </div>
+
+            <!-- End Screen -->
+            <div id="end-screen" class="hidden text-center py-8 fade-in">
+                <div id="end-icon" class="text-6xl mb-4">🎓</div>
+                <h2 id="end-title" class="text-3xl font-bold text-gray-800 mb-2">כל הכבוד, סיימת!</h2>
+                <p id="end-subtitle" class="text-gray-600 mb-8">השלמת את מטלת ההגשה בהצלחה.</p>
+                
+                <div class="bg-gray-100 p-6 rounded-xl inline-block w-full max-w-sm mb-6 border border-gray-200">
+                    <p class="text-lg text-gray-700 mb-2">הציון שלך הוא:</p>
+                    <p id="final-score" class="text-5xl font-bold text-blue-600 mb-2">100</p>
+                    <p class="text-sm text-gray-500">מתוך 100 אפשריים</p>
+                </div>
+
+                <!-- משוב אישי מפורט -->
+                <div id="feedback-box" class="text-right p-6 rounded-xl w-full max-w-2xl mx-auto mb-8 text-gray-800 leading-relaxed border shadow-sm">
+                </div>
+
+                <!-- אזור הצלחה - קוד הגשה -->
+                <div id="success-section" class="bg-green-50 border border-green-200 p-6 rounded-xl w-full max-w-md mx-auto shadow-sm hidden">
+                    <p class="font-semibold text-green-800 mb-2">קוד ההגשה שלך:</p>
+                    <div class="flex items-center justify-center gap-2">
+                        <code id="submission-code" class="bg-white px-4 py-2 rounded text-xl font-mono text-gray-800 border select-all"></code>
+                    </div>
+                    <p class="text-xs text-green-600 mt-3">העתק את הקוד הנ"ל והזן אותו במערכת ההגשות כדי לאשר את סיום המטלה ולקבל את הציון.</p>
+                </div>
+
+                <!-- אזור כישלון - כפתור חזרה -->
+                <div id="fail-section" class="hidden mt-6 flex flex-col items-center">
+                    <p class="text-red-600 font-medium mb-4">לא הגעת לרף המעבר (50 נקודות). עליך לפתור את המטלה מחדש כדי לקבל קוד הגשה.</p>
+                    <button onclick="restartQuiz()" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-8 rounded-xl transition shadow-lg">
+                        🔄 התחל את המטלה מחדש
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "1. משק סגור מצוי בשיווי משקל של תעסוקה מלאה. הממשלה מחליטה להגדיל את הוצאותיה (G) ומממנת מהלך זה במלואו על ידי הדפסת כסף חדש. מה תהיה התוצאה של צעדים אלו בשיווי המשקל החדש?",
+                options: [
+                    "התוצר יישאר ללא שינוי ושער הריבית לא ישתנה.",
+                    "התוצר יעלה ושער הריבית לא ישתנה.",
+                    "התוצר יישאר ללא שינוי ושער הריבית יעלה.",
+                    "התוצר יעלה ושער הריבית יעלה."
+                ],
+                correctIndex: 2,
+                hint: "כאשר המשק כבר בתעסוקה מלאה, התוצר הפיזי אינו יכול לגדול עוד. חישבו מה יקרה לרמת המחירים ואיך זה ישפיע על שוק הכסף.",
+                explanation: "התשובה הנכונה היא שהתוצר לא ישתנה והריבית תעלה.<br><br><strong>שלב א' (שוק המוצרים):</strong> הגדלת הוצאות הממשלה מגדילה את הביקוש המצרפי. מכיוון שאנו בתעסוקה מלאה, התוצר הפיזי אינו יכול לגדול, ולכן נוצר פער אינפלציוני שמוביל לעליית מחירים (P עולה).<br><br><strong>שלב ב' (שוק הכסף):</strong> עליית המחירים שוחקת את כמות הכסף הריאלית (M/P קטן). למרות שהממשלה הדפיסה כסף (הגדילה את M הנומינלי), המחירים עולים בשיעור חד יותר. הירידה ב-M/P מעלה את שער הריבית (r).<br><br><strong>סיכום:</strong> עליית הריבית מקטינה חזרה את ההשקעות (והצריכה) עד שהביקוש המצרפי יורד חזרה לרמת תעסוקה מלאה. ניסיון הממשלה נכשל, התוצר נשאר ללא שינוי והריבית עלתה (קיזוז מלא)."
+            },
+            {
+                question: "2. בהמשך לשאלה הקודמת, מדוע בעצם התוצר אינו גדל למרות שהממשלה מנסה 'לדחוף' את הכלכלה על ידי הגדלת הוצאותיה (G) והדפסת כסף?",
+                options: [
+                    "מפני שהבנק המרכזי מתערב ומונע את גידול התוצר.",
+                    "מפני שהמשק כבר נמצא בניצול מקסימלי של גורמי הייצור שלו.",
+                    "מפני שהציבור חוסך את כל התוספת להכנסה ולא צורך אותה.",
+                    "מפני שמיסים גבוהים מונעים צמיחה כלכלית בתעסוקה מלאה."
+                ],
+                correctIndex: 1,
+                hint: "התשובה טמונה בהגדרה של המונח 'תעסוקה מלאה' במונחים של כושר ייצור פיזי.",
+                explanation: "התשובה הנכונה היא שהמשק נמצא בניצול מקסימלי של גורמי הייצור שלו.<br><br><strong>הסבר מפורט:</strong> 'תעסוקה מלאה' משמעותה שהמשק מייצר את התפוקה המקסימלית האפשרית שלו באמצעות העובדים, המכונות והטכנולוגיה הקיימים (תוצר פוטנציאלי). במצב כזה, פשוט אין מי שייצר יותר סחורות ושירותים. כל ניסיון להגדיל את הביקוש המצרפי מעבר לקו זה אינו יכול לייצר סחורות חדשות, אלא רק גורם ליותר כסף 'לרדוף' אחרי אותה כמות סחורות - מה שמתורגם ישירות לעליית מחירים (אינפלציה)."
+            },
+            {
+                question: "3. עדיין בתעסוקה מלאה: הממשלה הדפיסה כסף חדש (הגדילה את M הנומינלי). מה קרה בסופו של התהליך להיצע הכסף הריאלי (M/P)?",
+                options: [
+                    "גדל, משום שהממשלה הוסיפה כסף למשק.",
+                    "נשאר ללא שינוי, כי עליית המחירים הייתה זהה להדפסת הכסף.",
+                    "קטן, כי עליית המחירים הייתה חזקה יותר מתוספת הכסף המודפס.",
+                    "תלוי בהחלטת הבנק המרכזי בלבד."
+                ],
+                correctIndex: 2,
+                hint: "כדי שהריבית תעלה (כפי שראינו בשאלה 1 ושתקזז את הביקוש), מה חייב לקרות להיצע הכסף הריאלי?",
+                explanation: "התשובה הנכונה היא שהיצע הכסף הריאלי קטן.<br><br><strong>הסבר מפורט:</strong> בשיווי המשקל החדש אנחנו יודעים שהריבית גבוהה יותר (כדי לקזז את עליית ה-G ולהחזיר אותנו לתוצר תעסוקה מלאה). אם הריבית עלתה בשוק הכסף, זה אומר בהכרח שעקומת היצע הכסף הריאלי (M/P) זזה שמאלה (כלומר, M/P קטן). איך זה ייתכן למרות שהגדילו את M? מכיוון שהאינפלציה (העלייה ב-P) הייתה כל כך חזקה, שהיא 'אכלה' לא רק את תוספת הכסף החדש, אלא גם מעבר לה. המכנה (P) גדל הרבה יותר מהמונה (M)."
+            },
+            {
+                question: "4. במשק הנמצא בתעסוקה מלאה, הציבור מחליט להגדיל את צריכתו הפרטית (C) עקב שינוי טעמים. הבנק המרכזי מזהה זאת ובמקביל קונה אג\"ח מהציבור. מה תהיה ההשפעה של אירועים אלו על רמת המחירים במשק (P)?",
+                options: [
+                    "רמת המחירים לא תשתנה בגלל פעולת הבנק המרכזי.",
+                    "רמת המחירים תרד כי הבנק המרכזי ספג כסף.",
+                    "רמת המחירים תעלה משמעותית בשל עודף ביקוש כפול.",
+                    "רמת המחירים תעלה, אך רק אם הממשלה תעלה מיסים."
+                ],
+                correctIndex: 2,
+                hint: "הגדלת צריכה יוצרת עודף ביקוש. קניית אג\"ח (עירוי חיצוני חיובי) מגדילה את כמות הכסף ומורידה ריבית, מה שמעודד עוד יותר ביקושים. איך יגיבו המחירים בתעסוקה מלאה?",
+                explanation: "התשובה הנכונה היא שרמת המחירים תעלה משמעותית.<br><br><strong>הסבר מפורט:</strong> אנו עדים כאן ל'סערה מושלמת' של ביקושים. מצד אחד (שוק המוצרים), הציבור רוצה לצרוך יותר, מה שיוצר מיד פער אינפלציוני. מצד שני (שוק הכסף), הבנק המרכזי קונה אג\"ח - כלומר מזזרים כסף חדש לציבור (מגדיל את M). זה מוריד את הריבית זמנית ומעודד השקעות. שני הצעדים לוחצים את הביקוש המצרפי כלפי מעלה. מכיוון שהמשק כבר בתעסוקה מלאה ולא יכול לייצר יותר, הלחץ הזה יתפרץ במלוא עוזו כעליית מחירים חדה (אינפלציה)."
+            },
+            {
+                question: "5. בהמשך לשאלה 4 (הגדלת הצריכה וקניית האג\"ח בתעסוקה מלאה) - מה יקרה לשער הריבית (r) בשיווי המשקל הסופי לאחר שרמת המחירים תתעדכן?",
+                options: [
+                    "הריבית תרד כי הבנק המרכזי קנה אג\"ח.",
+                    "הריבית תישאר ללא שינוי.",
+                    "הריבית תעלה בהכרח כדי לרסן את עודפי הביקוש.",
+                    "לא ניתן לדעת, זה תלוי בגובה המיסים."
+                ],
+                correctIndex: 2,
+                hint: "כדי שהמשק יחזור לשיווי משקל בתעסוקה מלאה, מישהו חייב 'לעצור' את הציבור מלצרוך ולהשקיע כל כך הרבה. מהו המנגנון הכלכלי שעושה זאת?",
+                explanation: "התשובה הנכונה היא שהריבית תעלה בהכרח.<br><br><strong>הסבר מפורט:</strong> למרות שבשלב הראשון קניית האג\"ח ניסתה להוריד את הריבית, התהליך לא נעצר שם. עודף הביקוש המאסיבי מזניק את המחירים (P). כשרמת המחירים טסה למעלה, ערך הכסף הריאלי (M/P) קורס, מה שיוצר מחסור חמור בכסף ריאלי בשוק. הציבור מנסה להשיג נזילות, מוכר נכסים, וכתוצאה מכך שער הריבית מזנק כלפי מעלה. הריבית תמשיך לעלות עד שהיא תייקר את ההלוואות מספיק כדי 'לכבות' את עודף הביקוש ולהחזיר את המשק בדיוק לקו התעסוקה המלאה."
+            },
+            {
+                question: "6. נעבור לאבטלה. משק סגור עם שוק כסף פעיל נמצא באבטלה. ידוע כי הפער הדפלציוני במשק הוא בדיוק 50 מיליון ש\"ח. הממשלה רוצה לסגור את הפער ולהגיע לתעסוקה מלאה רק באמצעות הפחתת מיסים (T). מה עליה לעשות?",
+                options: [
+                    "להקטין מסים בסכום של 50 מיליון ש\"ח בדיוק.",
+                    "להקטין מסים בסכום הקטן מ-50 מיליון ש\"ח.",
+                    "להקטין מסים בסכום הגדול מ-50 מיליון ש\"ח.",
+                    "להגדיל מסים בסכום הגדול מ-50 מיליון ש\"ח."
+                ],
+                correctIndex: 2,
+                hint: "הפחתת מיסים משפיעה על הצריכה רק דרך הנטייה השולית לצרוך (MPC, שהיא קטנה מ-1). בנוסף, קיים שוק כסף פעיל המייצר אפקט קיזוז.",
+                explanation: "התשובה הנכונה היא שעליה להקטין מסים בסכום הגדול מ-50.<br><br><strong>הסבר מפורט:</strong> יש כאן שתי סיבות לכך שהורדת מס של 50 לא תספיק: <br>1. <strong>הנטייה השולית לצרוך (MPC):</strong> אם נוריד מס ב-50, הציבור לא יוציא את כל ה-50 על צריכה, אלא יחסוך חלק. לכן התרומה הראשונית לביקוש תהיה קטנה מ-50.<br>2. <strong>אפקט הקיזוז (שוק הכסף):</strong> גם כשהתוצר יתחיל לעלות, הביקוש לכסף יעלה, מה שיעלה את הריבית (r). הריבית הגבוהה תקטין השקעות, ותמשוך את הביקוש מעט למטה. לכן הממשלה חייבת לתת 'מכה' חזקה משמעותית מיותר מ-50 כדי להתגבר גם על החיסכון וגם על הריבית שעולה."
+            },
+            {
+                question: "7. עדיין באבטלה עם פער דפלציוני של 50 מיליון ש\"ח ושוק כסף פעיל. הפעם, הממשלה מחליטה לסגור את הפער באמצעות הגדלת הצריכה הציבורית (G) במימון הנפקת אג\"ח לציבור. באיזה סכום עליה להגדיל את G?",
+                options: [
+                    "בסכום של 50 מיליון ש\"ח בדיוק.",
+                    "בסכום הקטן מ-50 מיליון ש\"ח.",
+                    "בסכום הגדול מ-50 מיליון ש\"ח.",
+                    "לא ניתן לסגור פער באבטלה בעזרת G."
+                ],
+                correctIndex: 2,
+                hint: "אמנם G משפיע ישירות על הביקוש المצרפי במלוא הסכום (בניגוד למיסים), אך זכרו שיש לנו שוק כסף פעיל שגורר תגובת שרשרת כשמנסים להגדיל את התוצר.",
+                explanation: "התשובה הנכונה היא שעליה להגדיל את G בסכום הגדול מ-50.<br><br><strong>הסבר מפורט:</strong> אילו לא היה שוק כסף, הגדלת G ב-50 הייתה מספיקה במדויק (מכיוון ש-G הוא חלק ישיר מהביקוש המצרפי). אולם, בגלל ש<strong>שוק הכסף פעיל</strong>, ברגע שהממשלה מתחילה להגדיל את G, התוצר (Y) מתחיל לצמוח. הצמיחה הזו גורמת לציבור להזדקק ליותר כסף (הביקוש לכסף עולה). כתוצאה מכך הריבית מטפסת. עליית הריבית גורמת לירידה בהשקעות הפרטיות של עסקים ('דחיקה החוצה'). כדי שהתוספת נטו תהיה 50 (אחרי הירידה בהשקעות), על הממשלה מראש להגדיל את G בסכום גדול יותר מ-50."
+            },
+            {
+                question: "8. מהו המושג הכלכלי המתאר את התופעה שראינו בשאלה הקודמת, שבה עליית הריבית מקזזת חלק מהמאמץ הממשלתי להגדיל את התוצר?",
+                options: [
+                    "פער דפלציוני",
+                    "עירוי פנימי שלילי",
+                    "אפקט הקיזוז (דחיקה החוצה - Crowding Out)",
+                    "מלכודת הנזילות"
+                ],
+                correctIndex: 2,
+                hint: "הפעולה הממשלתית 'דוחפת' את המגזר הפרטי החוצה מהשוק בגלל התייקרות עלויות המימון (הריבית).",
+                explanation: "התשובה הנכונה היא אפקט הקיזוז (Crowding Out).<br><br><strong>הסבר מפורט:</strong> 'דחיקה החוצה' או 'אפקט הקיזוז' מתרחש כאשר הרחבה פיסקלית של הממשלה (למשל הגדלת G) גורמת בעקיפין להקטנת הפעילות הכלכלית של המגזר הפרטי (ירידה בהשקעות I ואולי צריכה C). הממשלה למעשה לוקחת נתח גדול יותר מהכלכלה, והתייקרות הריבית (שנוצרת בגלל הביקוש לכסף) מקשה על עסקים פרטיים לקחת הלוואות כדי להתרחב. זה מקזז חלק (ולפעמים את כל) ההשפעה החיובית של מדיניות הממשלה."
+            },
+            {
+                question: "9. משק מצוי באבטלה עם שוק כסף פעיל. הממשלה מחליטה להגדיל את הצריכה הציבורית (G). הבנק המרכזי צופה את התהליך הכלכלי ומעוניין *למנוע* את עליית הריבית הצפויה. באיזה כלי עליו להשתמש?",
+                options: [
+                    "ביצוע עירוי חיצוני שלילי (מכירת אג\"ח לציבור).",
+                    "הורדת יחס הרזרבה של הבנקים המסחריים.",
+                    "העלאת יחס הרזרבה של הבנקים המסחריים.",
+                    "ביצוע עירוי פנימי שלילי."
+                ],
+                correctIndex: 1,
+                hint: "הבנק המרכזי מבין שהביקוש לכסף עומד לעלות, מה שיעלה את הריבית. כדי למנוע זאת, הוא חייב להגדיל את ה'היצע' של הכסף. איזה כלי מייצר כסף נוסף?",
+                explanation: "התשובה הנכונה היא הורדת יחס הרזרבה.<br><br><strong>הסבר מפורט:</strong> אם הבנק המרכזי רוצה להשאיר את הריבית נמוכה כדי לא להפריע לצמיחה (למנוע את אפקט הקיזוז), הוא חייב להגדיל את היצע הכסף במשק באופן שיתאים לעלייה בביקוש לכסף. <br>מבין האפשרויות: <br>- עירוי חיצוני שלילי (מכירת אג\"ח) מקטין את כמות הכסף (שגוי). <br>- העלאת יחס הרזרבה מקטינה את כמות הכסף (שגוי). <br>- עירוי פנימי אינו החלטה של הבנק המרכזי אלא של הציבור. <br>רק <strong>הורדת יחס הרזרבה</strong> תאפשר לבנקים לייצר יותר אשראי ולהגדיל את היצע הכסף."
+            },
+            {
+                question: "10. כיצד בדיוק עוזרת 'הורדת יחס הרזרבה' לבנק המרכזי למנוע את עליית הריבית במשק (כהמשך לשאלה הקודמת)?",
+                options: [
+                    "היא מאלצת את הציבור לחסוך יותר כסף מזומן בבית.",
+                    "היא מאפשרת לבנקים המסחריים להלוות יותר כסף לציבור, מה שמגדיל את כמות הכסף (M) ומוריד את הריבית.",
+                    "היא מעלה את מיסי החברות על הבנקים, מה שמכניס כסף לממשלה.",
+                    "היא גורמת להדפסת שטרות כסף פיזיים חדשים והזרמתם ישירות לחשבונות האזרחים."
+                ],
+                correctIndex: 1,
+                hint: "יחס הרזרבה מגדיר כמה אחוזים מהפיקדונות הבנקים חייבים לשמור בכספת מבלי להלוות הלאה.",
+                explanation: "התשובה הנכונה היא שהיא מאפשרת לבנקים המסחריים להלוות יותר כסף.<br><br><strong>הסבר מפורט:</strong> יחס הרזרבה הוא אחוז פיקדונות הציבור שהבנק המרכזי מחייב את הבנקים המסחריים להחזיק נזיל ולא לתת כהלוואה. כאשר הבנק המרכזי <strong>מוריד</strong> את יחס הרזרבה, משתחרר לבנקים המסחריים כסף רב שקודם היה נעול. כעת הם יכולים לתת יותר הלוואות לציבור ולעסקים (תהליך הנקרא 'יצירת כסף בנקאי'). תהליך זה מגדיל דרמטית את היצע הכסף (M) במשק, וכמו בכל שוק - כשההיצע גדל, המחיר (במקרה זה, שער הריבית) יורד או לפחות נמנעת עלייתו."
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let pointsPerQuestion = 100 / questions.length;
+        let currentSelection = null;
+        let isQuestionAnswered = false;
+        let questionPointsEligible = true;
+
+        const ui = {
+            questionTitle: document.getElementById('question-title'),
+            optionsContainer: document.getElementById('options-container'),
+            hintBox: document.getElementById('hint-box'),
+            hintText: document.getElementById('hint-text'),
+            explanationBox: document.getElementById('explanation-box'),
+            explanationTitle: document.getElementById('explanation-title'),
+            explanationText: document.getElementById('explanation-text'),
+            btnSubmit: document.getElementById('btn-submit'),
+            btnNext: document.getElementById('btn-next'),
+            helpersContainer: document.getElementById('helpers-container'),
+            progressBar: document.getElementById('progress-bar'),
+            progressText: document.getElementById('progress-text'),
+            quizContainer: document.getElementById('quiz-container'),
+            endScreen: document.getElementById('end-screen'),
+            finalScore: document.getElementById('final-score'),
+            submissionCode: document.getElementById('submission-code'),
+            feedbackBox: document.getElementById('feedback-box'),
+            successSection: document.getElementById('success-section'),
+            failSection: document.getElementById('fail-section'),
+            endTitle: document.getElementById('end-title'),
+            endSubtitle: document.getElementById('end-subtitle'),
+            endIcon: document.getElementById('end-icon')
+        };
+
+        function init() {
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const q = questions[currentQuestionIndex];
+            currentSelection = null;
+            isQuestionAnswered = false;
+            questionPointsEligible = true;
+
+            // Reset UI
+            ui.explanationBox.className = 'hidden mb-6 p-5 rounded-lg text-sm leading-relaxed border-2';
+            ui.hintBox.classList.add('hidden');
+            ui.btnNext.classList.add('hidden');
+            ui.btnSubmit.classList.remove('hidden');
+            ui.btnSubmit.disabled = true;
+            ui.helpersContainer.classList.remove('hidden');
+
+            // Update Progress
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            ui.progressBar.style.width = `${progress}%`;
+            ui.progressText.innerText = `שאלה ${currentQuestionIndex + 1} מתוך ${questions.length}`;
+
+            // Render text
+            ui.questionTitle.innerHTML = q.question;
+            ui.hintText.innerText = q.hint;
+
+            // Render options
+            ui.optionsContainer.innerHTML = '';
+            q.options.forEach((opt, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option-card border-2 border-gray-200 rounded-xl p-4 cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition flex items-start gap-3';
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                
+                optionDiv.innerHTML = `
+                    <div class="w-6 h-6 shrink-0 mt-0.5 rounded-full border-2 border-gray-300 flex items-center justify-center pointer-events-none radio-circle"></div>
+                    <span class="text-gray-800 font-medium pointer-events-none">${opt}</span>
+                `;
+                ui.optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function selectOption(index, element) {
+            if (isQuestionAnswered) return;
+
+            currentSelection = index;
+            ui.btnSubmit.disabled = false;
+
+            // Reset all options visual
+            const allOptions = document.querySelectorAll('.option-card');
+            allOptions.forEach(opt => {
+                opt.classList.remove('border-blue-500', 'bg-blue-50');
+                opt.classList.add('border-gray-200');
+                opt.querySelector('.radio-circle').innerHTML = '';
+                opt.querySelector('.radio-circle').classList.remove('border-blue-500');
+            });
+
+            // Set selected visual
+            element.classList.remove('border-gray-200');
+            element.classList.add('border-blue-500', 'bg-blue-50');
+            element.querySelector('.radio-circle').classList.add('border-blue-500');
+            element.querySelector('.radio-circle').innerHTML = '<div class="w-3 h-3 bg-blue-500 rounded-full"></div>';
+        }
+
+        function showHint() {
+            ui.hintBox.classList.remove('hidden');
+            ui.hintBox.classList.add('fade-in');
+        }
+
+        function revealAnswer() {
+            if (isQuestionAnswered) return;
+            questionPointsEligible = false; // Zero points for this question
+            currentSelection = questions[currentQuestionIndex].correctIndex;
+            submitAnswer(true); // pass true to indicate it was revealed
+        }
+
+        function submitAnswer(isRevealed = false) {
+            if (currentSelection === null && !isRevealed) return;
+            isQuestionAnswered = true;
+
+            const q = questions[currentQuestionIndex];
+            const isCorrect = currentSelection === q.correctIndex;
+
+            if (isCorrect && questionPointsEligible) {
+                score += pointsPerQuestion;
+            }
+
+            ui.helpersContainer.classList.add('hidden');
+            ui.hintBox.classList.add('hidden');
+            ui.btnSubmit.classList.add('hidden');
+            ui.btnNext.classList.remove('hidden');
+
+            const allOptions = document.querySelectorAll('.option-card');
+            
+            // Highlight answers
+            allOptions.forEach((opt, index) => {
+                opt.classList.remove('cursor-pointer', 'hover:border-blue-400', 'hover:bg-blue-50');
+                
+                if (index === q.correctIndex) {
+                    opt.classList.remove('border-gray-200', 'border-blue-500', 'bg-blue-50');
+                    opt.classList.add('border-green-500', 'bg-green-50');
+                    opt.querySelector('.radio-circle').classList.add('border-green-500');
+                    if(isCorrect) opt.querySelector('.radio-circle').innerHTML = '<span class="text-green-500 font-bold">✓</span>';
+                } else if (index === currentSelection && !isCorrect) {
+                    opt.classList.remove('border-gray-200', 'border-blue-500', 'bg-blue-50');
+                    opt.classList.add('border-red-500', 'bg-red-50');
+                    opt.querySelector('.radio-circle').classList.add('border-red-500');
+                    opt.querySelector('.radio-circle').innerHTML = '<span class="text-red-500 font-bold">✗</span>';
+                } else {
+                    opt.style.opacity = '0.5';
+                }
+            });
+
+            // Show explanation
+            ui.explanationBox.classList.remove('hidden');
+            ui.explanationBox.classList.add('fade-in');
+            ui.explanationText.innerHTML = q.explanation;
+
+            if (isRevealed) {
+                ui.explanationBox.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-900');
+                ui.explanationTitle.innerText = "התשובה נחשפה:";
+            } else if (isCorrect) {
+                ui.explanationBox.classList.add('bg-green-50', 'border-green-300', 'text-green-900');
+                ui.explanationTitle.innerText = "תשובה נכונה! כל הכבוד 🎉";
+            } else {
+                ui.explanationBox.classList.add('bg-red-50', 'border-red-300', 'text-red-900');
+                ui.explanationTitle.innerText = "תשובה שגויה 😔";
+            }
+        }
+
+        function nextQuestion() {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < questions.length) {
+                loadQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function generateCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'MACRO-';
+            for(let i=0; i<4; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+            code += '-';
+            for(let i=0; i<4; i++) code += chars.charAt(Math.floor(Math.random() * chars.length));
+            return code;
+        }
+
+        function finishQuiz() {
+            ui.quizContainer.classList.add('hidden');
+            ui.endScreen.classList.remove('hidden');
+            ui.progressBar.style.width = '100%';
+            
+            const finalScoreVal = Math.round(score);
+            ui.finalScore.innerText = finalScoreVal;
+            
+            // Clean previous classes
+            ui.finalScore.className = 'text-5xl font-bold mb-2';
+            ui.feedbackBox.className = 'text-right p-6 rounded-xl w-full max-w-2xl mx-auto mb-8 text-gray-800 leading-relaxed border shadow-sm';
+            
+            let feedbackHTML = "";
+            const passed = finalScoreVal >= 50;
+
+            if (finalScoreVal === 100) {
+                ui.finalScore.classList.add('text-green-600');
+                ui.feedbackBox.classList.add('bg-green-50', 'border-green-200');
+                feedbackHTML = "<h3 class='font-bold text-xl mb-2 text-green-700'>ציון מושלם! 🌟</h3><p>הפגנת שליטה מוחלטת בחומר. ניכר שאתה מבין היטב את תהליכי שיווי המשקל במקרו כלכלה, הן בשוק המוצרים והן בשוק הכסף, וכיצד הם משפיעים זה על זה (אפקט הקיזוז, פערים אינפלציוניים ודפלציוניים).</p>";
+            } else if (finalScoreVal >= 80) {
+                ui.finalScore.classList.add('text-blue-600');
+                ui.feedbackBox.classList.add('bg-blue-50', 'border-blue-200');
+                feedbackHTML = "<h3 class='font-bold text-xl mb-2 text-blue-700'>עבודה מצוינת! 👍</h3><p>יש לך הבנה טובה מאוד של המודל. ייתכן שפספסת נקודה או שתיים בניואנסים הקטנים של מדיניות מוניטרית, אך סך הכל ניכרת שליטה רחבה בתהליכים ובהבדלים בין תעסוקה מלאה לאבטלה.</p>";
+            } else if (finalScoreVal >= 50) {
+                ui.finalScore.classList.add('text-yellow-600');
+                ui.feedbackBox.classList.add('bg-yellow-50', 'border-yellow-200');
+                feedbackHTML = "<h3 class='font-bold text-xl mb-2 text-yellow-700'>עברת, אבל כדאי לתרגל עוד קצת 📚</h3><p>הגעת לרף ההגשה ועברת את המטלה. עם זאת, הציון מעיד על כך שחלק מהקשרים בין שוק הכסף לשוק המוצרים עדיין לא לגמרי מבוססים אצלך. מומלץ לקרוא שוב בעיון את ההסברים בסוף כל שאלה כדי לחזק את ההבנה.</p>";
+            } else {
+                ui.finalScore.classList.add('text-red-600');
+                ui.feedbackBox.classList.add('bg-red-50', 'border-red-200');
+                feedbackHTML = "<h3 class='font-bold text-xl mb-2 text-red-700'>יש פערים משמעותיים בחומר ⚠️</h3><p>חשוב לזכור את כללי הברזל:<br>1. בתעסוקה מלאה התוצר לא גדל. כל עודף ביקוש הופך לאינפלציה ששוחקת את הכסף ומעלה ריבית.<br>2. באבטלה, כל התערבות ממשלתית נתקלת ב'קיזוז' בגלל שוק הכסף.<br><strong>צפה שוב בחומרים ונסה את המטלה מחדש.</strong></p>";
+            }
+
+            ui.feedbackBox.innerHTML = feedbackHTML;
+
+            if (passed) {
+                ui.endIcon.innerText = "🎓";
+                ui.endTitle.innerText = "כל הכבוד, סיימת!";
+                ui.endTitle.classList.replace('text-red-600', 'text-gray-800');
+                ui.endSubtitle.innerText = "השלמת את מטלת ההגשה בהצלחה.";
+                
+                ui.successSection.classList.remove('hidden');
+                ui.failSection.classList.add('hidden');
+                ui.submissionCode.innerText = generateCode();
+            } else {
+                ui.endIcon.innerText = "🔄";
+                ui.endTitle.innerText = "לא עברת את רף המעבר";
+                ui.endTitle.classList.replace('text-gray-800', 'text-red-600');
+                ui.endSubtitle.innerText = "עליך לענות נכונה על לפחות 5 שאלות כדי להגיש.";
+                
+                ui.successSection.classList.add('hidden');
+                ui.failSection.classList.remove('hidden');
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            ui.endScreen.classList.add('hidden');
+            ui.quizContainer.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // Initialize Quiz
+        init();
+
+    </script>
+</body>
+</html>
