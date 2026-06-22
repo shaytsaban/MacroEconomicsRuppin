@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -51,6 +52,17 @@
         @keyframes spin-slow {
             100% { transform: rotate(360deg); }
         }
+        .bounce-macro {
+            animation: bounce-macro 2.5s cubic-bezier(0.28, 0.84, 0.42, 1) infinite;
+        }
+        @keyframes bounce-macro {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.15); filter: drop-shadow(0 10px 15px rgba(99, 102, 241, 0.4)); }
+        }
+        .caricature-hover:hover {
+            transform: scale(1.1) rotate(5deg);
+            transition: transform 0.3s ease;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center py-10 px-4">
@@ -63,7 +75,7 @@
             <div class="absolute bottom-0 left-0 opacity-20 text-6xl m-4 float-emoji" style="animation-delay: 1.5s;">🎉</div>
             
             <h1 class="text-4xl md:text-5xl font-extrabold mb-2 tracking-tight">
-                מילואימניקים יקרים,<br>אנחנו איתכם! 💙
+                מילואימניקים יקרים, מילואימניקיות יקרות,<br>אנחנו איתכם ולמענכן! 💙
             </h1>
             <p class="text-xl md:text-2xl mt-4 font-light">
                 המרכז האקדמי רופין עושה הכל כדי שתצליחו, תפרחו ותסגרו פערים בחיוך!
@@ -77,9 +89,61 @@
                 <h2 class="text-2xl font-bold text-gray-800">
                     מוכנים לחזור לעניינים? 🚀
                 </h2>
+                
+                <!-- Macroeconomics Bouncing Illustration -->
+                <div class="py-4 bounce-macro">
+                    <svg class="mx-auto w-28 h-28 text-indigo-600 drop-shadow-xl" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <!-- Chart ascending -->
+                        <line x1="3" y1="20" x2="21" y2="20" stroke="#333" stroke-width="2"></line>
+                        <line x1="3" y1="20" x2="3" y2="4" stroke="#333" stroke-width="2"></line>
+                        <polyline points="3 14 8 9 13 14 21 4" stroke="#10b981" stroke-width="2.5"></polyline>
+                        <!-- Arrow head -->
+                        <polyline points="16 4 21 4 21 9" stroke="#10b981" stroke-width="2.5"></polyline>
+                        <!-- Money coins / Globe element to represent Macro -->
+                        <circle cx="16" cy="14" r="3" fill="#fbbf24" stroke="#d97706" stroke-width="1"></circle>
+                        <circle cx="10" cy="18" r="2" fill="#fbbf24" stroke="#d97706" stroke-width="1"></circle>
+                    </svg>
+                </div>
+
                 <p class="text-lg text-gray-600 leading-relaxed">
-                    אתם מוזמנים לסשן תגבורים אינטנסיבי <strong>בקורס מיקרו כלכלה</strong> באווירה מרימה, אופטימית ומלאת אנרגיה - כדי לחזק ולהתחזק. הסשן יועבר על ידי לא אחר מאשר <strong>ד״ר שי צבאן</strong>!
+                    אתם מוזמנים לסשן תגבורים אינטנסיבי <strong class="text-2xl text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-indigo-700 bg-yellow-200 px-3 py-1 rounded-xl shadow-md border-2 border-yellow-300 inline-block my-2 mx-1 transform -rotate-2">בקורס מאקרו כלכלה 📈🌍</strong> באווירה מרימה, אופטימית ומלאת אנרגיה - כדי לחזק ולהתחזק.
                 </p>
+                
+                <div class="flex flex-col md:flex-row items-center justify-center gap-6 bg-blue-50/50 p-6 rounded-2xl mt-8 border-2 border-indigo-100 shadow-inner">
+                    <!-- Dr. Shay Tzaban Caricature (SVG) -->
+                    <div class="w-24 h-24 bg-white rounded-full border-4 border-indigo-400 shadow-[0_5px_15px_rgba(0,0,0,0.1)] flex items-center justify-center caricature-hover overflow-hidden shrink-0">
+                        <svg viewBox="0 0 100 100" class="w-full h-full pt-3">
+                            <!-- Face -->
+                            <circle cx="50" cy="45" r="28" fill="#ffcdb2" />
+                            <!-- Glasses -->
+                            <rect x="26" y="38" width="18" height="12" rx="3" fill="rgba(255,255,255,0.4)" stroke="#1f2937" stroke-width="2.5"/>
+                            <rect x="56" y="38" width="18" height="12" rx="3" fill="rgba(255,255,255,0.4)" stroke="#1f2937" stroke-width="2.5"/>
+                            <line x1="44" y1="44" x2="56" y2="44" stroke="#1f2937" stroke-width="2.5"/>
+                            <line x1="18" y1="44" x2="26" y2="44" stroke="#1f2937" stroke-width="2.5"/>
+                            <line x1="74" y1="44" x2="82" y2="44" stroke="#1f2937" stroke-width="2.5"/>
+                            <!-- Eyes -->
+                            <circle cx="35" cy="44" r="2.5" fill="#1f2937" />
+                            <circle cx="65" cy="44" r="2.5" fill="#1f2937" />
+                            <!-- Nose -->
+                            <path d="M 50 48 L 48 55 L 52 55 Z" fill="#e5989b" opacity="0.6"/>
+                            <!-- Big Smile -->
+                            <path d="M 35 60 Q 50 75 65 60" fill="none" stroke="#1f2937" stroke-width="3" stroke-linecap="round"/>
+                            <path d="M 40 63 Q 50 70 60 63" fill="#fff" stroke="none"/>
+                            <!-- Hair -->
+                            <path d="M 22 40 Q 15 15 50 10 Q 85 15 78 40 Q 85 25 50 20 Q 15 25 22 40" fill="#4a4e69" />
+                            <!-- Suit -->
+                            <path d="M 20 100 Q 20 70 50 70 Q 80 70 80 100" fill="#2b2d42" />
+                            <!-- Shirt -->
+                            <path d="M 40 70 L 60 70 L 50 85 Z" fill="#edf2f4" />
+                            <!-- Tie -->
+                            <path d="M 47 75 L 53 75 L 50 95 Z" fill="#d90429" />
+                        </svg>
+                    </div>
+                    <p class="text-xl text-gray-700 font-medium">
+                        הסשן יועבר על ידי לא אחר מאשר <br class="hidden md:block">
+                        <strong class="text-indigo-800 text-3xl drop-shadow-sm inline-block mt-1">ד״ר שי צבאן</strong>! 👑
+                    </p>
+                </div>
             </div>
 
             <!-- Schedule Cards -->
