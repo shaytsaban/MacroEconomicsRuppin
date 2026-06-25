@@ -1,0 +1,1455 @@
+
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>שיווי משקל משולב — שוק הכסף + שוק המוצרים</title>
+<style>
+/* ─── RESET & BASE ─── */
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:"Segoe UI",Arial,sans-serif;
+  background:#f5f6fa;
+  color:#1a1a2e;
+  direction:rtl;
+  font-size:15px;
+  line-height:1.6;
+}
+.page{max-width:1020px;margin:0 auto;padding:1.5rem 1rem}
+
+/* ─── PAGE HEADER ─── */
+.page-header{
+  background:linear-gradient(135deg,#1a1a6e,#2d3498);
+  color:#fff;
+  border-radius:14px;
+  padding:2rem 2.5rem;
+  margin-bottom:1.8rem;
+  text-align:center;
+}
+.page-header h1{font-size:1.65rem;margin-bottom:.45rem}
+.page-header p{font-size:.88rem;opacity:.85;line-height:1.7}
+.credit{margin-top:.8rem;font-size:.78rem;opacity:.65;border-top:1px solid rgba(255,255,255,.25);padding-top:.6rem}
+
+/* ─── TABS ─── */
+.tabs{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.6rem;border-bottom:2px solid #d1d5db;padding-bottom:.8rem}
+.tab-btn{
+  background:#fff;border:1.5px solid #d1d5db;color:#4b5563;
+  padding:.45rem 1.1rem;border-radius:8px;cursor:pointer;
+  font-size:.86rem;font-family:inherit;transition:all .15s;font-weight:500;
+}
+.tab-btn.active{background:#1a1a6e;border-color:#1a1a6e;color:#fff;font-weight:700}
+.tab-btn:hover:not(.active){border-color:#1a1a6e;color:#1a1a6e}
+.tab-pane{display:none}.tab-pane.active{display:block}
+
+/* ─── SECTION BANNER ─── */
+.sec-banner{
+  display:flex;align-items:center;gap:1rem;
+  background:#fff;border:1.5px solid #e5e7eb;
+  border-right:4px solid #1a1a6e;
+  border-radius:10px;padding:1rem 1.3rem;margin-bottom:1.3rem;
+}
+.sec-icon{font-size:1.9rem}
+.sec-banner h2{font-size:1.05rem;color:#1a1a6e;margin-bottom:.1rem;font-weight:700}
+.sec-desc{font-size:.8rem;color:#6b7280}
+
+/* ─── FORMULA CARD ─── */
+.fcard{background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;padding:1.2rem 1.4rem;margin-bottom:1.3rem}
+.fcard-title{font-size:.93rem;color:#1a1a6e;font-weight:700;margin-bottom:.9rem;display:flex;align-items:center;gap:.45rem}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.65rem}
+.fcell{background:#f0f2ff;border:1px solid #c7d0fa;border-radius:7px;padding:.65rem .9rem}
+.flabel{font-size:.71rem;color:#1a1a6e;font-weight:700;margin-bottom:.3rem;text-transform:uppercase;letter-spacing:.03em}
+
+/* ─── MATH ─── */
+.math{
+  font-family:"Courier New",monospace;
+  background:#f8f9ff;border:1px solid #c7d0fa;
+  border-radius:5px;padding:.35rem .8rem;
+  direction:ltr;text-align:center;
+  color:#1a1a6e;font-size:.9rem;margin:.3rem 0;
+}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .2rem}
+.frac .n{border-bottom:1.5px solid #1a1a6e;padding-bottom:.08rem;text-align:center;font-size:.88em}
+.frac .d{padding-top:.08rem;text-align:center;font-size:.88em}
+
+/* ─── KATZ TABLE (the canonical table) ─── */
+.katz-table{width:100%;border-collapse:collapse;font-size:.84rem;margin:.8rem 0}
+.katz-table th{
+  background:#1a1a6e;color:#fff;
+  padding:.6rem .9rem;border:1px solid #2d3498;
+  text-align:center;font-weight:700;
+}
+.katz-table td{
+  padding:.55rem .9rem;border:1px solid #e5e7eb;
+  vertical-align:top;line-height:1.55;
+}
+.katz-table tr:nth-child(even) td{background:#f8f9ff}
+.katz-table .row-label{
+  background:#f0f2ff;font-weight:700;
+  color:#1a1a6e;border-right:3px solid #1a1a6e;
+  white-space:nowrap;
+}
+.up{color:#15803d;font-weight:700}
+.dn{color:#b91c1c;font-weight:700}
+.q{color:#92400e;font-weight:700}   /* ? = לא ניתן לדעת */
+
+/* ─── CHAIN (process flow inline) ─── */
+.chain{
+  display:flex;align-items:center;flex-wrap:wrap;gap:.25rem;
+  margin:.6rem 0;direction:ltr;
+}
+.ch{
+  border-radius:5px;padding:.28rem .65rem;
+  font-size:.83rem;white-space:nowrap;
+  border:1.5px solid;
+}
+.ch.trigger{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8}
+.ch.mid{background:#f9fafb;border-color:#9ca3af;color:#374151}
+.ch.result-pos{background:#f0fdf4;border-color:#16a34a;color:#15803d;font-weight:700}
+.ch.result-neg{background:#fef2f2;border-color:#dc2626;color:#b91c1c;font-weight:700}
+.ch.warn{background:#fffbeb;border-color:#d97706;color:#92400e;font-weight:700}
+.ch-arr{color:#6b7280;font-size:.95rem;flex-shrink:0}
+
+/* ─── FLOW (vertical step diagram) ─── */
+.flow{display:flex;flex-direction:column;align-items:center;gap:.1rem;margin:.9rem 0}
+.fbox{
+  border-radius:7px;padding:.55rem 1.3rem;
+  text-align:center;width:100%;max-width:600px;
+  font-size:.85rem;line-height:1.55;border:1.5px solid;
+}
+.fbox.start{background:#eff6ff;border-color:#3b82f6;color:#1d4ed8}
+.fbox.mid{background:#f9fafb;border-color:#9ca3af;color:#374151}
+.fbox.pos{background:#f0fdf4;border-color:#16a34a;color:#15803d;font-weight:700}
+.fbox.neg{background:#fef2f2;border-color:#dc2626;color:#b91c1c;font-weight:700}
+.fbox.warn{background:#fffbeb;border-color:#d97706;color:#92400e}
+.farrow{color:#4b5563;font-size:1.1rem;line-height:1.1}
+
+/* ─── STEP REVEAL ─── */
+.steps{display:flex;flex-direction:column;gap:.4rem;margin:.8rem 0}
+.step-item{border:1.5px solid #e5e7eb;border-radius:8px;overflow:hidden;background:#fff}
+.step-trigger{
+  width:100%;background:#f9fafb;border:none;
+  color:#1a1a2e;padding:.65rem 1rem;
+  display:flex;align-items:center;gap:.7rem;
+  cursor:pointer;text-align:right;font-family:inherit;
+  font-size:.87rem;transition:background .12s;
+}
+.step-trigger:hover,.step-item.open .step-trigger{background:#eff6ff}
+.step-num{
+  background:#1a1a6e;color:#fff;
+  border-radius:50%;width:1.6rem;height:1.6rem;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.75rem;font-weight:700;flex-shrink:0;
+}
+.step-label{flex:1;font-weight:600;color:#1a1a6e}
+.step-chev{margin-right:auto;font-size:.75rem;transition:transform .2s;color:#6b7280}
+.step-item.open .step-chev{transform:rotate(180deg)}
+.step-body{
+  display:none;background:#fff;
+  padding:.9rem 1.2rem;border-top:1.5px solid #e5e7eb;
+  font-size:.85rem;line-height:1.7;
+}
+.step-item.open .step-body{display:block}
+
+/* ─── FLIP CARD ─── */
+.flip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(195px,1fr));gap:.8rem;margin:.9rem 0}
+.flip-card{perspective:900px;cursor:pointer}
+.flip-inner{
+  position:relative;width:100%;height:130px;
+  transform-style:preserve-3d;transition:transform .5s;
+  border-radius:9px;
+}
+.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+.flip-front,.flip-back{
+  position:absolute;inset:0;backface-visibility:hidden;
+  border-radius:9px;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:.8rem;text-align:center;
+}
+.flip-front{background:#f0f2ff;border:1.5px solid #c7d0fa}
+.flip-back{background:#f0fdf4;border:1.5px solid #86efac;transform:rotateY(180deg)}
+.flip-front .icon{font-size:1.7rem;margin-bottom:.3rem}
+.flip-front .label{font-size:.81rem;color:#1a1a6e;font-weight:700;line-height:1.4}
+.flip-back .result{font-size:.8rem;color:#15803d;line-height:1.5;font-weight:600}
+.flip-hint{font-size:.66rem;color:#9ca3af;margin-top:.25rem}
+
+/* ─── QUESTION CARD ─── */
+.qcard{background:#fff;border:1.5px solid #e5e7eb;border-radius:10px;margin-bottom:1.5rem;overflow:hidden}
+.qcard-head{
+  background:linear-gradient(90deg,#1a1a6e,#2d3498);
+  padding:.8rem 1.3rem;display:flex;align-items:center;gap:1rem;
+}
+.qnum{
+  background:#fff;color:#1a1a6e;
+  border-radius:50%;width:2rem;height:2rem;
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:.88rem;flex-shrink:0;
+}
+.qmeta{flex:1}
+.qsource{font-size:.73rem;color:rgba(255,255,255,.7);margin-bottom:.1rem}
+.qtopic{font-size:.92rem;color:#fff;font-weight:700}
+.qbody{padding:1.2rem 1.4rem}
+
+/* ─── NOTICE / HIGHLIGHT ─── */
+.notice{
+  background:#fffbeb;border:1.5px solid #d97706;
+  border-radius:7px;padding:.75rem 1rem;margin:.7rem 0;
+}
+.notice-title{font-size:.8rem;color:#92400e;font-weight:700;margin-bottom:.3rem}
+.notice ul{padding-right:1.2rem;font-size:.83rem;line-height:1.85;color:#78350f}
+
+.insight{
+  background:#eff6ff;border-right:4px solid #3b82f6;
+  border-radius:5px;padding:.65rem .95rem;
+  font-size:.83rem;color:#1d4ed8;margin:.5rem 0;line-height:1.6;
+}
+
+/* ─── ANSWER BOX ─── */
+.ans{
+  background:#f0fdf4;border:1.5px solid #16a34a;
+  border-radius:7px;padding:.75rem 1.1rem;
+  color:#15803d;font-weight:700;margin-top:.8rem;font-size:.9rem;
+}
+
+/* ─── EXACT QUESTION TEXT ─── */
+.q-text{
+  background:#f8f9ff;border:1.5px solid #c7d0fa;
+  border-radius:7px;padding:.8rem 1rem;margin:.7rem 0;
+  font-size:.86rem;line-height:1.75;color:#1a1a2e;
+}
+.q-text-label{font-size:.71rem;color:#1a1a6e;font-weight:700;margin-bottom:.35rem;text-transform:uppercase;letter-spacing:.03em}
+.opts{list-style-type:upper-alpha;padding-right:1.4rem;font-size:.85rem;line-height:2.1}
+.opts li.correct{color:#15803d;font-weight:700}
+
+/* ─── SEPARATOR ─── */
+.katz-ref{
+  display:inline-block;background:#1a1a6e;color:#fff;
+  font-size:.72rem;padding:.1rem .5rem;border-radius:4px;
+  margin-right:.4rem;vertical-align:middle;
+}
+
+/* ─── COMPARISON BANNER ─── */
+.comp-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:.8rem 0}
+.comp-col{border-radius:8px;padding:1rem 1.1rem;font-size:.84rem;line-height:1.7}
+.comp-col.neg-side{background:#fef2f2;border:1.5px solid #fca5a5}
+.comp-col.pos-side{background:#f0fdf4;border:1.5px solid #86efac}
+.comp-col h4{font-size:.88rem;font-weight:700;margin-bottom:.5rem}
+.comp-col.neg-side h4{color:#b91c1c}
+.comp-col.pos-side h4{color:#15803d}
+
+/* ─── SCROLL TARGET ─── */
+:target{scroll-margin-top:1rem}
+</style>
+<script>
+function showTab(id){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('pane-'+id).classList.add('active');
+  document.getElementById('btn-'+id).classList.add('active');
+}
+function tog(el){el.closest('.step-item').classList.toggle('open')}
+function flip(el){el.classList.toggle('flipped')}
+</script>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════ PAGE HEADER ══════════ -->
+<div class="page-header">
+  <h1>⚖️ שיווי משקל משולב — שוק הכסף + שוק המוצרים</h1>
+  <p>תרשימי זרימה הדרגתיים · כרטסות מסתובבות · שאלות ממבחנים בלבד<br>
+     מבוסס על מערכי השיעור של שלומי כץ — הגדרות וטבלאות לפי הקורס בלבד</p>
+  <div class="credit">📚 שלומי כץ — coursebook שיעורים 9 ו-10 | עמ' 181-212</div>
+</div>
+
+<!-- ══════════ TABS ══════════ -->
+<div class="tabs">
+  <button class="tab-btn active" id="btn-mon" onclick="showTab('mon')">🏦 מדיניות מוניטרית</button>
+  <button class="tab-btn" id="btn-comb" onclick="showTab('comb')">🔗 מודל משולב — עקרונות</button>
+  <button class="tab-btn" id="btn-abt" onclick="showTab('abt')">📉 מקרי אבטלה</button>
+  <button class="tab-btn" id="btn-full" onclick="showTab('full')">📈 מקרי תעסוקה מלאה</button>
+  <button class="tab-btn" id="btn-exam" onclick="showTab('exam')">📋 שאלות מבחן</button>
+</div>
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  TAB 1 — מדיניות מוניטרית          ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div id="pane-mon" class="tab-pane active">
+
+<div class="sec-banner">
+  <div class="sec-icon">🏦</div>
+  <div>
+    <h2>מדיניות מוניטרית — טבלת שלומי כץ (עמ' 181)</h2>
+    <div class="sec-desc">הגדרות, כלים, כיוון שינוי ריבית, השפעה על ביקוש ותוצר</div>
+  </div>
+</div>
+
+<!-- הטבלה המרכזית של שלומי כץ עמ' 181 -->
+<div class="fcard">
+  <div class="fcard-title">📊 <span class="katz-ref">כץ עמ' 181</span> טבלת מדיניות מוניטרית — מצמצמת לעומת מרחיבה</div>
+  <table class="katz-table">
+    <tr>
+      <th style="width:28%">שורה בטבלה של שלומי</th>
+      <th>מדיניות מוניטרית מצמצמת</th>
+      <th>מדיניות מוניטרית מרחיבה</th>
+    </tr>
+    <tr>
+      <td class="row-label">מה זה?</td>
+      <td>מקטינה היצע כסף — <span class="dn">MS↓</span></td>
+      <td>מגדילה היצע כסף — <span class="up">MS↑</span></td>
+    </tr>
+    <tr>
+      <td class="row-label">מי מבצע ואיך?</td>
+      <td>
+        הבנק המרכזי בלבד:<br>
+        (1) העלאת יחס הרזרבה <span class="dn">R↑</span><br>
+        (2) עירוי חיצוני שלילי — מכירת אג"ח לציבור
+      </td>
+      <td>
+        הבנק המרכזי בלבד:<br>
+        (1) הקטנת יחס הרזרבה <span class="up">R↓</span><br>
+        (2) עירוי חיצוני חיובי — קניית אג"ח מהציבור
+      </td>
+    </tr>
+    <tr>
+      <td class="row-label">כיוון הריבית</td>
+      <td class="dn">ריבית עולה r↑</td>
+      <td class="up">ריבית יורדת r↓</td>
+    </tr>
+    <tr>
+      <td class="row-label">השפעה על C ו-I</td>
+      <td class="dn">C↓ · I↓</td>
+      <td class="up">C↑ · I↑</td>
+    </tr>
+    <tr>
+      <td class="row-label">השפעה על ביקוש מצרפי</td>
+      <td class="dn">AD↓</td>
+      <td class="up">AD↑</td>
+    </tr>
+    <tr>
+      <td class="row-label">השפעה על תוצר</td>
+      <td class="dn">Y↓</td>
+      <td class="up">Y↑</td>
+    </tr>
+    <tr>
+      <td class="row-label">מתי מתאים?</td>
+      <td>פגר אינפלציוני<br><small>(Y* &gt; Yf — ביקושים גבוהים מדי, צריך לקרר)</small></td>
+      <td>פגר דפלציוני / אבטלה<br><small>(Y* &lt; Yf — צריך לעודד ביקושים)</small></td>
+    </tr>
+  </table>
+</div>
+
+<!-- אזהרה חשובה — בלבול שמות -->
+<div class="insight">
+  ⚠️ <strong>אל תבלבלו!</strong>
+  מדיניות מוניטרית <strong>מרחיבה</strong> = מורידה ריבית ו<em>מרחיבה</em> את הפעילות הכלכלית.
+  מדיניות מוניטרית <strong>מצמצמת</strong> = מעלה ריבית ו<em>מצמצמת</em> את הפעילות הכלכלית.
+</div>
+
+<!-- ── מה שייך לבנק מרכזי ומה לא (טבלת כץ עמ' 191) ── -->
+<div class="fcard">
+  <div class="fcard-title">📊 <span class="katz-ref">כץ עמ' 191</span> מה בסמכות הבנק המרכזי?</div>
+  <table class="katz-table">
+    <tr>
+      <th>פעולה</th>
+      <th>מדיניות מוניטרית מצמצמת</th>
+      <th>מדיניות מוניטרית מרחיבה</th>
+    </tr>
+    <tr>
+      <td class="row-label">שינוי יחס הרזרבה</td>
+      <td class="dn">העלאת יחס הרזרבה R↑</td>
+      <td class="up">הקטנת יחס הרזרבה R↓</td>
+    </tr>
+    <tr>
+      <td class="row-label">עירוי חיצוני</td>
+      <td class="dn">שלילי — מכירת אג"ח לציבור</td>
+      <td class="up">חיובי — קניית אג"ח מהציבור</td>
+    </tr>
+    <tr>
+      <td class="row-label">עירוי פנימי</td>
+      <td colspan="2" style="text-align:center;color:#78350f;background:#fffbeb">
+        ❌ <strong>לא בסמכות הבנק המרכזי!</strong><br>
+        זו החלטה של הציבור (להפקיד / למשוך מהבנק) — לא של בנק ישראל
+      </td>
+    </tr>
+    <tr>
+      <td class="row-label">הוצאות ממשלה G</td>
+      <td colspan="2" style="text-align:center;color:#78350f;background:#fffbeb">
+        ❌ <strong>מדיניות פיסקלית — לא מוניטרית!</strong><br>
+        G ו-T נקבעים על ידי הממשלה, לא הבנק המרכזי
+      </td>
+    </tr>
+  </table>
+</div>
+
+<!-- שרשרת מדיניות מוניטרית מצמצמת -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 181</span> שרשרת ההשפעה — מדיניות מוניטרית מצמצמת</div>
+  <div class="chain">
+    <div class="ch trigger">R↑ / עירוי חיצוני שלילי</div>
+    <div class="ch-arr">←</div>
+    <div class="ch mid">MS↓</div>
+    <div class="ch-arr">←</div>
+    <div class="ch warn">r↑</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-neg">C↓ · I↓</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-neg">AD↓</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-neg">Y↓</div>
+  </div>
+  <div class="chain">
+    <div class="ch trigger">R↓ / עירוי חיצוני חיובי</div>
+    <div class="ch-arr">←</div>
+    <div class="ch mid">MS↑</div>
+    <div class="ch-arr">←</div>
+    <div class="ch warn">r↓</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-pos">C↑ · I↑</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-pos">AD↑</div>
+    <div class="ch-arr">←</div>
+    <div class="ch result-pos">Y↑</div>
+  </div>
+</div>
+
+<!-- כרטסות מסתובבות — סוגי פעולות -->
+<div class="fcard">
+  <div class="fcard-title">🔄 כרטסות — לחץ לגלות את ההשפעה</div>
+  <div class="flip-grid">
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">⬆️</div>
+          <div class="label">העלאת<br>יחס הרזרבה R↑</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">מדיניות מצמצמת<br>MS↓ → r↑ → C↓, I↓<br>AD↓ → Y↓</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">⬇️</div>
+          <div class="label">הקטנת<br>יחס הרזרבה R↓</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">מדיניות מרחיבה<br>MS↑ → r↓ → C↑, I↑<br>AD↑ → Y↑</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">🏛️</div>
+          <div class="label">עירוי חיצוני חיובי<br>(קניית אג"ח)</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">מדיניות מרחיבה<br>MB↑ → MS↑ → r↓<br>C↑, I↑ → AD↑ → Y↑</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">📤</div>
+          <div class="label">עירוי חיצוני שלילי<br>(מכירת אג"ח)</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result" style="color:#b91c1c">מדיניות מצמצמת<br>MB↓ → MS↓ → r↑<br>C↓, I↓ → AD↓ → Y↓</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">📥</div>
+          <div class="label">עירוי פנימי חיובי<br>(ציבור מפקיד)</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">החלטה של הציבור<br>MB ← ללא שינוי<br>MS↑ = עירוי × (KM−1)</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">💸</div>
+          <div class="label">עירוי פנימי שלילי<br>(ציבור מושך)</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result" style="color:#b91c1c">החלטה של הציבור<br>MB ← ללא שינוי<br>MS↓ = עירוי × (KM−1)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /pane-mon -->
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  TAB 2 — מודל משולב: עקרונות       ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div id="pane-comb" class="tab-pane">
+
+<div class="sec-banner">
+  <div class="sec-icon">🔗</div>
+  <div>
+    <h2>המודל המשולב — עקרונות ותנאים (כץ עמ' 196–212)</h2>
+    <div class="sec-desc">כשגם שוק הכסף וגם שוק המוצרים פעילים בו-זמנית</div>
+  </div>
+</div>
+
+<!-- עקרונות בסיסיים -->
+<div class="fcard">
+  <div class="fcard-title">📋 <span class="katz-ref">כץ עמ' 196</span> עקרונות בסיסיים במודל המשולב</div>
+  <div class="steps">
+    <div class="step-item open">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">כשהתוצר עולה — ביקוש לכסף עולה</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="chain">
+          <div class="ch trigger">Y↑</div>
+          <div class="ch-arr">←</div>
+          <div class="ch warn">L (ביקוש לכסף) ↑</div>
+          <div class="ch-arr">←</div>
+          <div class="ch result-neg">r↑</div>
+          <div class="ch-arr">←</div>
+          <div class="ch result-neg">C↓ · I↓</div>
+        </div>
+        <div class="insight">הקיזוז הוא <strong>חלקי בלבד</strong> — ההשפעה הראשונית (Y↑) תמיד חזקה יותר מהאפקט המקזז.</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">2</div>
+        <div class="step-label">כשהתוצר יורד — ביקוש לכסף יורד</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="chain">
+          <div class="ch trigger">Y↓</div>
+          <div class="ch-arr">←</div>
+          <div class="ch warn">L (ביקוש לכסף) ↓</div>
+          <div class="ch-arr">←</div>
+          <div class="ch result-pos">r↓</div>
+          <div class="ch-arr">←</div>
+          <div class="ch result-pos">C↑ · I↑ (קיזוז חלקי)</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">3</div>
+        <div class="step-label">עלייה בריבית → ירידה בביקוש (ולהפך)</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <p>r↑ → C↓, I↓ → AD↓</p>
+        <p>r↓ → C↑, I↑ → AD↑</p>
+        <div class="insight">הריבית משפיעה על <strong>הצריכה הפרטית C</strong> ועל <strong>ההשקעות I</strong> — לא על G (ממשלה).</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">4</div>
+        <div class="step-label">כלל הזהב — ההשפעה הראשונית תמיד חזקה יותר</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <p>כשמתרחשים שני כוחות מנוגדים בו-זמנית, ההשפעה הראשונית (הישירה) תמיד חזקה מהאפקט המקזז (הנגרר).</p>
+        <div class="insight">
+          דוגמה: I↑ ראשוני → Y↑ → r↑ → I↓ (קיזוז)<br>
+          בסך הכל: I עדיין גדל (כי ההשפעה הראשונית חזקה יותר)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- טבלת כל המקרים — הטבלה המרכזית של שלומי כץ -->
+<div class="fcard">
+  <div class="fcard-title">📊 <span class="katz-ref">כץ עמ' 198–212</span> טבלת שיווי משקל משולב — כל המקרים</div>
+  <div class="insight" style="margin-bottom:.8rem">
+    ⚠️ <strong>סימן ? = לא ניתן לדעת</strong> — שני כוחות מנוגדים ללא מידע על עוצמה יחסית. זה שונה מ"ללא שינוי"!
+  </div>
+  <div style="overflow-x:auto">
+  <table class="katz-table">
+    <tr>
+      <th>מצב / פעולה</th>
+      <th>Y תוצר</th>
+      <th>r ריבית</th>
+      <th>C פרטית</th>
+      <th>I השקעות</th>
+      <th>G ממשלה</th>
+    </tr>
+    <!-- אבטלה — G↑ מימון אג"ח -->
+    <tr>
+      <td class="row-label">אבטלה: G↑ (מימון אג"ח) + שוק כסף פעיל</td>
+      <td class="up">↑ (פחות מ-K×ΔG)</td>
+      <td class="dn">↑</td>
+      <td class="dn">↓</td>
+      <td class="dn">↓</td>
+      <td class="up">↑</td>
+    </tr>
+    <!-- אבטלה — T↓ מימון אג"ח -->
+    <tr>
+      <td class="row-label">אבטלה: T↓ (מימון אג"ח) + שוק כסף פעיל</td>
+      <td class="up">↑ (פחות מ-KT×ΔT)</td>
+      <td class="dn">↑</td>
+      <td class="up">↑ (פחות מ-MPC×ΔT)</td>
+      <td class="dn">↓</td>
+      <td style="text-align:center">—</td>
+    </tr>
+    <!-- אבטלה — תקציב מאוזן -->
+    <tr>
+      <td class="row-label">אבטלה: תקציב מאוזן (ΔG=ΔT) + שוק כסף פעיל</td>
+      <td class="up">↑ (פחות מ-ΔG)</td>
+      <td class="dn">↑</td>
+      <td class="dn">↓</td>
+      <td class="dn">↓</td>
+      <td class="up">↑</td>
+    </tr>
+    <!-- אבטלה — עלייה אוטונומית I -->
+    <tr>
+      <td class="row-label">אבטלה: I אוטונומי↑ + שוק כסף פעיל</td>
+      <td class="up">↑</td>
+      <td class="dn">↑</td>
+      <td class="up">↑ (קיזוז חלקי בלבד)</td>
+      <td class="up">↑ (בסך הכל — ראשוני חזק יותר)</td>
+      <td style="text-align:center">—</td>
+    </tr>
+    <!-- אבטלה — ירידה אוטונומית C -->
+    <tr>
+      <td class="row-label">אבטלה: C₀↓ (ירידה אוטונומית) + שוק כסף</td>
+      <td class="dn">↓</td>
+      <td class="up">↓</td>
+      <td class="dn">↓ (בסך הכל — ראשוני חזק)</td>
+      <td class="up">↑ (קיזוז חלקי)</td>
+      <td style="text-align:center">—</td>
+    </tr>
+    <!-- אבטלה — מוניטרית מרחיבה -->
+    <tr>
+      <td class="row-label">אבטלה: מוניטרית מרחיבה (R↓ / עירוי חיצוני +) + שוק כסף</td>
+      <td class="up">↑</td>
+      <td class="up">↓ (פחות ממה שהיה)</td>
+      <td class="up">↑</td>
+      <td class="up">↑</td>
+      <td style="text-align:center">—</td>
+    </tr>
+    <!-- תעסוקה מלאה — G↑ -->
+    <tr>
+      <td class="row-label">תעסוקה מלאה: G↑ + שוק כסף פעיל</td>
+      <td style="text-align:center;color:#78350f">ללא שינוי (=Yf)</td>
+      <td class="dn">↑</td>
+      <td class="dn">↓</td>
+      <td class="dn">↓</td>
+      <td class="up">↑</td>
+    </tr>
+    <!-- תעסוקה מלאה — הדפסת כסף -->
+    <tr>
+      <td class="row-label">תעסוקה מלאה: הדפסת כסף (G↑ מימון הדפסה)</td>
+      <td style="text-align:center;color:#78350f">ללא שינוי (=Yf)</td>
+      <td class="dn">↑</td>
+      <td class="dn">↓</td>
+      <td class="dn">↓</td>
+      <td class="up">↑</td>
+    </tr>
+    <!-- שני שינויים מנוגדים — L↑ ו-MS↑ -->
+    <tr>
+      <td class="row-label">L (ביקוש לכסף) ↑ ובו-זמנית MS↑ (מוניטרית מרחיבה)</td>
+      <td class="q">?</td>
+      <td class="q">? (לא ניתן לדעת)</td>
+      <td class="q">?</td>
+      <td class="q">?</td>
+      <td style="text-align:center">—</td>
+    </tr>
+  </table>
+  </div>
+</div>
+
+</div><!-- /pane-comb -->
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  TAB 3 — מקרי אבטלה                ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div id="pane-abt" class="tab-pane">
+
+<div class="sec-banner">
+  <div class="sec-icon">📉</div>
+  <div>
+    <h2>מקרי אבטלה — פגר דפלציוני + שוק כסף</h2>
+    <div class="sec-desc">שאלות ממבחנים עם תרשימי זרימה הדרגתיים (כץ שיעור 10)</div>
+  </div>
+</div>
+
+<!-- מקרה 1: G↑ + שוק כסף -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 198–201</span> מקרה 1: G↑ באבטלה עם שוק כסף פעיל</div>
+  <div class="insight">
+    <strong>ללא שוק כסף:</strong> ΔG = ΔAD לסגירת פגר. <strong>עם שוק כסף:</strong> צריך ΔG &gt; ΔAD — כי הריבית מקזזת!
+  </div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">השפעה ראשונית — שוק המוצרים</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">G↑ (הממשלה מגדילה הוצאות)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox mid">AD↑ — הביקוש המצרפי עולה</div>
+          <div class="farrow">↓</div>
+          <div class="fbox pos">Y↑ — התוצר עולה (אנחנו באבטלה, אפשר!)</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">2</div>
+        <div class="step-label">השפעה נגררת — שוק הכסף</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">Y↑ → הציבור רוצה לבזבז יותר</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">L (ביקוש לכסף)↑ — עקומת הביקוש לכסף נעה ימינה</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">r↑ — הריבית עולה (MS קבוע, L עלה → מחיר הכסף עלה)</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">3</div>
+        <div class="step-label">השפעה מקזזת — חזרה לשוק המוצרים</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">r↑ — הריבית עלתה</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">C↓, I↓ — צריכה והשקעות יורדות</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">AD↓ מעט — קיזוז חלקי בלבד</div>
+        </div>
+        <div class="insight">ההשפעה המקזזת <strong>חלקית בלבד</strong> — G עדיין גדל, ולכן Y↑ בסך הכל</div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">4</div>
+        <div class="step-label">תוצאה סופית</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <table class="katz-table">
+          <tr><th>משתנה</th><th>כיוון</th><th>הסבר</th></tr>
+          <tr><td>Y</td><td class="up">↑ (פחות מ-K×ΔG)</td><td>G עלה, אבל הריבית קיזזה חלק</td></tr>
+          <tr><td>r</td><td class="dn">↑</td><td>L עלה כי Y עלה</td></tr>
+          <tr><td>C פרטית</td><td class="dn">↓</td><td>r↑ פגע בצריכה הפרטית</td></tr>
+          <tr><td>I</td><td class="dn">↓</td><td>r↑ פגע בהשקעות</td></tr>
+          <tr><td>G</td><td class="up">↑</td><td>זה הכלי שהפעלנו</td></tr>
+        </table>
+        <div class="notice" style="margin-top:.7rem">
+          <div class="notice-title">⚠️ כדי לסגור פגר — צריך ΔG גדול יותר מעולם ללא שוק כסף!</div>
+          <ul>
+            <li>ללא שוק כסף: ΔG = ΔAD (= גובה הפגר הדפלציוני)</li>
+            <li>עם שוק כסף: ΔG &gt; ΔAD — כי הריבית תעלה ותקזז חלק מהביקוש</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- מקרה 2: T↓ + שוק כסף -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 198</span> מקרה 2: T↓ (הפחתת מסים) באבטלה + שוק כסף</div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">שרשרת ההשפעה הכוללת</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">T↓ → הכנסה פנויה Yd↑</div>
+          <div class="farrow">↓</div>
+          <div class="fbox mid">C↑ (ראשוני) → AD↑ → Y↑</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">L↑ → r↑ (שוק הכסף מגיב)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">C↓, I↓ (קיזוז חלקי)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox pos">בסך הכל: Y↑, r↑, C↑ (אבל פחות מ-MPC×ΔT), I↓</div>
+        </div>
+        <div class="insight">
+          ללא שוק כסף לסגירת פגר: ΔT = ΔAD / MPC<br>
+          עם שוק כסף לסגירת פגר: ΔT &gt; ΔAD / MPC — צריך להפחית מסים יותר!
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- מקרה 3: I₀↑ אוטונומי -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 203–204</span> מקרה 3: השקעות אוטונומיות עולות (I₀↑)</div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">שרשרת ושאלת המפתח: האם I בסך הכל עלתה?</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">I₀↑ (ראשוני — פירמות מחליטות להשקיע יותר)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox pos">AD↑ → Y↑</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">L↑ → r↑</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">I↓ (בגלל r↑ — מקזז)</div>
+        </div>
+        <div class="insight">
+          שני כוחות על I: (1) I₀↑ ראשוני — חיובי. (2) r↑ → I↓ — מקזז.<br>
+          <strong>ההשפעה הראשונית חזקה יותר → I בסך הכל עולה!</strong> (תשובה א בשאלה 3 בכץ)
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- מקרה 4: C₀↓ -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 205–206</span> מקרה 4: ירידה אוטונומית בצריכה (C₀↓)</div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">שרשרת — ירידה בצריכה אוטונומית</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">C₀↓ (ירידה אוטונומית — ציבור מחליט לצרוך פחות)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">AD↓ → Y↓</div>
+          <div class="farrow">↓</div>
+          <div class="fbox pos">L↓ → r↓ (שוק הכסף מגיב — ביקוש לכסף ירד)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox pos">C↑ מעט, I↑ מעט (קיזוז חלקי בגלל r↓)</div>
+        </div>
+        <table class="katz-table" style="margin-top:.7rem">
+          <tr><th>משתנה</th><th>כיוון סופי</th><th>הסבר</th></tr>
+          <tr><td>Y</td><td class="dn">↓</td><td>ראשוני חזק יותר מהקיזוז</td></tr>
+          <tr><td>r</td><td class="up">↓</td><td>L ירד כי Y ירד</td></tr>
+          <tr><td>C פרטית</td><td class="dn">↓ (בסך הכל)</td><td>הראשוני (C₀↓) חזק יותר מהקיזוז (r↓→C↑)</td></tr>
+          <tr><td>I</td><td class="up">↑ (קיזוז חלקי)</td><td>r↓ העלה השקעות מעט</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /pane-abt -->
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  TAB 4 — מקרי תעסוקה מלאה          ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div id="pane-full" class="tab-pane">
+
+<div class="sec-banner">
+  <div class="sec-icon">📈</div>
+  <div>
+    <h2>מקרי תעסוקה מלאה — Y = Yf</h2>
+    <div class="sec-desc">כשהמשק כבר במקסימום — ביקוש עודף גורם לאינפלציה, לא לצמיחה (כץ עמ' 207–212)</div>
+  </div>
+</div>
+
+<!-- עיקרון המנגנון -->
+<div class="fcard">
+  <div class="fcard-title">📋 <span class="katz-ref">כץ עמ' 207–211</span> מנגנון שיווי משקל בתעסוקה מלאה</div>
+  <div class="notice">
+    <div class="notice-title">⚠️ הכלל הבסיסי בתעסוקה מלאה</div>
+    <ul>
+      <li>אי אפשר לייצר מעבר ל-Yf — התוצר תקוע על Yf</li>
+      <li>ביקוש עודף → אינפלציה (P↑) — לא צמיחה</li>
+      <li>P↑ → היצע כסף ריאלי (M/P) ↓ → r↑ → C↓, I↓ → מאזן מחדש</li>
+    </ul>
+  </div>
+</div>
+
+<!-- מקרה 1: G↑ בתעסוקה מלאה -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 207–209</span> מקרה 5: G↑ בתעסוקה מלאה</div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">שלב 1 — הממשלה מגדילה הוצאות</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">G↑ → AD &gt; Yf (עודף ביקוש)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">Y לא יכול לגדול! (כבר בתעסוקה מלאה)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">P↑ — עליית מחירים (אינפלציה)</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">2</div>
+        <div class="step-label">שלב 2 — שוק הכסף מגיב לעליית מחירים</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="flow">
+          <div class="fbox start">P↑ → היצע כסף ריאלי M/P ↓</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">r↑ — ריבית עולה</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">C↓, I↓ → AD↓</div>
+          <div class="farrow">↓</div>
+          <div class="fbox mid">AD חוזר ל-Yf — שיווי משקל מחדש</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">3</div>
+        <div class="step-label">תוצאה סופית — טבלה</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <table class="katz-table">
+          <tr><th>משתנה</th><th>כיוון</th><th>הסבר</th></tr>
+          <tr><td>Y</td><td style="color:#78350f;font-weight:700">ללא שינוי (=Yf)</td><td>לא אפשרי לחרוג מ-Yf</td></tr>
+          <tr><td>r</td><td class="dn">↑</td><td>P↑ → M/P↓ → r↑</td></tr>
+          <tr><td>C פרטית</td><td class="dn">↓</td><td>r↑ פגע בצריכה</td></tr>
+          <tr><td>I</td><td class="dn">↓</td><td>r↑ פגע בהשקעות</td></tr>
+          <tr><td>G</td><td class="up">↑</td><td>זה הכלי שהפעלנו — G צרכה יותר על חשבון C,I</td></tr>
+        </table>
+        <div class="insight">G↑ בתעסוקה מלאה = <strong>הזזת משאבים</strong> מהמגזר הפרטי (C,I) למגזר הציבורי (G)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- מקרה 2: הדפסת כסף בתעסוקה מלאה -->
+<div class="fcard">
+  <div class="fcard-title">🔗 <span class="katz-ref">כץ עמ' 209–212</span> מקרה 6: G↑ ממומן בהדפסת כסף — בתעסוקה מלאה</div>
+  <div class="steps">
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">1</div>
+        <div class="step-label">מה המיוחד בהדפסת כסף?</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <div class="insight">
+          הדפסת כסף = הגדלת MS נומינלית. בתעסוקה מלאה זה <strong>לא עוזר</strong> — כי P↑ מבטל את הגידול ב-M:
+        </div>
+        <div class="flow">
+          <div class="fbox start">הממשלה מדפיסה כסף: MS↑ (נומינלי)</div>
+          <div class="farrow">↓</div>
+          <div class="fbox mid">r↓ ראשוני → AD &gt; Yf</div>
+          <div class="farrow">↓</div>
+          <div class="fbox warn">P↑ → M/P↓ → r↑ חזרה</div>
+          <div class="farrow">↓</div>
+          <div class="fbox neg">הדפסת הכסף בוטלה ריאלית על ידי האינפלציה!</div>
+        </div>
+      </div>
+    </div>
+    <div class="step-item">
+      <button class="step-trigger" onclick="tog(this)">
+        <div class="step-num">2</div>
+        <div class="step-label">תוצאה סופית — טבלה (כץ עמ' 212)</div>
+        <span class="step-chev">▾</span>
+      </button>
+      <div class="step-body">
+        <table class="katz-table">
+          <tr><th>משתנה</th><th>כיוון</th><th>הסבר</th></tr>
+          <tr><td>Y</td><td style="color:#78350f;font-weight:700">ללא שינוי (=Yf)</td><td>לא אפשרי לחרוג</td></tr>
+          <tr><td>r</td><td class="dn">↑</td><td>P↑ → M/P↓ → r↑ (מנגנון זהה)</td></tr>
+          <tr><td>C פרטית</td><td class="dn">↓</td><td>r↑ פגע בצריכה</td></tr>
+          <tr><td>I</td><td class="dn">↓</td><td>r↑ פגע בהשקעות</td></tr>
+          <tr><td>G</td><td class="up">↑</td><td>G גדל</td></tr>
+          <tr><td>P (מחירים)</td><td class="dn">↑</td><td>אינפלציה — הבדל מהמקרה הרגיל!</td></tr>
+        </table>
+        <div class="notice">
+          <div class="notice-title">⚠️ קביעת שלומי — הבנק המרכזי לא יכול למנוע עליית ריבית</div>
+          <ul>
+            <li>אם הבנק המרכזי ינסה לשמור ריבית נמוכה → ייווצר שוב עודף ביקוש → P↑ → חוזרים לאותה בעיה</li>
+            <li>לכן הריבית <strong>חייבת</strong> לעלות בתעסוקה מלאה — הבנק המרכזי אינו יכול לעצור זאת לאורך זמן</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- כרטסות תעסוקה מלאה -->
+<div class="fcard">
+  <div class="fcard-title">🔄 כרטסות — תעסוקה מלאה</div>
+  <div class="flip-grid">
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">🏛️</div>
+          <div class="label">G↑ בתעסוקה מלאה</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">Y=Yf (ללא שינוי)<br>r↑ · C↓ · I↓ · G↑<br>G על חשבון C,I</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">🖨️</div>
+          <div class="label">הדפסת כסף — תעסוקה מלאה</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back">
+          <div class="result">Y=Yf (ללא שינוי)<br>r↑ · C↓ · I↓ · P↑<br>אינפלציה!</div>
+        </div>
+      </div>
+    </div>
+    <div class="flip-card" onclick="flip(this)">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="icon">❓</div>
+          <div class="label">יכול הבנק המרכזי לעצור r↑?</div>
+          <div class="flip-hint">לחץ לגלות</div>
+        </div>
+        <div class="flip-back" style="background:#fef2f2;border-color:#fca5a5">
+          <div class="result" style="color:#b91c1c">לא! אם ינסה — עודף ביקוש חוזר → P↑ שוב → r↑ בכל מקרה</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /pane-full -->
+
+
+<!-- ╔══════════════════════════════════════╗ -->
+<!-- ║  TAB 5 — שאלות מבחן                ║ -->
+<!-- ╚══════════════════════════════════════╝ -->
+<div id="pane-exam" class="tab-pane">
+
+<div class="sec-banner">
+  <div class="sec-icon">📋</div>
+  <div>
+    <h2>שאלות ממבחנים בלבד — עם פתרון מפורט</h2>
+    <div class="sec-desc">שאלות מתשפ"ג, תשפ"ב, תשע"ט · מחברת שלומי כץ</div>
+  </div>
+</div>
+
+<!-- שאלה 1 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">1</div>
+    <div class="qmeta">
+      <div class="qsource">מבחן תשפ"ג — שאלה 15 | כץ עמ' 194</div>
+      <div class="qtopic">פגר אינפלציוני — מה על הבנק המרכזי לעשות?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li>פגר <strong>אינפלציוני</strong> = Y* &gt; Yf → ביקושים גבוהים מדי → צריך <strong>לקרר</strong></li>
+        <li>שואלים על הבנק המרכזי → רק כלים מוניטריים (לא G, לא T, לא עירוי פנימי!)</li>
+        <li>מוניטרית <strong>מצמצמת</strong> = R↑ או עירוי חיצוני שלילי</li>
+      </ul>
+    </div>
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      לאחרונה אנו עדים להיווצרות פגר אינפלציוני. בכדי למנוע עליית מחירים הנובעת מביקושי יתר, על הבנק המרכזי:
+      <ol class="opts">
+        <li class="correct">להעלות את יחס הרזרבה ✓</li>
+        <li>לבצע עירוי חיצוני חיובי</li>
+        <li>לבצע עירוי פנימי שלילי</li>
+        <li>להפחית את המחירים בעצמו</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">זהה את הסיטואציה והכלי הנדרש</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="flow">
+            <div class="fbox start">פגר אינפלציוני: Y* &gt; Yf — ביקושים גבוהים מדי</div>
+            <div class="farrow">↓</div>
+            <div class="fbox warn">צריך: מדיניות מוניטרית <strong>מצמצמת</strong></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">2</div>
+          <div class="step-label">פסול כל תשובה לא נכונה</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <p>❌ ב — עירוי חיצוני חיובי = מרחיב (הפוך!)</p>
+          <p>❌ ג — עירוי פנימי = לא בסמכות הבנק המרכזי (החלטה של הציבור)</p>
+          <p>❌ ד — הבנק המרכזי לא יכול לקבוע מחירים</p>
+          <p>✅ א — העלאת יחס הרזרבה = MS↓ → r↑ → C↓, I↓ → AD↓ → קירור ביקושים</p>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: א — להעלות את יחס הרזרבה</div>
+  </div>
+</div>
+
+<!-- שאלה 2 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">2</div>
+    <div class="qmeta">
+      <div class="qsource">מבחן תשע"ט — שאלה 14 | כץ עמ' 194</div>
+      <div class="qtopic">אבטלה עמוקה — מה על הבנק המרכזי לעשות ואיך?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      במדינת "בחירות" נמצאים באבטלה עמוקה. כדי לחלץ את המשק מהפגר ה______, הבנק המרכזי צריך לנקוט
+      במדיניות _________ _________, כלומר להוריד את ה__________ במשק.
+      <ol class="opts">
+        <li class="correct">דפלציוני · מוניטרית · מרחיבה · ריבית ✓</li>
+        <li>דפלציוני · מוניטרית · מרחיבה · מסים</li>
+        <li>אינפלציוני · פיסקלית · מצמצמת · מסים</li>
+        <li>אינפלציוני · פיסקלית · מצמצמת · מסים</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">שרשרת ההיגיון</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="flow">
+            <div class="fbox start">אבטלה עמוקה = Y* &lt; Yf = פגר <strong>דפלציוני</strong></div>
+            <div class="farrow">↓</div>
+            <div class="fbox mid">בנק מרכזי → מדיניות <strong>מוניטרית מרחיבה</strong></div>
+            <div class="farrow">↓</div>
+            <div class="fbox mid">מרחיבה = MS↑ → <strong>ריבית יורדת</strong></div>
+            <div class="farrow">↓</div>
+            <div class="fbox pos">r↓ → C↑, I↑ → AD↑ → Y↑ → לקראת Yf</div>
+          </div>
+          <p style="margin-top:.5rem">מדיניות מרחיבה <strong>לא</strong> כוללת מסים — מסים = מדיניות פיסקלית, לא מוניטרית! → ב' נפסלת</p>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: א — דפלציוני · מוניטרית · מרחיבה · ריבית</div>
+  </div>
+</div>
+
+<!-- שאלה 3 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">3</div>
+    <div class="qmeta">
+      <div class="qsource">כץ שיעור 10 — שאלה 1 (ממבחן) | עמ' 197–201</div>
+      <div class="qtopic">תקציב מאוזן + שוק כסף — כמה ΔG=ΔT נדרש לסגירת פגר?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="notice">
+      <div class="notice-title">⚠️ עיקרון המפתח</div>
+      <ul>
+        <li>ללא שוק כסף: ΔG=ΔT = ΔAD / (1−MPC)</li>
+        <li>עם שוק כסף: ΔG=ΔT <strong>&gt;</strong> ΔAD / (1−MPC) — צריך יותר!</li>
+        <li>כי Y↑ → L↑ → r↑ → C↓, I↓ → קיזוז חלקי → צריך "להתאמץ יותר"</li>
+      </ul>
+    </div>
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      במשק בו קיים שוק כסף פעיל קיים פגר דפלציוני של 100. MPC = 0.6.
+      הממשלה מעוניינת לסגור את הפגר הדפלציוני בשמירה על תקציב מאוזן. מה עליה לעשות?
+      <ol class="opts">
+        <li>להגדיל את G ו-T ביותר מ-166.66</li>
+        <li>להפחית מסים ב-100 בדיוק</li>
+        <li>להפחית מסים ב-166.66 בדיוק</li>
+        <li class="correct">להגדיל את G ו-T ביותר מ-250 ✓</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">חשב כמה ΔG=ΔT ללא שוק כסף</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">ΔG = ΔT = <span class="frac"><span class="n">ΔAD</span><span class="d">1 − MPC</span></span> = <span class="frac"><span class="n">100</span><span class="d">1 − 0.6</span></span> = <span class="frac"><span class="n">100</span><span class="d">0.4</span></span> = 250</div>
+          <p>ללא שוק כסף: מספיק להגדיל G=T ב-250 בדיוק.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">2</div>
+          <div class="step-label">עם שוק כסף — למה צריך יותר?</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="flow">
+            <div class="fbox start">G↑, T↑ → AD↑ → Y↑</div>
+            <div class="farrow">↓</div>
+            <div class="fbox warn">L↑ → r↑ (שוק כסף מגיב)</div>
+            <div class="farrow">↓</div>
+            <div class="fbox neg">C↓, I↓ → AD↓ מעט (קיזוז)</div>
+          </div>
+          <p>קיזוז חלקי = Y עולה פחות ממה שנדרש → הפגר לא נסגר במלואו.</p>
+          <p>צריך להגדיל G=T <strong>יותר מ-250</strong> כדי לפצות על הקיזוז.</p>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: ד — להגדיל G ו-T ביותר מ-250</div>
+  </div>
+</div>
+
+<!-- שאלה 4 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">4</div>
+    <div class="qmeta">
+      <div class="qsource">כץ שיעור 9 — שאלה 8 (ממבחן) | עמ' 192–193</div>
+      <div class="qtopic">חישוב מספרי: כמה % להוריד ריבית לסגירת פגר?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      משק באבטלה עם פגר תוצר = 240. מכפיל K = 4. ריבית בשיווי משקל = 12%.
+      כל ירידה של 1% בריבית: I עולה ב-10, C עולה ב-5.
+      בכמה הבנק המרכזי צריך להוריד ריבית?
+      <ol class="opts">
+        <li>ב-8%</li>
+        <li class="correct">ב-4% ✓</li>
+        <li>ב-10%</li>
+        <li>ב-2%</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">חשב את הפגר הדפלציוני (ΔAD הנדרש)</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">ΔAD = <span class="frac"><span class="n">פגר תוצר</span><span class="d">K</span></span> = <span class="frac"><span class="n">240</span><span class="d">4</span></span> = 60</div>
+          <p>כלומר: צריך להגדיל ביקוש מצרפי אוטונומי ב-60 כדי שהתוצר יגדל ב-240.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">2</div>
+          <div class="step-label">חשב ΔAD לכל 1% ירידה בריבית</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">r↓ 1% → ΔI = +10, ΔC = +5</div>
+          <div class="math">ΔAD(לכל 1%) = 10 + 5 = 15</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">3</div>
+          <div class="step-label">חשב כמה % נדרש</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">x × 15 = 60 → x = <span class="frac"><span class="n">60</span><span class="d">15</span></span> = 4</div>
+          <p>4 ירידות של 1% = ירידה כוללת של 4% בריבית → ΔAD = 60 → ΔY = 60×4 = 240 ✓</p>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: ב — להוריד ריבית ב-4%</div>
+  </div>
+</div>
+
+<!-- שאלה 5 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">5</div>
+    <div class="qmeta">
+      <div class="qsource">כץ שיעור 10 — שאלה 2 (ממבחן) | עמ' 202–203</div>
+      <div class="qtopic">G↑ + שוק כסף — למה הפגר לא נסגר?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      במשק הנמצא בפגר דפלציוני של 75, הממשלה העלתה G ב-75. אחרי כן נמצא שהמשק לא הגיע לתעסוקה מלאה. מה יכולה להיות הסיבה?
+      <ol class="opts">
+        <li>המימון בוצע בהנפקת אג"ח (ללא שוק כסף)</li>
+        <li class="correct">שוק הכסף פעיל — Y↑ גרם ל-L↑ → r↑ → C↓, I↓ (קיזוז חלקי) ✓</li>
+        <li>המימון הוביל לירידת ריבית ולכן ירידת C</li>
+        <li>שוק הכסף אינו פעיל ולכן חל קיזוז</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">ניתוח: מתי ΔG = ΔAD מספיק?</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <p>ΔG = ΔAD מספיק <strong>ללא שוק כסף</strong>: ΔG = 75 = ΔAD = פגר → אמור לסגור.</p>
+          <p>עם שוק כסף: Y↑ → L↑ → r↑ → C↓, I↓ → מקזז חלקית → Y עולה <strong>פחות</strong> מ-75×K → פגר לא נסגר.</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">2</div>
+          <div class="step-label">פסול תשובות</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <p>❌ א — ללא שוק כסף + מימון אג"ח: ΔG = ΔAD → פגר <strong>נסגר</strong>. סתירה!</p>
+          <p>❌ ג — מימון אג"ח לא מוריד ריבית (לא שינינו MS)</p>
+          <p>❌ ד — אם אין שוק כסף, אין קיזוז כלל!</p>
+          <p>✅ ב — שוק כסף פעיל = קיזוז חלקי → פגר לא נסגר</p>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: ב — שוק הכסף פעיל גרם לקיזוז חלקי</div>
+  </div>
+</div>
+
+<!-- שאלה 6 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">6</div>
+    <div class="qmeta">
+      <div class="qsource">כץ שיעור 10 — שאלה 4 (ממבחן) | עמ' 207–209</div>
+      <div class="qtopic">G↑ בתעסוקה מלאה — יכול הבנק המרכזי לשמור על ריבית קבועה?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      משק בשיווי משקל בתעסוקה מלאה. הממשלה מעלה G. הבנק המרכזי מעוניין לשמור על שער הריבית הקיים. מה עליו לעשות?
+      <ol class="opts">
+        <li>להדפיס כסף</li>
+        <li>לקנות אג"ח מהציבור</li>
+        <li>למכור אג"ח לציבור</li>
+        <li class="correct">הבנק המרכזי לא יכול! כל עוד יש עודף ביקוש — P↑ → M/P↓ → r↑ בכל מקרה ✓</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">הסבר: למה הבנק המרכזי חסר אונים?</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="flow">
+            <div class="fbox start">G↑ + תעסוקה מלאה → עודף ביקוש</div>
+            <div class="farrow">↓</div>
+            <div class="fbox warn">P↑ (אינפלציה — בלתי נמנע!)</div>
+            <div class="farrow">↓</div>
+            <div class="fbox neg">M/P↓ → r↑ (ריבית חייבת לעלות)</div>
+          </div>
+          <p>אם הבנק המרכזי ינסה להוריד r (למשל: לקנות אג"ח):</p>
+          <div class="flow">
+            <div class="fbox mid">r↓ ראשוני → AD &gt; Yf שוב → P↑ שוב → M/P↓ → r↑ חזרה</div>
+          </div>
+          <div class="insight">מעגל אינסופי. לכן הריבית <strong>חייבת</strong> לעלות — הבנק המרכזי אינו יכול למנוע זאת לאורך זמן.</div>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: ד — הבנק המרכזי אינו יכול לשמור על ריבית קבועה</div>
+  </div>
+</div>
+
+<!-- שאלה 7 -->
+<div class="qcard">
+  <div class="qcard-head">
+    <div class="qnum">7</div>
+    <div class="qmeta">
+      <div class="qsource">כץ שיעור 10 — שאלה 3 (ממבחן) | עמ' 203–204</div>
+      <div class="qtopic">I אוטונומי עולה — מה קורה ל-I בסך הכל?</div>
+    </div>
+  </div>
+  <div class="qbody">
+    <div class="q-text">
+      <div class="q-text-label">נוסח השאלה</div>
+      במשק באבטלה עם שוק כסף, פירמות החליטו להגדיל השקעה בכל רמת תוצר ב-50. כתוצאה:
+      <ol class="opts">
+        <li class="correct">ההשקעה במשק גדלה בוודאות ✓</li>
+        <li>לא ניתן לומר מה קרה להשקעה — הריבית עלתה</li>
+        <li>לא ניתן לומר מה קרה להשקעה — התוצר עלה</li>
+        <li>ההשקעה נותרה ללא שינוי</li>
+      </ol>
+    </div>
+    <div class="steps">
+      <div class="step-item">
+        <button class="step-trigger" onclick="tog(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">שני הכוחות על I</div>
+          <span class="step-chev">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="comp-grid">
+            <div class="comp-col pos-side">
+              <h4>כוח חיובי (ראשוני)</h4>
+              I₀↑ = +50 (ישיר)
+            </div>
+            <div class="comp-col neg-side">
+              <h4>כוח שלילי (מקזז)</h4>
+              Y↑ → L↑ → r↑ → I↓
+            </div>
+          </div>
+          <div class="insight">
+            <strong>כלל הזהב:</strong> ההשפעה הראשונית (I₀↑) תמיד חזקה מהאפקט המקזז (r↑→I↓)<br>
+            → I בסך הכל <strong>עולה בוודאות</strong>!
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ans">✅ תשובה: א — ההשקעה גדלה בוודאות (ההשפעה הראשונית חזקה יותר)</div>
+  </div>
+</div>
+
+</div><!-- /pane-exam -->
+
+</div><!-- /page -->
+</body>
+</html>
