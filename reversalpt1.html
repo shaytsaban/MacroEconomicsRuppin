@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>מכפיל הכסף</title>
+  <style>
+    :root {
+      --primary: #1a237e;
+      --accent: #283593;
+      --gold: #f9a825;
+      --green: #2e7d32;
+      --red: #c62828;
+      --bg: #f0f2f5;
+      --text: #1a1a2e;
+      --sub: #546e7a;
+      --border: #dde1e7;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+
+    /* ===== MATH ===== */
+    .frac {
+      display: inline-flex; flex-direction: column; align-items: center;
+      vertical-align: middle; font-size: .95em; margin: 0 .15em;
+    }
+    .frac .num { padding: 0 .25em .05em; border-bottom: 1.5px solid currentColor; }
+    .frac .den { padding: .05em .25em 0; }
+    .math-block {
+      direction: ltr; text-align: center;
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 1.1rem; color: var(--accent);
+      margin: .75rem 0; padding: .4rem;
+    }
+    .math-block.large { font-size: 1.25rem; }
+    .math-block.green { color: var(--green); font-weight: 700; }
+    .mi { font-family: 'Georgia', 'Times New Roman', serif; font-style: italic; }
+
+    /* ===== LAYOUT ===== */
+    header {
+      background: linear-gradient(135deg, #1a237e 0%, #3949ab 100%);
+      color: white; padding: 2.5rem 2rem 2rem; text-align: center;
+    }
+    .badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+      border-radius: 2rem; padding: .35rem 1.1rem; font-size: .82rem; margin-bottom: 1rem;
+    }
+    header h1 { font-size: 1.9rem; font-weight: 800; margin-bottom: .4rem; }
+    header p { font-size: .92rem; opacity: .82; }
+
+    .section { max-width: 860px; margin: 2rem auto; padding: 0 1.25rem; }
+    .section-title {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: 1.15rem; font-weight: 700; color: var(--primary);
+      margin-bottom: 1.25rem; padding-bottom: .6rem;
+      border-bottom: 3px solid #c5cae9;
+    }
+    .section-title .icon {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .95rem; flex-shrink: 0;
+    }
+
+    /* ===== QUESTION ===== */
+    .question-box {
+      background: #fff8e1; border-right: 5px solid var(--gold);
+      border-radius: .6rem; padding: 1.5rem 1.75rem;
+      margin: 1.5rem auto; max-width: 860px;
+    }
+    .q-label { font-size: .7rem; font-weight: 800; color: #e65100; text-transform: uppercase; letter-spacing: .12em; margin-bottom: .6rem; }
+    .question-box p { font-size: .97rem; color: #3e2723; }
+    .choices { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: 1rem; }
+    .choice {
+      display: flex; align-items: center; gap: .75rem;
+      border: 2px solid var(--border); border-radius: .5rem;
+      padding: .6rem 1rem; background: white; font-size: .93rem;
+    }
+    .choice .letter {
+      width: 27px; height: 27px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: .82rem; flex-shrink: 0;
+    }
+    .choice.wrong { border-color: #ef9a9a; background: #ffebee; }
+    .choice.wrong .letter { background: var(--red); color: white; }
+    .choice.correct { border-color: #81c784; background: #e8f5e9; }
+    .choice.correct .letter { background: var(--green); color: white; }
+    .choice .answer-val { font-weight: 700; }
+
+    /* ===== CONCEPT CARDS ===== */
+    .concept-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .concept-val {
+      background: #e8eaf6; border-radius: .4rem;
+      padding: .4rem .8rem; display: inline-flex;
+      align-items: center; gap: .3rem; direction: ltr;
+      font-family: 'Georgia', serif; font-size: 1rem; color: var(--accent);
+    }
+
+    /* ===== CONCEPT FLIP CARDS ===== */
+    .concept-flip { perspective: 800px; height: 185px; cursor: pointer; }
+    .concept-flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform .45s ease; transform-style: preserve-3d;
+    }
+    .concept-flip.flipped .concept-flip-inner { transform: rotateY(180deg); }
+    .concept-cfront, .concept-cback {
+      position: absolute; inset: 0; border-radius: .8rem; padding: 1.1rem 1.3rem;
+      backface-visibility: hidden; display: flex; flex-direction: column; justify-content: center;
+    }
+    .concept-cfront {
+      background: white; border: 1px solid var(--border);
+      box-shadow: 0 1px 6px rgba(0,0,0,.06); align-items: center; text-align: center;
+    }
+    .concept-cfront h3 { font-size: .88rem; font-weight: 700; color: var(--primary); margin-bottom: .55rem; }
+    .concept-cfront .flip-prompt { font-size: .7rem; color: var(--sub); margin-top: .6rem; }
+    .concept-cback {
+      transform: rotateY(180deg);
+      background: #e8eaf6; border: 1.5px solid #9fa8da;
+    }
+    .concept-cback h4 { font-size: .85rem; font-weight: 700; color: var(--primary); margin-bottom: .45rem; }
+    .concept-cback p { font-size: .82rem; color: #37474f; line-height: 1.6; }
+
+    /* ===== METHOD TABS ===== */
+    .tabs { display: flex; border-radius: .8rem .8rem 0 0; overflow: hidden; }
+    .tab-btn {
+      flex: 1; padding: .9rem 1.2rem; border: none; cursor: pointer;
+      font-size: .95rem; font-weight: 700; font-family: inherit;
+      transition: background .2s, color .2s;
+    }
+    .tab-btn.a-btn { background: #e8eaf6; color: var(--primary); }
+    .tab-btn.b-btn { background: #e0f2f1; color: #00695c; }
+    .tab-btn.active.a-btn { background: var(--primary); color: white; }
+    .tab-btn.active.b-btn { background: #00695c; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    .method-panel {
+      background: white; border: 2px solid var(--border);
+      border-top: none; border-radius: 0 0 .8rem .8rem; padding: 1.75rem;
+    }
+    .method-panel.blue { border-color: #7986cb; }
+    .method-panel.teal { border-color: #4db6ac; }
+    .method-desc {
+      font-size: .88rem; color: var(--sub); margin-bottom: 1.5rem;
+      padding: .75rem 1rem; background: #f8f9ff; border-radius: .5rem;
+      border-right: 3px solid #9fa8da;
+    }
+
+    /* ===== PROGRESSIVE STEPS ===== */
+    .steps-container { display: flex; flex-direction: column; gap: .75rem; }
+
+    .prog-step { border-radius: .65rem; overflow: hidden; border: 1.5px solid #c5cae9; }
+    .prog-step.revealed .step-body { display: block; }
+    .prog-step.result-step { border-color: #81c784; }
+
+    .step-trigger {
+      width: 100%; background: #f0f2ff; border: none;
+      display: flex; align-items: center; gap: .75rem;
+      padding: .85rem 1.2rem; cursor: pointer; text-align: right;
+      font-family: inherit; transition: background .2s;
+    }
+    .step-trigger:hover { background: #e8eaf6; }
+    .prog-step.revealed .step-trigger { background: #e8eaf6; }
+    .prog-step.result-step .step-trigger { background: #e8f5e9; }
+    .prog-step.result-step.revealed .step-trigger { background: #c8e6c9; }
+    .prog-step.result-step .step-trigger:hover { background: #c8e6c9; }
+
+    .step-num {
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--primary); color: white; font-weight: 800;
+      font-size: .82rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .prog-step.result-step .step-num { background: var(--green); }
+
+    .step-trigger-text { flex: 1; font-size: .9rem; font-weight: 700; color: var(--primary); }
+    .prog-step.result-step .step-trigger-text { color: var(--green); }
+
+    .step-chevron {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--primary); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .75rem; flex-shrink: 0;
+      transition: transform .25s;
+    }
+    .prog-step.result-step .step-chevron { background: var(--green); }
+    .prog-step.revealed .step-chevron { transform: rotate(180deg); }
+
+    .step-body {
+      display: none;
+      padding: 1.1rem 1.4rem 1.2rem;
+      background: white;
+      border-top: 1px solid #c5cae9;
+      animation: fadeIn .2s ease;
+    }
+    .prog-step.result-step .step-body { border-top-color: #81c784; }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: none; } }
+
+    .step-body p { font-size: .88rem; color: var(--text); margin-bottom: .4rem; }
+    .step-body p.why { font-size: .82rem; color: var(--sub); font-style: italic; margin-top: .4rem; }
+    .check-line {
+      font-size: .82rem; color: var(--sub); background: #f0f4f8;
+      border-radius: .4rem; padding: .4rem .8rem; margin-top: .6rem;
+      display: block; direction: ltr; text-align: left;
+      font-family: 'Georgia', serif;
+    }
+
+    /* ===== FORMULA PANEL (Method B) ===== */
+    .formula-panel {
+      background: linear-gradient(135deg, #e0f2f1, #b2dfdb);
+      border: 2px solid #4db6ac; border-radius: .9rem;
+      padding: 1.75rem; text-align: center; margin-bottom: 1rem;
+    }
+    .formula-panel h3 { font-size: .85rem; font-weight: 700; color: #004d40; margin-bottom: 1.25rem; }
+    .formula-main {
+      direction: ltr; display: flex; align-items: center; justify-content: center;
+      gap: .4rem; font-family: 'Georgia', serif; font-size: 1.3rem;
+      color: #004d40; margin-bottom: 1.25rem; flex-wrap: wrap;
+    }
+    .formula-vars { display: flex; justify-content: center; flex-wrap: wrap; gap: 1.5rem; margin: .75rem 0; }
+    .var-chip { text-align: center; }
+    .var-chip .sym { font-size: .95rem; font-weight: 700; color: #00695c; font-family: 'Georgia', serif; font-style: italic; }
+    .var-chip .def { font-size: .78rem; color: #00796b; }
+
+    /* ===== FLIP CARDS (Wrong Answers) ===== */
+    .flip-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .flip-card {
+      perspective: 800px; height: 210px; cursor: pointer;
+    }
+    .flip-inner {
+      position: relative; width: 100%; height: 100%;
+      transition: transform .45s ease;
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-inner { transform: rotateY(180deg); }
+
+    .flip-front, .flip-back {
+      position: absolute; inset: 0;
+      border-radius: .75rem; padding: 1rem 1.2rem;
+      backface-visibility: hidden;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .flip-front {
+      border: 1.5px solid var(--border);
+      background: white;
+      align-items: center; text-align: center;
+    }
+    .flip-front .letter-big {
+      font-size: 2rem; font-weight: 800; margin-bottom: .3rem;
+    }
+    .flip-front .amount { font-size: 1.1rem; font-weight: 700; margin-bottom: .4rem; }
+    .flip-front .hint { font-size: .75rem; color: var(--sub); }
+
+    .flip-back { transform: rotateY(180deg); }
+    .flip-back.ok { background: #e8f5e9; border: 1.5px solid #81c784; }
+    .flip-back.no { background: #ffebee; border: 1.5px solid #ef9a9a; }
+
+    .flip-back h4 { font-size: .88rem; font-weight: 700; margin-bottom: .5rem; }
+    .flip-back.ok h4 { color: var(--green); }
+    .flip-back.no h4 { color: var(--red); }
+    .flip-back ul { list-style: none; padding: 0; }
+    .flip-back ul li {
+      font-size: .82rem; color: #4e342e; padding: .25rem 0;
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      display: flex; gap: .4rem; align-items: center;
+    }
+    .flip-back.ok ul li { color: #1b5e20; }
+    .flip-back ul li:last-child { border-bottom: none; }
+    .flip-back ul li::before { content: '•'; flex-shrink: 0; }
+
+    /* math inside flip cards LTR, serif */
+    .flip-math {
+      direction: ltr; display: inline-flex; align-items: center;
+      gap: .3rem; font-family: 'Georgia', serif; font-size: 1rem;
+      font-weight: 600; color: inherit;
+    }
+    .flip-math .frac { font-size: .9rem; }
+
+    .flip-hint-bar {
+      text-align: center; font-size: .72rem; color: var(--sub);
+      margin-bottom: .5rem; letter-spacing: .05em;
+    }
+
+    /* ===== INSIGHT ===== */
+    .insight {
+      background: #fff8e1; border: 2px solid #ffe082; border-radius: .8rem;
+      padding: 1.1rem 1.4rem; margin-top: 1rem;
+    }
+    .insight .i-title { font-weight: 700; color: #e65100; font-size: .88rem; margin-bottom: .35rem; }
+    .insight p { font-size: .85rem; color: #4e342e; }
+    .insight.teal { background: linear-gradient(135deg, #e0f7fa, #e0f2f1); border-color: #80cbc4; }
+    .insight.teal .i-title { color: #006064; }
+    .insight.teal p { color: #004d40; }
+
+    /* ===== COMPARISON ===== */
+    .compare-wrap { background: white; border-radius: .8rem; border: 1px solid var(--border); overflow: hidden; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+    table { width: 100%; border-collapse: collapse; font-size: .87rem; }
+    th { background: var(--primary); color: white; padding: .65rem 1.1rem; text-align: right; }
+    td { padding: .65rem 1.1rem; border-bottom: 1px solid var(--border); }
+    tr.hl td { background: #e8f5e9; font-weight: 700; color: var(--green); }
+    tr:nth-child(even):not(.hl) td { background: #f7f8fc; }
+
+    /* ===== PED LIST ===== */
+    .ped-list { list-style: none; background: white; border-radius: .8rem; border: 1px solid var(--border); padding: 1.25rem 1.5rem; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+    .ped-list li { display: flex; gap: .75rem; padding: .6rem 0; border-bottom: 1px solid var(--border); font-size: .88rem; align-items: flex-start; }
+    .ped-list li:last-child { border-bottom: none; }
+    .pnum { width: 26px; height: 26px; border-radius: 50%; background: var(--accent); color: white; font-weight: 800; font-size: .78rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: .1rem; }
+
+    /* ===== FINAL ===== */
+    .final-box {
+      background: linear-gradient(135deg, var(--green), #1b5e20);
+      border-radius: 1rem; padding: 2rem; text-align: center; color: white;
+      box-shadow: 0 4px 20px rgba(46,125,50,.3);
+    }
+    .final-box h2 { font-size: 1.4rem; margin-bottom: .75rem; }
+    .final-math {
+      background: rgba(255,255,255,.15); border-radius: .5rem;
+      padding: .9rem 1.2rem; margin: 1rem auto; display: inline-block;
+      direction: ltr; font-family: 'Georgia', serif; font-size: 1.15rem; color: white;
+    }
+
+    footer { text-align: center; padding: 2rem 1rem; font-size: .78rem; color: var(--sub); border-top: 1px solid var(--border); margin-top: 3rem; }
+
+    @media (max-width: 580px) {
+      .concept-grid, .flip-grid, .choices { grid-template-columns: 1fr; }
+      header h1 { font-size: 1.35rem; }
+      .tabs { flex-direction: column; }
+      .flip-card { height: 240px; }
+      .concept-flip { height: 205px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="badge">📊 כלכלה מוניטרית · שאלה 11</div>
+  <h1>מכפיל הכסף</h1>
+  <p>שתי גישות פתרון, שלב אחר שלב</p>
+</header>
+
+<!-- QUESTION -->
+<div class="section">
+  <div class="question-box">
+    <div class="q-label">📋 השאלה המקורית</div>
+    <p>
+      במערכת הבנקאות יחס הרזרבה הינו <strong>0.2</strong> והציבור שומר יחס קבוע בין מב"צ לעו"ש של <strong>1:5</strong>
+      (על כל 1 מב"צ יש 5 בעו"ש). הבנק המרכזי ביצע עירוי חיצוני חיובי בסך <strong>400</strong>.
+      מה יקרה כתוצאה לכמות הכסף?
+    </p>
+    <div class="choices">
+      <div class="choice correct"><div class="letter">א</div><span>תגדל ב<span class="answer-val">1,200 ✓</span></span></div>
+      <div class="choice wrong"><div class="letter">ב</div><span>תגדל ב<span class="answer-val">2,000 ✗</span></span></div>
+      <div class="choice wrong"><div class="letter">ג</div><span>תגדל ב<span class="answer-val">400 ✗</span></span></div>
+      <div class="choice wrong"><div class="letter">ד</div><span>תגדל ב<span class="answer-val">800 ✗</span></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCEPTS -->
+<div class="section">
+  <div class="section-title"><div class="icon">📚</div>הגדרות ומשתנים — לחצו לפרטים</div>
+  <div class="concept-grid">
+
+    <div class="concept-flip" onclick="this.classList.toggle('flipped')">
+      <div class="concept-flip-inner">
+        <div class="concept-cfront">
+          <h3>🏦 יחס הרזרבה</h3>
+          <div class="concept-val"><span class="mi">r</span> = 0.2</div>
+          <div class="flip-prompt">לחץ לפרטים &#x25BE;</div>
+        </div>
+        <div class="concept-cback">
+          <h4>🏦 יחס הרזרבה (r)</h4>
+          <p>הבנק שומר 20% מכל פיקדון כרזרבה בנקאית ומלווה את ה-80% הנותרים. רזרבה = r &times; עו"ש.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-flip" onclick="this.classList.toggle('flipped')">
+      <div class="concept-flip-inner">
+        <div class="concept-cfront">
+          <h3>💵 יחס מב"צ לעו"ש</h3>
+          <div class="concept-val">
+            <span class="mi">rco</span> =
+            <span class="frac"><span class="num">1</span><span class="den">5</span></span>
+            = 0.2
+          </div>
+          <div class="flip-prompt">לחץ לפרטים &#x25BE;</div>
+        </div>
+        <div class="concept-cback">
+          <h4>💵 יחס מב"צ לעו"ש (rco)</h4>
+          <p>הציבור מחזיק 1 מזומן על כל 5 בעו"ש. מב"צ = rco &times; עו"ש. מתוך 6 יחידות: 1 מזומן, 5 בבנק.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-flip" onclick="this.classList.toggle('flipped')">
+      <div class="concept-flip-inner">
+        <div class="concept-cfront">
+          <h3>💰 בסיס הכסף (MB)</h3>
+          <div class="concept-val">&#x394;<span class="mi">MB</span> = 400</div>
+          <div class="flip-prompt">לחץ לפרטים &#x25BE;</div>
+        </div>
+        <div class="concept-cback">
+          <h4>💰 בסיס הכסף (MB)</h4>
+          <p>הכסף שהבנק המרכזי יצר ישירות. MB = מב"צ + רזרבה בנקאית. הבנקים מגדילים אותו דרך אשראי.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="concept-flip" onclick="this.classList.toggle('flipped')">
+      <div class="concept-flip-inner">
+        <div class="concept-cfront">
+          <h3>📊 כמות הכסף (MS)</h3>
+          <div class="concept-val"><span class="mi">MS</span> = מב"צ + עו"ש</div>
+          <div class="flip-prompt">לחץ לפרטים &#x25BE;</div>
+        </div>
+        <div class="concept-cback">
+          <h4>📊 כמות הכסף (MS)</h4>
+          <p>כמות הכסף הכוללת (M1). גדולה מ-MB כי הבנקים מלווים ויוצרים אשראי. MS = מב"צ + עו"ש.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TWO METHODS -->
+<div class="section">
+  <div class="section-title"><div class="icon">🔢</div>שתי גישות לפתרון</div>
+
+  <div class="tabs">
+    <button class="tab-btn a-btn active" onclick="showTab('ma',this)">גישה א' — גזירה מהגדרות</button>
+    <button class="tab-btn b-btn" onclick="showTab('mb',this)">גישה ב' נוסחה מקוצרת</button>
+  </div>
+
+  <!-- ===== METHOD A ===== -->
+  <div id="ma" class="tab-content active">
+    <div class="method-panel blue">
+      <div class="method-desc">
+        בונים את הפתרון אלגברית מהגדרות MB ו-MS. לחצו על כל שלב לחשיפתו.
+      </div>
+
+      <div class="steps-container">
+
+        <div class="prog-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">1</div>
+            <div class="step-trigger-text">כתוב את הגדרות MB ו-MS</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>בסיס הכסף כולל מזומן בידי הציבור ורזרבה בנקאית:</p>
+            <div class="math-block"><span class="mi">MB</span> = <bdi>מב"צ</bdi> + <bdi>רזרבה בנקאית</bdi></div>
+            <p>כמות הכסף כוללת מזומן ופיקדונות עו"ש:</p>
+            <div class="math-block"><span class="mi">MS</span> = <bdi>מב"צ</bdi> + <bdi>עו"ש</bdi></div>
+            <p class="why">MB כולל רזרבה בנקאית. MS כולל עו"ש. אלה שני דברים שונים לחלוטין.</p>
+          </div>
+        </div>
+
+        <div class="prog-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">2</div>
+            <div class="step-trigger-text">הבע מב"צ ורזרבה כפונקציה של עו"ש</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>מהגדרת <span class="mi">rco</span>: הציבור מחזיק <span class="mi">rco</span> יחידות מב"צ לכל יחידת עו"ש, לכן:</p>
+            <div class="math-block"><bdi>מב"צ</bdi> = <span class="mi">rco</span> &times; <bdi>עו"ש</bdi> = 0.2 &times; <bdi>עו"ש</bdi></div>
+            <p>מהגדרת <span class="mi">r</span>: הבנק שומר <span class="mi">r</span> יחידות רזרבה לכל יחידת עו"ש, לכן:</p>
+            <div class="math-block"><bdi>רזרבה בנקאית</bdi> = <span class="mi">r</span> &times; <bdi>עו"ש</bdi> = 0.2 &times; <bdi>עו"ש</bdi></div>
+            <p class="why">מבטאים הכל כפונקציה של עו"ש, כדי שנוכל להציב בנוסחת MB ולחלץ ערך יחיד.</p>
+          </div>
+        </div>
+
+        <div class="prog-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">3</div>
+            <div class="step-trigger-text">הצב בנוסחת MB וחלץ את עו"ש</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>מציבים בנוסחת MB = מב"צ + רזרבה בנקאית:</p>
+            <div class="math-block">
+              <span class="mi">MB</span> = <span class="mi">rco</span> &times; <bdi>עו"ש</bdi> + <span class="mi">r</span> &times; <bdi>עו"ש</bdi> = (<span class="mi">rco</span> + <span class="mi">r</span>) &times; <bdi>עו"ש</bdi>
+            </div>
+            <p>מחלקים את שני האגפים ב-(<span class="mi">rco</span> + <span class="mi">r</span>), מקבלים:</p>
+            <div class="math-block large" style="display:flex; align-items:center; justify-content:center; gap:.4rem; flex-wrap:wrap;">
+              עו"ש =
+              <span class="frac"><span class="num"><span class="mi">MB</span></span><span class="den"><span class="mi">rco</span> + <span class="mi">r</span></span></span>
+              =
+              <span class="frac"><span class="num">400</span><span class="den">0.2 + 0.2</span></span>
+              =
+              <span class="frac"><span class="num">400</span><span class="den">0.4</span></span>
+              = <strong>1,000</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="prog-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">4</div>
+            <div class="step-trigger-text">חשב את מב"צ</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>משתמשים בקשר מצעד 2:</p>
+            <div class="math-block"><bdi>מב"צ</bdi> = <span class="mi">rco</span> &times; <bdi>עו"ש</bdi> = 0.2 &times; 1,000 = <strong>200</strong></div>
+            <span class="check-line">בדיקה: MB = מב"צ + רזרבה = 200 + (0.2 × 1,000) = 200 + 200 = 400 ✓</span>
+          </div>
+        </div>
+
+        <div class="prog-step result-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">5</div>
+            <div class="step-trigger-text">חשב את ΔMS תשובה סופית</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>מציבים מב"צ ועו"ש בהגדרת MS מצעד 1:</p>
+            <div class="math-block large green">
+              Δ<span class="mi">MS</span> = <bdi>מב"צ</bdi> + <bdi>עו"ש</bdi> = 200 + 1,000 = <strong>1,200</strong>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight" style="margin-top:1rem;">
+        <div class="i-title">💡 מה קרה לאותם 400?</div>
+        <p>
+          200 הפכו למב"צ בידי הציבור. 200 הפכו לרזרבה בנקאית.
+          הרזרבה של 200 תומכת ב-1,000 עו"ש (כי 200 = 0.2 × 1,000).
+          סה"כ MS = 200 + 1,000 = 1,200, פי 3 מהעירוי.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== METHOD B ===== -->
+  <div id="mb" class="tab-content">
+    <div class="method-panel teal">
+      <div class="method-desc" style="border-color:#80cbc4;">
+        נוסחה מקוצרת שנגזרת ישירות מהגדרות MB ו-MS. לחצו על כל שלב לחשיפתו.
+      </div>
+
+      <div class="formula-panel">
+        <h3>נוסחת מכפיל הכסף</h3>
+
+        <!-- KM רגיל -->
+        <div style="background:#e8f5e9; border-radius:.6rem; padding:.7rem 1rem; margin-bottom:.7rem; border:1px solid #a5d6a7;">
+          <div style="font-size:.78rem; font-weight:700; color:#2e7d32; margin-bottom:.3rem;">מכפיל רגיל (ללא מזומן בציבור)</div>
+          <div style="display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; font-size:1rem;">
+            <span class="mi" style="color:#2e7d32;">KM</span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="color:#2e7d32;">
+              <span class="num" style="border-color:#2e7d32;">1</span>
+              <span class="den"><span class="mi">r</span></span>
+            </span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="color:#2e7d32;">
+              <span class="num" style="border-color:#2e7d32;">1</span>
+              <span class="den">0.2</span>
+            </span>
+            &nbsp;=&nbsp;<strong style="color:#2e7d32;">5</strong>
+          </div>
+        </div>
+
+        <!-- KM(rco) מיוחד -->
+        <div style="background:#e0f2f1; border-radius:.6rem; padding:.7rem 1rem; margin-bottom:.8rem; border:1px solid #80cbc4;">
+          <div style="font-size:.78rem; font-weight:700; color:#004d40; margin-bottom:.3rem;">מכפיל עם מזומן בציבור</div>
+          <div style="display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; font-size:1rem;">
+            <span class="mi" style="color:#004d40;">KM(rco)</span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="font-size:1.1rem; color:#004d40;">
+              <span class="num" style="border-color:#004d40;">1 + <span class="mi">rco</span></span>
+              <span class="den"><span class="mi">rco</span> + <span class="mi">r</span></span>
+            </span>
+            &nbsp;=&nbsp;
+            <span class="frac" style="color:#004d40;">
+              <span class="num" style="border-color:#004d40;">1.2</span>
+              <span class="den">0.4</span>
+            </span>
+            &nbsp;=&nbsp;<strong style="color:#004d40;">3</strong>
+          </div>
+        </div>
+
+        <!-- הנוסחה הסופית -->
+        <div class="formula-main">
+          Δ<span class="mi" style="color:#004d40;">MS</span>
+          &nbsp;=&nbsp;
+          Δ<span class="mi" style="color:#004d40;">MB</span>
+          &nbsp;×&nbsp;
+          <span class="mi" style="color:#004d40; font-size:1.15rem;">KM(rco)</span>
+          &nbsp;=&nbsp;
+          400 &times; 3
+          &nbsp;=&nbsp;<strong style="color:#004d40;">1,200</strong>
+        </div>
+
+        <div class="formula-vars">
+          <div class="var-chip"><div class="sym">Δ<i>MB</i></div><div class="def">עירוי הבנק המרכזי = 400</div></div>
+          <div class="var-chip"><div class="sym"><i>rco</i></div><div class="def">יחס מב"צ / עו"ש = 0.2</div></div>
+          <div class="var-chip"><div class="sym"><i>r</i></div><div class="def">יחס רזרבה = 0.2</div></div>
+        </div>
+      </div>
+
+      <div class="steps-container">
+
+        <div class="prog-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">1</div>
+            <div class="step-trigger-text">חשב את המכפיל</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <p>מציבים <span class="mi">rco</span> = 0.2 ו-<span class="mi">r</span> = 0.2:</p>
+            <div class="math-block large" style="display:flex; align-items:center; justify-content:center; gap:.4rem; flex-wrap:wrap;">
+              מכפיל =
+              <span class="frac"><span class="num">1 + 0.2</span><span class="den">0.2 + 0.2</span></span>
+              =
+              <span class="frac"><span class="num">1.2</span><span class="den">0.4</span></span>
+              = <strong>3</strong>
+            </div>
+            <p class="why">המונה (1 + rco): על כל יחידת עו"ש יש גם rco יחידות מב"צ, ביחד (1+rco) יחידות MS.</p>
+            <p class="why">המכנה (rco + r): שתי ה"דליפות" מהשרשרת, מה שהולך למזומן (rco) ומה שנשמר כרזרבה (r).</p>
+          </div>
+        </div>
+
+        <div class="prog-step result-step" onclick="toggleStep(this)">
+          <button class="step-trigger">
+            <div class="step-num">2</div>
+            <div class="step-trigger-text">הכפל בעירוי תשובה סופית</div>
+            <div class="step-chevron">▾</div>
+          </button>
+          <div class="step-body">
+            <div class="math-block large green">ΔMS = 400 × 3 = <strong>1,200</strong></div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="insight teal" style="margin-top:1rem;">
+        <div class="i-title">💡 מתי המכפיל הוא 1/r = 5 ומתי 3?</div>
+        <p>
+          המכפיל הבסיסי
+          <span style="direction:ltr; display:inline-flex; align-items:center; gap:.1rem; vertical-align:middle; font-family:Georgia,serif; font-size:.9rem;">
+            <span class="frac"><span class="num">1</span><span class="den"><i>r</i></span></span> = 5
+          </span>
+          מתקבל כאשר כמות המזומן בידי הציבור קבועה, כלומר כל עירוי נוסף מופקד במלואו בבנקים.
+          <br><br>
+          בשאלה שלנו הציבור מחזיק יחס קבוע rco = 0.2, לכן כל עירוי מחלחל גם למב"צ.
+          הוספת rco למכנה מורידה את המכפיל:
+          <span style="direction:ltr; display:inline-flex; align-items:center; gap:.1rem; vertical-align:middle; font-family:Georgia,serif; font-size:.9rem;">
+            <span class="frac"><span class="num">1.2</span><span class="den">0.4</span></span> = 3
+          </span>
+          במקום 5.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPARISON -->
+<div class="section">
+  <div class="section-title"><div class="icon">⚖️</div>השוואת המכפילים</div>
+  <div class="compare-wrap">
+    <table>
+      <thead>
+        <tr><th>מצב</th><th>מכפיל</th><th>חישוב</th><th>ΔMS</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>מזומן קבוע בידי הציבור (כל עירוי לפיקדונות)</td>
+          <td style="direction:ltr; text-align:center; font-family:Georgia,serif;">
+            <span style="display:inline-flex; align-items:center; gap:.2rem;">
+              <span class="frac" style="font-size:.9rem;"><span class="num">1</span><span class="den"><i>r</i></span></span> = 5
+            </span>
+          </td>
+          <td>400 × 5</td>
+          <td>2,000 ✗</td>
+        </tr>
+        <tr class="hl">
+          <td><strong>יחס rco קבוע (1:5) מצב השאלה</strong></td>
+          <td style="direction:ltr; text-align:center; font-family:Georgia,serif;">
+            <span style="display:inline-flex; align-items:center; gap:.2rem; color:var(--green);">
+              KM(rco) = <span class="frac" style="font-size:.9rem; color:var(--green);"><span class="num" style="border-color:var(--green);">1+<i>rco</i></span><span class="den"><i>rco</i>+<i>r</i></span></span> = 3
+            </span>
+          </td>
+          <td>400 × 3</td>
+          <td>1,200 ✓</td>
+        </tr>
+        <tr>
+          <td>ללא מכפיל (עירוי בלבד)</td>
+          <td style="text-align:center;">1</td>
+          <td>400 × 1</td>
+          <td>400 ✗</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- WRONG ANSWERS FLIP CARDS -->
+<div class="section">
+  <div class="section-title"><div class="icon">🔍</div>ניתוח התשובות לחצו להפיכה</div>
+  <p class="flip-hint-bar">לחצו על כל כרטיסייה לחשיפת הניתוח</p>
+  <div class="flip-grid">
+
+    <!-- CARD א correct -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front" style="border-color:#81c784; background:#e8f5e9;">
+          <div class="letter-big" style="color:var(--green);">א</div>
+          <div class="amount" style="color:var(--green);">1,200</div>
+          <div class="hint" style="color:var(--green);">התשובה הנכונה</div>
+        </div>
+        <div class="flip-back ok">
+          <h4>✅ מדוע זו התשובה הנכונה</h4>
+          <ul>
+            <li>
+              <span class="flip-math">
+                KM(rco) =
+                <span class="frac"><span class="num">1 + <i>rco</i></span><span class="den"><i>rco</i> + <i>r</i></span></span>
+                =
+                <span class="frac"><span class="num">1.2</span><span class="den">0.4</span></span>
+                = 3
+              </span>
+            </li>
+            <li><span class="flip-math">Δ<i>MS</i> = 400 × 3 = <strong>1,200</strong></span></li>
+            <li>לוקח בחשבון רזרבה בנקאית ומב"צ</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD ב wrong, most common -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="letter-big" style="color:var(--red);">ב</div>
+          <div class="amount">2,000</div>
+          <div class="hint">הטעות הנפוצה ביותר</div>
+        </div>
+        <div class="flip-back no">
+          <h4>✗ מדוע זו טעות</h4>
+          <ul>
+            <li>
+              <span class="flip-math">
+                מכפיל =
+                <span class="frac"><span class="num">1</span><span class="den"><i>r</i></span></span>
+                =
+                <span class="frac"><span class="num">1</span><span class="den">0.2</span></span>
+                = 5
+              </span>
+            </li>
+            <li><span class="flip-math">400 × 5 = 2,000</span></li>
+            <li>מכפיל 1/r תקף רק כשמזומן בידי הציבור קבוע</li>
+            <li>כאן rco גדל עם העירוי, המכפיל קטן ל-3</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD ג no multiplier -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="letter-big" style="color:var(--red);">ג</div>
+          <div class="amount">400</div>
+          <div class="hint">ללא מכפיל</div>
+        </div>
+        <div class="flip-back no">
+          <h4>✗ מדוע זו טעות</h4>
+          <ul>
+            <li>400 הוא <span class="flip-math">Δ<i>MB</i></span>, לא <span class="flip-math">Δ<i>MS</i></span></li>
+            <li>מכפיל = 1 כאילו אין אשראי בנקאי כלל</li>
+            <li>מתעלם לחלוטין ממנגנון יצירת הפיקדונות</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD ד no basis -->
+    <div class="flip-card" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="letter-big" style="color:var(--red);">ד</div>
+          <div class="amount">800</div>
+          <div class="hint">ללא בסיס מתמטי</div>
+        </div>
+        <div class="flip-back no">
+          <h4>✗ מדוע זו טעות</h4>
+          <ul>
+            <li><span class="flip-math">400 × 2 = 800</span> מכפיל 2 לא מוצדק</li>
+            <li>
+              <span class="flip-math">
+                KM(rco) =
+                <span class="frac"><span class="num">1+<i>rco</i></span><span class="den"><i>rco</i>+<i>r</i></span></span>
+                =
+                <span class="frac"><span class="num">1.2</span><span class="den">0.4</span></span>
+                = 3 ≠ 2
+              </span>
+            </li>
+            <li>בלבול בין <i>r</i>, <i>rco</i> ומכפיל הכסף</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- HOW TO SOLVE -->
+<div class="section">
+  <div class="section-title"><div class="icon">🎓</div>כיצד לפתור שאלות מסוג זה</div>
+  <ul class="ped-list">
+    <li>
+      <div class="pnum">1</div>
+      <div><strong>זהה מה נשאל:</strong> ΔMS (מב"צ + עו"ש) או ΔMB בלבד?</div>
+    </li>
+    <li>
+      <div class="pnum">2</div>
+      <div><strong>חלץ פרמטרים:</strong> <span class="mi">r</span> (יחס רזרבה) ו-<span class="mi">rco</span> (יחס מב"צ/עו"ש). יחס 1:5 פירושו rco = 0.2.</div>
+    </li>
+    <li>
+      <div class="pnum">3</div>
+      <div><strong>בחר גישה:</strong> גישה א': גזור מהגדרות MB ו-MS, חלץ עו"ש ומב"צ וחשב. גישה ב' הצב ב-ΔMS = ΔMB × (1+rco) / (rco+r).</div>
+    </li>
+    <li>
+      <div class="pnum">4</div>
+      <div><strong>בדוק סבירות:</strong> ΔMS חייב להיות בין ΔMB (400) לבין ΔMB/r (2,000). 1,200 סביר ✓</div>
+    </li>
+  </ul>
+</div>
+
+<!-- FINAL ANSWER -->
+<div class="section">
+  <div class="final-box">
+    <div style="font-size:2.5rem; margin-bottom:.5rem;">✅</div>
+    <h2>התשובה הנכונה: א תגדל ב-1,200</h2>
+    <div class="final-math">
+      <span style="display:inline-flex; align-items:center; gap:.35rem; flex-wrap:wrap; justify-content:center;">
+        ΔMS = 400 ×
+        <span class="frac" style="color:white;"><span class="num" style="border-color:white;">1.2</span><span class="den">0.4</span></span>
+        = 400 × 3 = <strong>1,200</strong>
+      </span>
+    </div>
+    <p style="opacity:.85; font-size:.87rem;">מב"צ נוסף: 200 &nbsp;|&nbsp; עו"ש נוסף: 1,000 &nbsp;|&nbsp; מכפיל = 3</p>
+  </div>
+</div>
+
+<footer>כלכלה מוניטרית · שאלה 11 · מכפיל הכסף</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  function toggleStep(el) {
+    el.classList.toggle('revealed');
+  }
+</script>
+</body>
+</html>
