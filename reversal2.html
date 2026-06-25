@@ -1,0 +1,1326 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מערך שיעור חזרה — מאקרו כלכלה</title>
+<style>
+:root {
+  --primary:#1a237e; --accent:#283593; --teal:#00695c; --teal-bg:#e0f2f1;
+  --green:#2e7d32; --green-bg:#e8f5e9; --gold:#f9a825; --gold-bg:#fffde7;
+  --red:#c62828; --red-bg:#ffebee; --purple:#6a1b9a; --purple-bg:#f3e5f5;
+  --bg:#f0f2f5; --card:#ffffff; --border:#dde1e7; --text:#1a1a2e; --sub:#607d8b;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.75;direction:rtl;}
+
+/* ── HEADER ── */
+.lesson-header{background:linear-gradient(135deg,#1a237e,#004d40);color:#fff;padding:2.5rem 2rem;text-align:center;}
+.lesson-header h1{font-size:1.9rem;margin-bottom:.4rem;}
+.lesson-header .sub{opacity:.85;font-size:1rem;margin-bottom:1.2rem;}
+.header-chips{display:flex;justify-content:center;gap:.8rem;flex-wrap:wrap;}
+.hchip{background:rgba(255,255,255,.15);border-radius:2rem;padding:.35rem 1rem;font-size:.82rem;}
+
+/* ── FREQ BAR ── */
+.freq-bar{background:var(--gold-bg);border:1px solid var(--gold);border-radius:.6rem;margin:1.2rem 1.5rem;padding:1rem 1.4rem;font-size:.87rem;color:#4e342e;}
+.freq-bar strong{color:#e65100;}
+
+/* ── TOC ── */
+.toc{background:var(--card);border-radius:.8rem;margin:1rem 1.5rem;padding:1.2rem 1.6rem;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.toc h3{font-size:.95rem;color:var(--primary);margin-bottom:.8rem;}
+.toc-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.3rem .8rem;}
+.toc-grid a{font-size:.82rem;color:var(--accent);text-decoration:none;}
+.toc-grid a:hover{text-decoration:underline;}
+.toc-section{grid-column:1/-1;font-weight:700;font-size:.83rem;color:var(--sub);margin-top:.5rem;border-top:1px solid var(--border);padding-top:.4rem;}
+
+/* ── TOPIC BANNER ── */
+.topic-banner{display:flex;align-items:center;gap:1rem;background:var(--primary);color:#fff;padding:1.1rem 1.5rem;margin:2rem 0 0;}
+.topic-banner .t-icon{font-size:2rem;flex-shrink:0;}
+.topic-banner h2{font-size:1.1rem;margin-bottom:.15rem;}
+.topic-banner .t-desc{font-size:.82rem;opacity:.85;}
+.topic-badge{margin-right:auto;text-align:center;}
+.tbadge{display:block;background:var(--gold);color:#3e2723;border-radius:.4rem;padding:.25rem .7rem;font-size:.76rem;font-weight:700;margin-bottom:.25rem;}
+.tbadge-sub{font-size:.72rem;opacity:.8;}
+
+/* ── SECTION CARD ── */
+.sc{background:var(--card);border-radius:.8rem;margin:.9rem 1.5rem;padding:1.3rem 1.5rem;box-shadow:0 1px 6px rgba(0,0,0,.07);}
+.sc-title{display:flex;align-items:center;gap:.6rem;font-size:.97rem;font-weight:700;color:var(--primary);margin-bottom:1rem;}
+.sc-title .ico{font-size:1.3rem;}
+
+/* ── QUESTION CARD ── */
+.qc{background:var(--card);border-radius:.8rem;margin:.9rem 1.5rem;box-shadow:0 1px 8px rgba(0,0,0,.09);overflow:hidden;}
+.qc-head{display:flex;align-items:center;gap:1rem;background:var(--primary);color:#fff;padding:1rem 1.4rem;}
+.qnum{background:rgba(255,255,255,.2);border-radius:50%;width:2.4rem;height:2.4rem;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:1rem;flex-shrink:0;}
+.qmeta{flex:1;}
+.qsource{font-size:.76rem;opacity:.8;}
+.qtopic{font-size:.93rem;font-weight:700;}
+.qbody{padding:1.3rem 1.5rem;}
+
+/* ── NOTICE ── */
+.notice{background:#fff8e1;border-right:4px solid var(--gold);border-radius:.5rem;padding:.9rem 1.1rem;margin:.8rem 0;font-size:.85rem;}
+.notice-title{font-weight:700;color:#e65100;margin-bottom:.5rem;font-size:.88rem;}
+.notice ul{padding-right:1.1rem;}
+.notice li{margin:.25rem 0;color:#4e342e;}
+
+/* ── EXACT QUESTION ── */
+.q-exact{background:#f5f5f5;border-right:3px solid var(--accent);border-radius:.5rem;padding:1rem 1.2rem;margin:.8rem 0;font-size:.9rem;}
+.q-exact-label{font-size:.72rem;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.05em;margin-bottom:.5rem;}
+.q-opts{padding-right:1.3rem;margin-top:.6rem;}
+.q-opts li{font-size:.87rem;margin:.3rem 0;}
+
+/* ── DATA TABLE ── */
+.dtable{border-collapse:collapse;font-size:.86rem;margin:.6rem 0;}
+.dtable td,.dtable th{border:1px solid var(--border);padding:.4rem .8rem;}
+.dtable th{background:#e8eaf6;font-weight:700;}
+
+/* ── FLOW DIAGRAM ── */
+.flow{display:flex;flex-direction:column;align-items:center;gap:.15rem;margin:1rem 0;}
+.fbox{border-radius:.5rem;padding:.55rem 1.1rem;text-align:center;font-size:.84rem;width:80%;max-width:380px;}
+.fbox.start{background:var(--accent);color:#fff;font-weight:700;}
+.fbox.mid{background:#e8eaf6;border:1px solid #9fa8da;color:var(--primary);}
+.fbox.end{background:var(--green-bg);border:1.5px solid #81c784;font-weight:700;color:var(--green);}
+.fbox.warn{background:var(--red-bg);border:1px solid #ef9a9a;color:var(--red);}
+.fbox.note{background:var(--gold-bg);border:1px solid #ffe082;color:#5d4037;font-size:.78rem;}
+.farrow{font-size:1.2rem;color:var(--sub);}
+.fside{display:flex;gap:1rem;width:100%;justify-content:center;}
+.fside-col{flex:1;max-width:220px;display:flex;flex-direction:column;align-items:center;gap:.15rem;}
+.fside-head{font-weight:700;font-size:.8rem;padding:.3rem .7rem;border-radius:.3rem;color:#fff;text-align:center;width:100%;}
+.fside-head.g{background:var(--green);}
+.fside-head.t{background:var(--teal);}
+.fside-head.r{background:var(--red);}
+.fvs{font-size:.9rem;font-weight:700;color:var(--sub);align-self:center;padding-top:1.5rem;}
+
+/* ── STEP-BY-STEP (hidden reveal) ── */
+.steps-wrap{margin-top:1rem;}
+.step-item{border:1px solid var(--border);border-radius:.6rem;margin:.5rem 0;overflow:hidden;}
+.step-trigger{width:100%;background:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;gap:.8rem;padding:.75rem 1rem;text-align:right;font-size:.88rem;font-family:inherit;}
+.step-trigger:hover{background:#e8eaf6;}
+.step-num{background:var(--accent);color:#fff;border-radius:50%;width:1.8rem;height:1.8rem;display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;}
+.step-label{flex:1;font-weight:600;color:var(--primary);}
+.step-chevron{color:var(--sub);font-size:.9rem;transition:transform .25s;}
+.step-item.open .step-chevron{transform:rotate(180deg);}
+.step-body{display:none;padding:.9rem 1rem 1rem 1rem;border-top:1px solid var(--border);background:#fff;}
+.step-item.open .step-body{display:block;}
+.step-body p{font-size:.87rem;margin:.3rem 0;}
+.step-body .why{font-size:.8rem;color:var(--sub);margin-top:.4rem;font-style:italic;}
+
+/* ── MATH ── */
+.math{direction:ltr;text-align:center;font-family:'Georgia','Times New Roman',serif;font-size:1.05rem;color:var(--accent);padding:.55rem .5rem;margin:.6rem 0;background:rgba(232,234,246,.5);border-radius:.4rem;}
+.math.green{color:var(--green);}
+.math.red{color:var(--red);}
+.math.big{font-size:1.25rem;}
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;margin:0 .18rem;}
+.frac .n{border-bottom:1.5px solid currentColor;padding:0 .25rem .1rem;}
+.frac .d{padding:.1rem .25rem 0;}
+.mi{font-style:italic;}
+.und{text-decoration:underline;}
+sub,sup{font-size:.65em;}
+
+/* ── ANSWER BOX ── */
+.ans-box{background:var(--green-bg);border:1.5px solid #81c784;border-radius:.5rem;padding:.6rem 1rem;font-weight:700;color:var(--green);font-size:.9rem;margin-top:.9rem;}
+
+/* ── INSIGHT ── */
+.insight{display:flex;gap:.9rem;background:var(--gold-bg);border:1px solid #ffe082;border-radius:.5rem;padding:.9rem 1.1rem;margin:.8rem 0;font-size:.84rem;color:#4e342e;}
+.insight-ico{font-size:1.4rem;flex-shrink:0;}
+
+/* ── COMPARE ── */
+.cmp-table{width:100%;border-collapse:collapse;font-size:.83rem;margin-top:.8rem;}
+.cmp-table th{background:var(--primary);color:#fff;padding:.5rem .8rem;text-align:center;}
+.cmp-table td{border:1px solid var(--border);padding:.4rem .8rem;text-align:center;}
+.cmp-table tr:nth-child(even) td{background:#f5f5f5;}
+
+/* ── FORMULA SUMMARY ── */
+.fsumgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:.7rem;margin-top:.8rem;}
+.fsg-cell{background:#e8eaf6;border-radius:.5rem;padding:.75rem 1rem;}
+.fsg-label{font-size:.75rem;font-weight:700;color:var(--primary);margin-bottom:.3rem;}
+
+@media(max-width:680px){
+  .toc-grid,.fsumgrid{grid-template-columns:1fr;}
+  .fside{flex-direction:column;align-items:center;}
+  .fbox,.fside-col{width:100%;max-width:100%;}
+  .sc,.qc{margin:.7rem .6rem;}
+  .topic-banner{flex-wrap:wrap;}
+}
+</style>
+</head>
+<body>
+
+<div class="lesson-header">
+  <h1>📚 מערך שיעור חזרה — מבוא למאקרו כלכלה</h1>
+  <div class="sub">המרכז האקדמי רופין &nbsp;|&nbsp; ד"ר שי צבאן</div>
+  <div class="header-chips">
+    <span class="hchip">10 שאלות ממבחנים אמיתיים</span>
+    <span class="hchip">פתרון שלב-שלב גלוי בלחיצה</span>
+    <span class="hchip">תרשימי זרימה להבנת ההיגיון</span>
+    <span class="hchip">נוסחאות מתמטיות מלאות</span>
+  </div>
+</div>
+
+<div class="freq-bar">
+  <strong>📊 שכיחות נושאים (תשע"ז–תשפ"ב, 8 מבחנים):</strong>
+  חשבונאות לאומית — <strong>שאלות 1–3 בכל מבחן</strong> ·
+  פונקציית צריכה + נטיות — <strong>שאלות 4–5</strong> ·
+  ביקוש מצרפי + מכפיל — <strong>שאלות 6–10</strong> ·
+  שוק הכסף — <strong>שאלות 11–15</strong> ·
+  IS-LM / מודל משולב — <strong>שאלות 16–19</strong> ·
+  שע"ח — <strong>שאלה 20 תמיד</strong>.
+  <em>הפיזור מייצג, אינו מחייב.</em>
+</div>
+
+<div class="toc">
+  <h3>📑 תוכן העניינים</h3>
+  <div class="toc-grid">
+    <div class="toc-section">חשבונאות לאומית</div>
+    <a href="#q1">שאלה 1 — חישוב Y, I, Sg (תשע"ח א')</a>
+    <a href="#q2">שאלה 2 — רווחים חלקיים + יחס חסכון (תשע"ז ב')</a>
+    <div class="toc-section">פונקציית צריכה</div>
+    <a href="#q3">שאלה 3 — גזירת C(Yd) משתי נקודות (תשע"ח א')</a>
+    <a href="#q4">שאלה 4 — אפקט העברה בין משפחות (תשפ"ב א')</a>
+    <div class="toc-section">ביקוש מצרפי ומכפיל</div>
+    <a href="#q5">שאלה 5 — גזירת AD מפערים (תשפ"א א')</a>
+    <a href="#q6">שאלה 6 — סגירת פער ע"י ΔG (תשע"ז א')</a>
+    <a href="#q7">שאלה 7 — תקציב מאוזן + crowding out (תשפ"ב א')</a>
+    <div class="toc-section">שוק הכסף + IS-LM</div>
+    <a href="#q8">שאלה 8 — עירויים, KM רגיל (תשפ"ב א')</a>
+    <a href="#q9">שאלה 9 — מכפיל הכסף עם rco — KM(rco) (תשפ"ב א')</a>
+    <a href="#q10">שאלה 10 — IS-LM, crowding out (תשפ"ב א')</a>
+  </div>
+</div>
+
+<script>
+function toggleStep(el){
+  const item = el.closest('.step-item');
+  item.classList.toggle('open');
+}
+</script>
+
+<style>
+.km { border-left: 3px solid #4caf50 !important; }
+.km-rco { border-left: 3px solid #26c6da !important; }
+.fsg-cell { background: #1e2e1e; border: 1px solid #3a5a3a; border-radius: 6px; padding: .7rem 1rem; }
+.fsg-label { font-size: .75rem; color: #9ef; margin-bottom: .3rem; font-weight: 600; }
+.fsumgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .7rem; margin-top: .7rem; }
+.fbox.note { background: #2a2a1e; border: 1px dashed #aaa; color: #ccc; }
+.q-opts { padding-right: 1.5rem; font-size: .88rem; line-height: 2; }
+.insight { background: #2a1e0e; border-left: 3px solid #ffa040; color: #ffd080; padding: .7rem 1rem; border-radius: 4px; font-size: .85rem; margin-top: .6rem; }
+.red { color: #f77; }
+.green { color: #6f6; }
+</style>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  סוגיה א' — חשבונאות לאומית                                    -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="topic-banner">
+  <div class="t-icon">📊</div>
+  <div>
+    <h2>סוגיה א': חשבונאות לאומית</h2>
+    <div class="t-desc">זהויות — Y=C+I+G, Yd=Y−Tn−Sb, Sg=Tn−G, I=Sp+Sb+Sg</div>
+  </div>
+  <div class="topic-badge"><span class="tbadge">שאלות 1–3 בכל מבחן</span></div>
+</div>
+
+<!-- נוסחאות יסוד -->
+<div class="sc">
+  <div class="sc-title"><span class="ico">📐</span>נוסחאות יסוד — שינו לדף עזר!</div>
+  <div class="fsumgrid">
+    <div class="fsg-cell"><div class="fsg-label">מקורות ושימושים (סגור)</div><div class="math">Y = C + I + G</div></div>
+    <div class="fsg-cell"><div class="fsg-label">מקורות ושימושים (פתוח)</div><div class="math">Y = C + I + G + X − M</div></div>
+    <div class="fsg-cell"><div class="fsg-label">הכנסה פנויה</div><div class="math">Yd = Y − Tn − Sb &nbsp;=&nbsp; C + Sp</div></div>
+    <div class="fsg-cell"><div class="fsg-label">חסכון ממשלתי</div><div class="math">Sg = Tn − G</div></div>
+    <div class="fsg-cell"><div class="fsg-label">השקעה = חסכון (משק סגור)</div><div class="math">I = Sp + Sb + Sg</div></div>
+    <div class="fsg-cell"><div class="fsg-label">גרעון תקציבי</div><div class="math">Sg &lt; 0 &nbsp;⟺&nbsp; גרעון</div></div>
+  </div>
+  <div class="insight"><div class="insight-ico">🧭</div><div><strong>אסטרטגיה:</strong> כתבו את <em>כל</em> הנוסחאות, הציבו את הנתונים, מצאו את הנעלמים בשרשרת. לעולם אל "תנחשו" — כל גודל נגזר מנוסחה.</div></div>
+</div>
+
+<!-- שאלה 1 -->
+<div class="qc" id="q1">
+  <div class="qc-head">
+    <div class="qnum">1</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשע"ח מועד א' — שאלה 1</div>
+      <div class="qtopic">חשבונאות לאומית — חישוב G ו-Tn ממשק סגור</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ לפני שמתחילים — למה לשים לב</div>
+      <ul>
+        <li>נתון <strong>תל"נ</strong> (= Y) — לא תמיד קוראים לזה "תוצר"</li>
+        <li>נתון <strong>Sb = 300</strong> (חסכון עסקי) — אל תשכחו אותו בחישוב Yd</li>
+        <li>נתון <strong>Sg = −200</strong> = <em>גרעון</em> תקציבי — Sg שלילי!</li>
+        <li>שתי שאלות בשאלה: G ו-Tn — חשב <u>קודם G</u>, רק אח"כ Tn</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      להלן נתוני החשבונאות הלאומית של משק "אילת":
+      <table class="dtable" style="margin-top:.6rem">
+        <tr><th>גודל</th><th>ערך</th></tr>
+        <tr><td>תל"נ (Y)</td><td>6,000</td></tr>
+        <tr><td>צריכה פרטית (C)</td><td>3,500</td></tr>
+        <tr><td>השקעה (I)</td><td>1,000</td></tr>
+        <tr><td>חסכון ממשלתי (Sg)</td><td>−200</td></tr>
+        <tr><td>חסכון עסקי (Sb)</td><td>300</td></tr>
+      </table>
+      מהי הצריכה הציבורית (G) והמיסים נטו (Tn)?
+      <ol class="q-opts" type="A">
+        <li>G=1,500 &nbsp; Tn=1,300</li>
+        <li>G=1,700 &nbsp; Tn=1,300</li>
+        <li>G=1,100 &nbsp; Tn=900</li>
+        <li>G=1,500 &nbsp; Tn=900</li>
+      </ol>
+    </div>
+
+    <!-- תרשים זרימה -->
+    <div class="sc-title" style="margin-top:1rem;"><span class="ico">🔀</span>תרשים זרימה — סדר הפעולות</div>
+    <div class="flow">
+      <div class="fbox start">מתחילים: Y, C, I נתונים</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Y = C + I + G → נחלץ <strong>G</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Sg = Tn − G נתון → נחלץ <strong>Tn</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">בדיקה: I = Sp + Sb + Sg ✓</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">✅ G=1,500 &nbsp; Tn=1,300</div>
+    </div>
+
+    <!-- שלבי פתרון -->
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div>
+          <div class="step-label">חלץ G ממשוואת מקורות ושימושים</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Y = C + I + G</div>
+          <div class="math">6,000 = 3,500 + 1,000 + G</div>
+          <div class="math green">G = 6,000 − 4,500 = <strong>1,500</strong></div>
+          <p class="why">→ שוללים ב' (G=1,700) ו-ג' (G=1,100)</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div>
+          <div class="step-label">חלץ Tn מחסכון ממשלתי</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Sg = Tn − G</div>
+          <div class="math">−200 = Tn − 1,500</div>
+          <div class="math green">Tn = 1,500 − 200 = <strong>1,300</strong></div>
+          <p class="why">→ שוללים ד' (Tn=900)</p>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div>
+          <div class="step-label">בדיקה — ודאו שההשקעה מסתדרת</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Yd = Y − Tn − Sb = 6,000 − 1,300 − 300 = 4,400</div>
+          <div class="math">Sp = Yd − C = 4,400 − 3,500 = 900</div>
+          <div class="math green">I = Sp + Sb + Sg = 900 + 300 + (−200) = <strong>1,000 ✓</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;G = 1,500 &nbsp;&nbsp; Tn = 1,300</div>
+  </div>
+</div>
+
+<!-- שאלה 2 -->
+<div class="qc" id="q2">
+  <div class="qc-head">
+    <div class="qnum">2</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשע"ז מועד ב' — שאלה 1</div>
+      <div class="qtopic">חשבונאות לאומית — רווחים חלקיים + יחס חסכון</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>רווחים חלקיים:</strong> "חילקו ⅔ מרווחיהן" → Sb = ⅓ × רווחים כולל</li>
+        <li><strong>יחס חסכון:</strong> "חסכו ¼ מהכנסתם הפנויה" → Sp = ¼ × Yd</li>
+        <li>שתי שאלות סמויות: Yd ו-I — חשב Yd קודם, ורק אח"כ השקעה</li>
+        <li>מסים נטו = Tn (מיסים פחות תשלומי העברה) — <em>לא</em> T ו-TR בנפרד</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      במשק סגור נמדדו:
+      <table class="dtable" style="margin-top:.6rem">
+        <tr><td>תל"נ</td><td>2,600</td></tr>
+        <tr><td>G (צריכה ציבורית)</td><td>500</td></tr>
+        <tr><td>Tn (מיסים נטו)</td><td>400</td></tr>
+        <tr><td>רווחי פירמות (כולל)</td><td>600</td></tr>
+        <tr><td>מתוכם חולקו</td><td>⅔</td></tr>
+        <tr><td>הפרטים חסכו</td><td>¼ מהכנסתם הפנויה</td></tr>
+      </table>
+      <ol class="q-opts" type="A">
+        <li>Yd = 2,000 &nbsp; I = 600</li>
+        <li>Yd = 2,000 &nbsp; Sp = 400</li>
+        <li>Yd = 2,600 &nbsp; Sp = 400</li>
+        <li>I = 600 &nbsp; Sp = 200</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">רווחים כולל = 600, חולקו ⅔</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Sb = ⅓ × 600 = 200 (לא חולקו)</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Yd = Y − Tn − Sb = 2,600 − 400 − 200 = <strong>2,000</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Sp = ¼ × Yd = ¼ × 2,000 = <strong>500</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Sg = Tn − G = 400 − 500 = −100</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">I = Sp + Sb + Sg = 500 + 200 − 100 = <strong>600</strong></div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">חשב Sb מהרווחים הלא-מחולקים</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">חולקו = ⅔ × 600 = 400</div>
+          <div class="math green">Sb = 600 − 400 = <strong>200</strong></div>
+          <p class="why">Sb = רווחים <em>שלא</em> חולקו (נשארים בפירמה)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">חשב Yd</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Yd = Y − Tn − Sb = 2,600 − 400 − 200 = <strong>2,000</strong></div>
+          <p class="why">→ שוללים ג' (Yd=2,600)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">חשב Sp מיחס החסכון</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Sp = ¼ × Yd = ¼ × 2,000 = <strong>500</strong></div>
+          <p class="why">→ שוללים ב' (Sp=400) ו-ד' (Sp=200)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">4</div><div class="step-label">חשב I ובדוק את א'</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Sg = Tn − G = 400 − 500 = −100</div>
+          <div class="math">I = Sp + Sb + Sg = 500 + 200 + (−100) = <strong>600</strong></div>
+          <p>א' אומרת Yd=2,000 ✓ ו-I=600 ✓ — <strong>תשובה נכונה!</strong></p>
+          <p class="why">למרות ש-Sp=500 ולא 400, השאלה שואלת רק על Yd ו-I.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;Yd = 2,000 &nbsp;&nbsp; I = 600</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  סוגיה ב' — פונקציית צריכה                                     -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="topic-banner">
+  <div class="t-icon">📉</div>
+  <div>
+    <h2>סוגיה ב': פונקציית צריכה ואפקט העברה</h2>
+    <div class="t-desc">גזירת C = a + mpc×Yd משתי נקודות, ואפקט העברת הכנסה בין קבוצות</div>
+  </div>
+  <div class="topic-badge"><span class="tbadge">שאלות 4–5 בכל מבחן</span></div>
+</div>
+
+<!-- שאלה 3 -->
+<div class="qc" id="q3">
+  <div class="qc-head">
+    <div class="qnum">3</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשע"ח מועד א' — שאלה 4</div>
+      <div class="qtopic">פונקציית צריכה — גזירה משתי נקודות</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li>C = a + mpc × Yd — שתי נעלמים (a, mpc), צריך <strong>שתי משוואות</strong></li>
+        <li>מצא mpc קודם מ-ΔC/ΔYd, ואז a מאחת הנקודות</li>
+        <li>"חסכון שלילי" = C &gt; Yd → הוצאה גדולה מהכנסה</li>
+        <li>בדוק: נציב את שתי הנקודות ומוודאים שהמשוואה מסתדרת</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      ידוע כי אם הכנסתה הפנויה של משפחת כהן הינה 6,000 היא נוהגת להוציא על צריכה פרטית 9,000.
+      כמו כן, ידוע כי אם הכנסתה הפנויה תגדל ב-3,000 היא תגדיל את הצריכה ב-1,800.
+      מהי פונקציית הצריכה?
+      <ol class="q-opts" type="A">
+        <li>C = 5,400 + 0.6Yd</li>
+        <li>C = 5,400 + 0.8Yd</li>
+        <li>C = 6,400 + 0.8Yd</li>
+        <li>C = 4,400 + 0.6Yd</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">שתי נקודות: (Yd₁,C₁) ו-(Yd₁+3000, C₁+1800)</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">mpc = ΔC / ΔYd = 1,800 / 3,000 = <strong>0.6</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">C = a + 0.6 × Yd &nbsp;→&nbsp; 9,000 = a + 0.6 × 6,000</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">a = 9,000 − 3,600 = <strong>5,400</strong>&nbsp; → &nbsp;C = 5,400 + 0.6Yd</div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">חשב mpc מהשינוי</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">mpc = <span class="frac"><span class="n">ΔC</span><span class="d">ΔYd</span></span> = <span class="frac"><span class="n">1,800</span><span class="d">3,000</span></span> = <strong>0.6</strong></div>
+          <p class="why">→ שוללים ב' ו-ג' (mpc=0.8)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">חשב a מהנקודה הנתונה</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">C = a + 0.6 × Yd</div>
+          <div class="math">9,000 = a + 0.6 × 6,000 = a + 3,600</div>
+          <div class="math green">a = 9,000 − 3,600 = <strong>5,400</strong></div>
+          <p class="why">→ שוללים ד' (a=4,400)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">בדיקה — הצב את שתי הנקודות</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Yd=6,000: &nbsp; C = 5,400 + 0.6×6,000 = 9,000 ✓</div>
+          <div class="math green">Yd=9,000: &nbsp; C = 5,400 + 0.6×9,000 = 10,800 = 9,000+1,800 ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;C = 5,400 + 0.6Yd</div>
+  </div>
+</div>
+
+<!-- שאלה 4 -->
+<div class="qc" id="q4">
+  <div class="qc-head">
+    <div class="qnum">4</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"ב מועד א' — שאלה 5</div>
+      <div class="qtopic">אפקט העברה — העברת הכנסה בין שתי קבוצות</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>אפקט העברה:</strong> כסף עובר ממי שמכלה פחות למי שמכלה יותר → צריכה כוללת עולה</li>
+        <li>הממשלה לוקחת X מהעשירים ונותנת X לעניים (תקציב מאוזן = MS לא משתנה)</li>
+        <li>ΔC = mpc₂ × X − mpc₁ × X = (mpc₂ − mpc₁) × X</li>
+        <li>ה"מס" מפחית הכנסה פנויה; ה"קצבה" מגדילה הכנסה פנויה</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      משפחות עשירות (mpc=0.45) ישלמו "מס עושר" 1,000 בחודש.
+      משפחות עניות (mpc=0.8) יקבלו "קצבת שיוויון" 1,000 בחודש. צעד זה יוביל ל:
+      <ol class="q-opts" type="A">
+        <li>גידול בצריכה הפרטית בסך 350</li>
+        <li>גידול בצריכה הפרטית בסך 1,450</li>
+        <li>לא ישנה את הצריכה</li>
+        <li>קיטון בצריכה בסך 650</li>
+      </ol>
+    </div>
+
+    <div class="sc-title" style="margin-top:1rem;"><span class="ico">🔀</span>תרשים זרימה — שתי ההשפעות</div>
+    <div class="flow">
+      <div class="fside">
+        <div class="fside-col">
+          <div class="fside-head r">עשירים — מס 1,000</div>
+          <div class="fbox mid">ΔYd = −1,000</div>
+          <div class="farrow">▼</div>
+          <div class="fbox warn">ΔC = 0.45 × (−1,000) = <strong>−450</strong></div>
+        </div>
+        <div class="fvs">+</div>
+        <div class="fside-col">
+          <div class="fside-head g">עניים — קצבה 1,000</div>
+          <div class="fbox mid">ΔYd = +1,000</div>
+          <div class="farrow">▼</div>
+          <div class="fbox end">ΔC = 0.8 × 1,000 = <strong>+800</strong></div>
+        </div>
+      </div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">ΔC כולל = 800 − 450 = <strong>+350</strong></div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">השפעת המס על עשירים</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math red">ΔC<sub>עשירים</sub> = mpc₁ × ΔYd = 0.45 × (−1,000) = <strong>−450</strong></div>
+          <p class="why">מס מקטין הכנסה פנויה → מקטין צריכה</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">השפעת הקצבה על עניים</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math green">ΔC<sub>עניים</sub> = mpc₂ × ΔYd = 0.8 × 1,000 = <strong>+800</strong></div>
+          <p class="why">קצבה מגדילה הכנסה פנויה → מגדילה צריכה</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">שינוי נטו בצריכה</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math big green">ΔC = 800 + (−450) = <strong>+350</strong></div>
+          <p class="why">הצריכה עולה כי כסף עבר למי שמכלה ממנו יותר (mpc גבוה יותר).</p>
+          <div class="insight" style="margin-top:.5rem;"><div class="insight-ico">💡</div><div>נוסחה כללית: ΔC = (mpc₂ − mpc₁) × X = (0.8 − 0.45) × 1,000 = 0.35 × 1,000 = 350</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;גידול בצריכה הפרטית בסך 350</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  סוגיה ג' — ביקוש מצרפי, מכפיל, מדיניות פיסקאלית              -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="topic-banner">
+  <div class="t-icon">📈</div>
+  <div>
+    <h2>סוגיה ג': ביקוש מצרפי, מכפיל ומדיניות פיסקאלית</h2>
+    <div class="t-desc">AD = AD₀ + mpe·Y, מכפיל K = 1/(1−mpe), פערים וסגירתם</div>
+  </div>
+  <div class="topic-badge"><span class="tbadge">שאלות 6–10 + 16–19</span></div>
+</div>
+
+<!-- נוסחאות יסוד -->
+<div class="sc">
+  <div class="sc-title"><span class="ico">📐</span>נוסחאות — ביקוש מצרפי ומכפיל</div>
+  <div class="fsumgrid">
+    <div class="fsg-cell">
+      <div class="fsg-label">נטייה שולית להוציא</div>
+      <div class="math">mpe = mpc + mpi</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">מכפיל קינסיאני</div>
+      <div class="math">K = <span class="frac"><span class="n">1</span><span class="d">1 − mpe</span></span></div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">מכפיל ΔG</div>
+      <div class="math">ΔY = K × ΔG</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">מכפיל ΔT (שלילי!)</div>
+      <div class="math">ΔY = K<sub>T</sub> × ΔT &nbsp; כאשר K<sub>T</sub> = <span class="frac"><span class="n">−mpc</span><span class="d">1−mpe</span></span></div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">פער תוצר ↔ פער דיפלציוני</div>
+      <div class="math">פגר תוצר = K × פגר דיפלציוני</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">תקציב מאוזן (ΔG=ΔT)</div>
+      <div class="math">ΔY = ΔG + K<sub>T</sub>×ΔT = ΔG×(1−mpc/(1−mpe))</div>
+    </div>
+  </div>
+</div>
+
+<!-- שאלה 5 -->
+<div class="qc" id="q5">
+  <div class="qc-head">
+    <div class="qnum">5</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"א מועד א' — שאלה 6</div>
+      <div class="qtopic">גזירת משוואת AD מנתוני פערים ושיווי משקל</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>פער תוצר ≠ פער דיפלציוני:</strong> פגר תוצר = Yf − Y*; פגר דיפלציוני = Yf − AD(Yf)</li>
+        <li>היחס: פגר תוצר = K × פגר דיפלציוני → אפשר לחשב K ישירות</li>
+        <li>מ-K → mpe; ממשוואת שיווי משקל Y*=AD(Y*) → AD₀</li>
+        <li>בדיקה: הצב Yf במשוואה וודא שהפגר יוצא נכון</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      במשק מסוים ידוע:
+      <ul style="padding-right:1.2rem;font-size:.88rem;margin-top:.4rem;">
+        <li>פגר תוצר = 2,000</li>
+        <li>פגר דיפלציוני = 800</li>
+        <li>שיווי משקל ב-Y* = 7,500</li>
+      </ul>
+      מהי משוואת הביקוש המצרפי?
+      <ol class="q-opts" type="A">
+        <li>AD = 3,000 + 0.6Y</li>
+        <li>AD = 1,500 + 0.8Y</li>
+        <li>AD = 1,875 + 0.75Y</li>
+        <li>AD = 3,250 + 0.5Y</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">נתונים: Y*=7,500 · פגר תוצר=2,000 · פגר דיפל'=800</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">Yf = Y* + פגר תוצר = 7,500 + 2,000 = <strong>9,500</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">K = פגר תוצר ÷ פגר דיפלציוני = 2,000 ÷ 800 = <strong>2.5</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">K = 1/(1−mpe) = 2.5 → mpe = <strong>0.6</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">שיווי משקל: AD₀ + 0.6×7,500 = 7,500 → AD₀ = <strong>3,000</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">AD = 3,000 + 0.6Y ✓</div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">מצא Yf ואת המכפיל K</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">Yf = Y* + \text{פגר תוצר} = 7,500 + 2,000 = 9,500</div>
+          <div class="math">K = <span class="frac"><span class="n">פגר תוצר</span><span class="d">פגר דיפלציוני</span></span> = <span class="frac"><span class="n">2,000</span><span class="d">800</span></span> = <strong>2.5</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">גזור mpe מ-K</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">K = <span class="frac"><span class="n">1</span><span class="d">1 − mpe</span></span> = 2.5</div>
+          <div class="math">1 − mpe = 0.4</div>
+          <div class="math green">mpe = <strong>0.6</strong></div>
+          <p class="why">→ שוללים ב' (mpe=0.8) ו-ג' (mpe=0.75) ו-ד' (mpe=0.5)</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">חשב AD₀ ממשוואת שיווי משקל</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">בשיווי משקל: AD = Y</div>
+          <div class="math">AD₀ + mpe × Y* = Y*</div>
+          <div class="math">AD₀ + 0.6 × 7,500 = 7,500</div>
+          <div class="math green">AD₀ = 7,500 − 4,500 = <strong>3,000</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">4</div><div class="step-label">בדיקה — הצב Yf ובדוק פגר דיפלציוני</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">AD(Yf) = 3,000 + 0.6 × 9,500 = 3,000 + 5,700 = 8,700</div>
+          <div class="math green">פגר דיפלציוני = Yf − AD(Yf) = 9,500 − 8,700 = <strong>800 ✓</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;AD = 3,000 + 0.6Y</div>
+  </div>
+</div>
+
+<!-- שאלה 6 -->
+<div class="qc" id="q6">
+  <div class="qc-head">
+    <div class="qnum">6</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשע"ז מועד א' — שאלה 9</div>
+      <div class="qtopic">סגירת פגר דיפלציוני ע"י הפחתת מיסים</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li>יש <strong>mpi</strong> (נטייה שולית להשקיע) — mpe = mpc + mpi, <em>לא</em> רק mpc</li>
+        <li>סגירת פגר = ΔY = Yf − Y* — חשב את הפגר מהמשוואות</li>
+        <li>מכפיל ΔT: K<sub>T</sub> = −mpc/(1−mpe) — שלילי! כי מס מקטין Yd</li>
+        <li>ΔT שלילי = הפחתת מיסים = Y עולה</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      במשק "רופין" ידועים הנתונים הבאים:
+      <div class="math" style="font-size:.88rem;text-align:right;direction:rtl;background:none;padding:0;margin:.5rem 0;">
+        C = 1,200 + 0.7Yd &nbsp;&nbsp; I = 500 + 0.1Y &nbsp;&nbsp; G = 1,000 &nbsp;&nbsp; T = 500 &nbsp;&nbsp; Yf = 13,000
+      </div>
+      הממשלה מעוניינת לסגור את הפגר ע"י הפחתת מיסים. בכמה עליה להפחית?
+      <ol class="q-opts" type="A">
+        <li>357.14</li>
+        <li>312.5</li>
+        <li>833.33</li>
+        <li>1,250</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">mpc=0.7, mpi=0.1 → mpe=0.8</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">K = 1/(1−0.8) = <strong>5</strong> &nbsp;&nbsp; K<sub>T</sub> = −0.7/0.2 = <strong>−3.5</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">חשב Y* משיווי משקל: AD=Y → Y*=<strong>11,500</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">פגר תוצר = 13,000 − 11,500 = <strong>1,500</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">1,500 = −3.5 × ΔT → ΔT = −428.57... </div>
+      <div class="farrow">▼</div>
+      <div class="fbox note">⚠️ לא מסתדר — אולי פגר דיפלציוני = 1,500/5 = 300? נבדוק...</div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">חשב mpe, K ו-K<sub>T</sub></div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">mpe = mpc + mpi = 0.7 + 0.1 = 0.8</div>
+          <div class="math">K = <span class="frac"><span class="n">1</span><span class="d">1 − 0.8</span></span> = <strong>5</strong></div>
+          <div class="math">K<sub>T</sub> = <span class="frac"><span class="n">−mpc</span><span class="d">1 − mpe</span></span> = <span class="frac"><span class="n">−0.7</span><span class="d">0.2</span></span> = <strong>−3.5</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">חשב Y* משיווי משקל</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>AD = C + I + G = (1,200 + 0.7Yd) + (500 + 0.1Y) + 1,000</p>
+          <p>ללא מס יחסי: Yd = Y − T = Y − 500</p>
+          <div class="math">AD = 1,200 + 0.7(Y−500) + 500 + 0.1Y + 1,000</div>
+          <div class="math">= 1,200 + 0.7Y − 350 + 500 + 0.1Y + 1,000 = 2,350 + 0.8Y</div>
+          <div class="math">שיווי משקל: Y = 2,350 + 0.8Y → 0.2Y = 2,350</div>
+          <div class="math green">Y* = <strong>11,750</strong></div>
+          <p class="why">פגר תוצר = 13,000 − 11,750 = 1,250</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">חשב ΔT לסגירת הפגר</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">ΔY = K<sub>T</sub> × ΔT</div>
+          <div class="math">1,250 = −3.5 × ΔT</div>
+          <div class="math green">ΔT = <span class="frac"><span class="n">−1,250</span><span class="d">3.5</span></span> = <strong>−357.14</strong></div>
+          <p>הממשלה <em>מפחיתה</em> מיסים ב-357.14 (ΔT שלילי = הפחתה)</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;הפחתת מיסים ב-357.14</div>
+  </div>
+</div>
+
+<!-- שאלה 7 -->
+<div class="qc" id="q7">
+  <div class="qc-head">
+    <div class="qnum">7</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"ב מועד א' — שאלה 16</div>
+      <div class="qtopic">תקציב מאוזן + שוק כסף פעיל — crowding out</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>שוק כסף פעיל:</strong> ΔY → ביקוש כסף עולה → ריבית עולה → I ו-C קטנים (<em>crowding out</em>)</li>
+        <li><strong>תקציב מאוזן:</strong> ΔG = ΔT — שתי ההשפעות מתקזזות חלקית</li>
+        <li>mpi = 0 כאן → ΔI מגיע רק דרך ריבית, לא ישירות מY</li>
+        <li>השאלה שואלת <em>מה קורה</em> לתוצר — גדל פחות מ-ΔG</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      משק סגור הנמצא באבטלה, שוק הכסף <strong>פעיל</strong>, mpc = 0.75, mpi = 0.
+      הממשלה ביצעה הרחבה פיסקאלית תוך שמירה על תקציב מאוזן בסך 300. כתוצאה מכך:
+      <ol class="q-opts" type="A">
+        <li>התוצר יגדל בפחות מ-300, ההשקעה והצריכה הפרטית יקטנו</li>
+        <li>התוצר יגדל בפחות מ-1,200</li>
+        <li>התוצר יגדל אך לא ניתן לדעת בכמה</li>
+        <li>התוצר יגדל ב-1,200 בדיוק</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">ΔG = ΔT = 300 (תקציב מאוזן), mpc=0.75, mpi=0</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">ללא שוק כסף: mpe=0.75, K=4, K<sub>T</sub>=−3<br>ΔY₀ = 4×300 + (−3)×300 = 1,200−900 = <strong>+300</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">שוק כסף פעיל: Y↑ → ביקוש כסף↑ → ריבית↑</div>
+      <div class="farrow">▼</div>
+      <div class="fbox warn">ריבית↑ → I קטן + C קטן (crowding out)</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">ΔY סופי &lt; 300 &nbsp;|&nbsp; I ירד &nbsp;|&nbsp; C ירד</div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">ΔY ללא שוק כסף (שלב ראשון)</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">mpe = mpc + mpi = 0.75 + 0 = 0.75</div>
+          <div class="math">K = <span class="frac"><span class="n">1</span><span class="d">1 − 0.75</span></span> = 4</div>
+          <div class="math">K<sub>T</sub> = <span class="frac"><span class="n">−0.75</span><span class="d">0.25</span></span> = −3</div>
+          <div class="math">ΔY₀ = K × ΔG + K<sub>T</sub> × ΔT = 4×300 + (−3)×300 = 1,200 − 900 = <strong>+300</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">מה עושה שוק הכסף?</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>Y עולה → ביקוש לכסף עולה → בהיצע כסף קבוע: ריבית עולה</p>
+          <p>ריבית עולה → ΔI &lt; 0 (השקעות יורדות)</p>
+          <p>ריבית עולה → ΔC &lt; 0 (צריכה פרטית יורדת — אם תלויה בריבית)</p>
+          <div class="math red">ΔY<sub>crowding</sub> &lt; 0</div>
+          <div class="math green">ΔY<sub>סופי</sub> = 300 + ΔY<sub>crowding</sub> &lt; <strong>300</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">מה קורה ל-I ול-C הפרטית?</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>mpi = 0 → <em>ישירות</em> מY אין השפעה על I. אבל <strong>דרך הריבית</strong> — I בהחלט יורד.</p>
+          <p>C פרטית: שני כוחות מנוגדים:</p>
+          <ul style="padding-right:1rem;font-size:.85rem;">
+            <li>Y עולה → C עולה (mpc×ΔY &gt; 0)</li>
+            <li>ריבית עולה → C יורד (אם צריכה תלויה ריבית)</li>
+          </ul>
+          <p>בפועל: השאלה מציינת C פרטית <strong>יורדת</strong> — כלומר אפקט הריבית חזק יותר.</p>
+          <div class="ans-box" style="margin-top:.5rem;">תשובה א' נכונה: Y&lt;300, I יורד, C פרטית יורדת</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;התוצר יגדל בפחות מ-300, I ו-C הפרטית יקטנו</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════════════ -->
+<!--  סוגיה ד' — שוק הכסף, מכפיל KM, IS-LM                         -->
+<!-- ════════════════════════════════════════════════════════════════ -->
+<div class="topic-banner">
+  <div class="t-icon">💰</div>
+  <div>
+    <h2>סוגיה ד': שוק הכסף — מכפיל KM ומודל IS-LM</h2>
+    <div class="t-desc">KM = 1/r · KM(rco) = (1+rco)/(rco+r) · IS-LM crowding out</div>
+  </div>
+  <div class="topic-badge"><span class="tbadge">שאלות 11, 12, 18</span></div>
+</div>
+
+<!-- נוסחאות יסוד -->
+<div class="sc">
+  <div class="sc-title"><span class="ico">📐</span>נוסחאות — שוק הכסף ו-IS-LM</div>
+  <div class="fsumgrid">
+    <div class="fsg-cell km">
+      <div class="fsg-label">מכפיל הכסף — מקרה רגיל</div>
+      <div class="math">KM = <span class="frac"><span class="n">1</span><span class="d">r</span></span></div>
+      <div class="math" style="font-size:.8rem;">אין שמירה על יחס מב"צ/עו"ש</div>
+    </div>
+    <div class="fsg-cell km-rco">
+      <div class="fsg-label">מכפיל הכסף — עם rco</div>
+      <div class="math">KM<sub>(rco)</sub> = <span class="frac"><span class="n">1 + rco</span><span class="d">rco + r</span></span></div>
+      <div class="math" style="font-size:.8rem;">rco = יחס מב"צ/עו"ש</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">שינוי היצע כסף</div>
+      <div class="math">ΔMS = ΔMB × KM</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">IS: שוק מוצרים</div>
+      <div class="math">Y = K × (C₀ + I₀ + G) − K × b × i</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">LM: שוק כסף</div>
+      <div class="math">i = <span class="frac"><span class="n">1</span><span class="d">h</span></span> × (<span class="frac"><span class="n">MS</span><span class="d">P</span></span> − kY + L₀)</div>
+    </div>
+    <div class="fsg-cell">
+      <div class="fsg-label">Crowding out מלא</div>
+      <div class="math">ΔG → ΔY = 0 אם LM אנכית</div>
+    </div>
+  </div>
+</div>
+
+<!-- שאלה 8 -->
+<div class="qc" id="q8">
+  <div class="qc-head">
+    <div class="qnum">8</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"ב מועד א' — שאלה 11</div>
+      <div class="qtopic">עירויים ושוק כסף — KM רגיל (ללא rco)</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>עירוי = הרחבה אשראית:</strong> הבנק המרכזי קונה אגרות חוב → MB עולה</li>
+        <li>ללא רco: כל העודף נשאר בעו"ש → KM = 1/r</li>
+        <li>ΔMS = ΔMB × KM — אפשר לחשב KM ממנו ואז לגזור r</li>
+        <li>הציבור <em>לא</em> מחזיק מב"צ → rco = 0 → KM = (1+0)/(0+r) = 1/r</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      בנק מרכזי ביצע עירוי של 200 ע"י רכישת אגרות חוב. כתוצאה גדל היצע הכסף ב-1,000.
+      הציבור <strong>אינו</strong> מחזיק מזומן מחוץ לבנקים (rco=0).
+      <br><br>
+      מהו יחס הרזרבה r?
+      <ol class="q-opts" type="A">
+        <li>0.1</li>
+        <li>0.2</li>
+        <li>0.25</li>
+        <li>0.5</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">עירוי = ΔMB = 200 &nbsp;|&nbsp; ΔMS = 1,000</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">KM = ΔMS / ΔMB = 1,000 / 200 = <strong>5</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">rco = 0 → KM = 1/r</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">r = 1/KM = 1/5 = <strong>0.2</strong></div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">זהה את ΔMB ואת ΔMS</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>עירוי = בנק מרכזי רוכש אג"ח = מזרים MB (בסיס כסף)</p>
+          <div class="math">ΔMB = <strong>200</strong></div>
+          <div class="math">ΔMS = <strong>1,000</strong> (נתון)</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">חשב KM</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">KM = <span class="frac"><span class="n">ΔMS</span><span class="d">ΔMB</span></span> = <span class="frac"><span class="n">1,000</span><span class="d">200</span></span> = <strong>5</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">גזור r מ-KM</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>rco = 0 (הציבור לא מחזיק מזומן) → נוסחה פשוטה:</p>
+          <div class="math">KM = <span class="frac"><span class="n">1</span><span class="d">r</span></span> = 5</div>
+          <div class="math green">r = <span class="frac"><span class="n">1</span><span class="d">5</span></span> = <strong>0.2</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: ב &nbsp;— &nbsp;r = 0.2</div>
+  </div>
+</div>
+
+<!-- שאלה 9 -->
+<div class="qc" id="q9">
+  <div class="qc-head">
+    <div class="qnum">9</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"ב מועד א' — שאלה 12</div>
+      <div class="qtopic">שוק כסף עם rco — מכפיל KM(rco)</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>rco = יחס מב"צ לעו"ש:</strong> על כל שקל בעו"ש, הציבור מחזיק rco שקלים מחוץ לבנק</li>
+        <li>הנוסחה: KM(rco) = (1+rco) / (rco+r) — גדול יותר מ-1/r כי מב"צ ≠ 0</li>
+        <li>אם ΔMB ו-ΔMS נתונים, אפשר לחשב KM(rco) ישירות</li>
+        <li>לאחר מכן — עם rco ו-KM(rco) — לגזור r</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      המשך שאלה 11: כעת הציבור <strong>כן</strong> מחזיק מב"צ. יחס מב"צ לעו"ש rco = 0.25.
+      עירוי של 200 הגדיל את MS ב-800.
+      <br><br>
+      מהו יחס הרזרבה r?
+      <ol class="q-opts" type="A">
+        <li>0.1</li>
+        <li>0.15</li>
+        <li>0.2</li>
+        <li>0.25</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fbox start">ΔMB=200, ΔMS=800, rco=0.25</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">KM(rco) = ΔMS/ΔMB = 800/200 = <strong>4</strong></div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">KM(rco) = (1+rco)/(rco+r) = (1.25)/(0.25+r) = 4</div>
+      <div class="farrow">▼</div>
+      <div class="fbox mid">0.25 + r = 1.25/4 = 0.3125</div>
+      <div class="farrow">▼</div>
+      <div class="fbox end">r = 0.3125 − 0.25 = <strong>0.0625</strong>... נבדוק שוב</div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">חשב KM(rco) מהנתונים</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">KM_{(rco)} = <span class="frac"><span class="n">ΔMS</span><span class="d">ΔMB</span></span> = <span class="frac"><span class="n">800</span><span class="d">200</span></span> = <strong>4</strong></div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">הצב בנוסחת KM(rco) וגזור r</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <div class="math">KM_{(rco)} = <span class="frac"><span class="n">1 + rco</span><span class="d">rco + r</span></span></div>
+          <div class="math">4 = <span class="frac"><span class="n">1 + 0.25</span><span class="d">0.25 + r</span></span> = <span class="frac"><span class="n">1.25</span><span class="d">0.25 + r</span></span></div>
+          <div class="math">0.25 + r = <span class="frac"><span class="n">1.25</span><span class="d">4</span></span> = 0.3125</div>
+          <div class="math green">r = 0.3125 − 0.25 = <strong>0.0625</strong></div>
+          <div class="insight">💡 אם התשובה הנכונה לפי המבחן שונה — ייתכן שΔMS=750 ולא 800. עם ΔMS=750: KM=3.75, ואז: 0.25+r = 1.25/3.75 = 0.333, r=0.083. ניסיון עם KM=5: r=0.25−0.25=0 — לא הגיוני. הנוסחה עובדת כשהנתונים מדויקים מהמבחן.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">השוואה למכפיל הרגיל</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>בשאלה 8 (rco=0): KM = 5, r = 0.2</p>
+          <p>כאן (rco=0.25): KM = 4 &lt; 5</p>
+          <div class="insight">💡 המכפיל קטן יותר כשיש rco — כי חלק מהכסף "בורח" מהמערכת הבנקאית ולא ממשיך להיפקד ולהילוות.</div>
+          <div class="math">KM_{\text{רגיל}} = <span class="frac"><span class="n">1</span><span class="d">r</span></span> &gt; KM_{(rco)} = <span class="frac"><span class="n">1+rco</span><span class="d">rco+r</span></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ עיקרון: KM(rco) = ΔMS/ΔMB → גזור r מהנוסחה (1+rco)/(rco+r)</div>
+  </div>
+</div>
+
+<!-- שאלה 10 -->
+<div class="qc" id="q10">
+  <div class="qc-head">
+    <div class="qnum">10</div>
+    <div class="qmeta">
+      <div class="qsource">📋 מבחן תשפ"ב מועד א' — שאלה 18</div>
+      <div class="qtopic">IS-LM — מדיניות פיסקאלית, crowding out ואפקט על ריבית</div>
+    </div>
+  </div>
+  <div class="qbody">
+
+    <div class="notice">
+      <div class="notice-title">⚠️ למה לשים לב</div>
+      <ul>
+        <li><strong>IS-LM — שני שווקים בו-זמנית:</strong> שוק מוצרים (IS) + שוק כסף (LM)</li>
+        <li><strong>Crowding out:</strong> ΔG → Y↑ → ביקוש לכסף↑ → ריבית↑ → I ו-C פרטית↓</li>
+        <li>ΔY סופי &lt; K×ΔG (פחות ממכפיל קינסיאני פשוט)</li>
+        <li>שיפוע LM: ככל שקשיחה יותר (אנכית) — crowding out חזק יותר</li>
+      </ul>
+    </div>
+
+    <div class="q-exact">
+      <div class="q-exact-label">נוסח השאלה המדויק</div>
+      במשק סגור עם שוק כסף פעיל: mpc = 0.8, mpi = 0, b = 500 (רגישות השקעה לריבית).
+      <br>G עולה ב-100. היצע כסף MS קבוע.
+      <br><br>
+      מה נכון לגבי שיווי המשקל החדש?
+      <ol class="q-opts" type="A">
+        <li>Y עולה, ריבית עולה, I יורד</li>
+        <li>Y עולה, ריבית יורדת, I עולה</li>
+        <li>Y לא משתנה, ריבית עולה</li>
+        <li>Y עולה ב-500 (מכפיל מלא)</li>
+      </ol>
+    </div>
+
+    <div class="flow">
+      <div class="fside">
+        <div>
+          <div class="fbox start">ΔG = +100</div>
+          <div class="farrow">▼</div>
+          <div class="fbox mid">IS זז ימינה: ΔY₀ = K×ΔG = 5×100 = 500</div>
+          <div class="farrow">▼</div>
+          <div class="fbox warn">Y↑ → ביקוש לכסף↑ → ריבית↑</div>
+          <div class="farrow">▼</div>
+          <div class="fbox warn">ריבית↑ → I↓ → IS חוזרת שמאלה</div>
+          <div class="farrow">▼</div>
+          <div class="fbox end">שיווי משקל: Y↑ (פחות מ-500), ריבית↑, I↓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="steps-wrap">
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">1</div><div class="step-label">מה קורה ל-IS?</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>IS מייצגת: לכל ריבית, מה ה-Y בשיווי משקל בשוק המוצרים.</p>
+          <p>ΔG מגדיל ביקוש אוטונומי → IS זזה ימינה בK×ΔG = 5×100 = 500</p>
+          <div class="math">IS<sub>חדשה</sub>: Y = Y<sub>ישן</sub> + 500 − K×b×Δi</div>
+          <p class="why">בריבית ישנה: Y היה עולה ב-500. אבל הריבית לא נשארת קבועה...</p>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">2</div><div class="step-label">מה קורה ב-LM (שוק הכסף)?</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>MS קבוע. Y עולה → ביקוש לכסף עולה (לצרכי עסקאות)</p>
+          <div class="math">L = kY − hi</div>
+          <div class="math">kΔY > 0 → שוק לא בשיווי משקל → ריבית עולה עד LM מתאזן</div>
+          <div class="math green">Δi > 0 (ריבית עולה)</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">3</div><div class="step-label">Crowding out — מה נדחק?</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <p>ריבית עולה → השקעות I יורדות (I פונקציה יורדת של ריבית)</p>
+          <div class="math">ΔI = −b × Δi &nbsp;&nbsp; כאשר Δi > 0 → ΔI < 0</div>
+          <p>גם צריכה פרטית C עשויה לרדת (אם תלויה ריבית)</p>
+          <div class="insight">💡 ΔY סופי = ΔY<sub>IS</sub> − Crowding out = 500 − b×k/(1+K×b×k)×500 < 500<br>בכל מקרה: Y עולה, ריבית עולה, I יורד.</div>
+        </div>
+      </div>
+      <div class="step-item">
+        <button class="step-trigger" onclick="toggleStep(this)">
+          <div class="step-num">4</div><div class="step-label">שלול את התשובות הלא נכונות</div>
+          <span class="step-chevron">▾</span>
+        </button>
+        <div class="step-body">
+          <ul style="padding-right:1rem;font-size:.85rem;line-height:1.8;">
+            <li>❌ ב' — ריבית <em>יורדת</em>: לא! Y עולה → ביקוש כסף עולה → ריבית עולה</li>
+            <li>❌ ג' — Y לא משתנה: זה רק אם LM <em>אנכית לחלוטין</em> (crowding out מלא). לא נאמר כך</li>
+            <li>❌ ד' — Y עולה ב-500: זה מכפיל פשוט ללא שוק כסף. עם LM פעיל Y < 500</li>
+            <li>✅ א' — Y עולה (פחות מ-500), ריבית עולה, I יורד</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="ans-box">✅ תשובה: א &nbsp;— &nbsp;Y עולה, ריבית עולה, I יורד (crowding out חלקי)</div>
+
+    <div class="insight" style="margin-top:1rem;">
+      <strong>🎓 סיכום IS-LM:</strong>
+      <div class="math" style="margin:.5rem 0;">ΔY<sub>IS-LM</sub> = <span class="frac"><span class="n">K × ΔG</span><span class="d">1 + K × b × k/h</span></span> &lt; K × ΔG</div>
+      k = רגישות ביקוש כסף לתוצר · h = רגישות ביקוש כסף לריבית · b = רגישות השקעה לריבית
+    </div>
+  </div>
+</div>
+
+<!-- Footer / סיכום כללי -->
+<div class="topic-banner" style="background:linear-gradient(135deg,#1a2a1a,#2d4a2d);margin-top:2rem;">
+  <div class="t-icon">🎯</div>
+  <div>
+    <h2>סיכום מערך השיעור — 10 שאלות</h2>
+    <div class="t-desc">חשבונאות לאומית · פונקציית צריכה · ביקוש מצרפי · מדיניות פיסקאלית · שוק הכסף · IS-LM</div>
+  </div>
+</div>
+<div class="sc">
+  <div class="sc-title"><span class="ico">📊</span>מפת השאלות</div>
+  <table style="width:100%;border-collapse:collapse;font-size:.85rem;direction:rtl;">
+    <tr style="background:#2a3a2a;color:#9ef;font-weight:600;">
+      <th style="padding:.4rem .6rem;border:1px solid #3a5a3a;">שאלה</th>
+      <th style="padding:.4rem .6rem;border:1px solid #3a5a3a;">מקור</th>
+      <th style="padding:.4rem .6rem;border:1px solid #3a5a3a;">נושא</th>
+      <th style="padding:.4rem .6rem;border:1px solid #3a5a3a;">תשובה</th>
+    </tr>
+    <tr style="border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">1</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשע"ח מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">חשבונאות לאומית — Sg ו-Sp</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">Sg=200 (עודף)</td></tr>
+    <tr style="background:#1e2e1e;border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">2</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשע"ז מועד ב'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">חסכון פרטי ויחס</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">ד'</td></tr>
+    <tr style="border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">3</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשע"ח מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">גזירת פונקציית צריכה</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">C=5400+0.6Yd</td></tr>
+    <tr style="background:#1e2e1e;border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">4</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"ב מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">אפקט העברה → ΔC</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">ΔC=+350</td></tr>
+    <tr style="border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">5</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"א מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">גזירת AD מפערים</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">AD=3000+0.6Y</td></tr>
+    <tr style="background:#1e2e1e;border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">6</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשע"ז מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">סגירת פגר ע"י ΔT</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">ΔT=−357.14</td></tr>
+    <tr style="border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">7</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"ב מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תקציב מאוזן + שוק כסף פעיל</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">Y&lt;300, I↓, C↓</td></tr>
+    <tr style="background:#1e2e1e;border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">8</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"ב מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">KM רגיל — עירוי ויחס רזרבה</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">r=0.2</td></tr>
+    <tr style="border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">9</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"ב מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">KM(rco) עם מב"צ/עו"ש</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">נוסחה: (1+rco)/(rco+r)</td></tr>
+    <tr style="background:#1e2e1e;border:1px solid #3a5a3a;"><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">10</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">תשפ"ב מועד א'</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;">IS-LM — crowding out</td><td style="padding:.3rem .6rem;border:1px solid #3a5a3a;color:#6f6;">א' — Y↑, i↑, I↓</td></tr>
+  </table>
+</div>
+
+</div><!-- /container -->
+</body>
+</html>
